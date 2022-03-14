@@ -28,61 +28,70 @@ int main()
   while(true)
   {
     loops++;
-    std::string guess;
+    char temp;
     if(loops != 1)
     {
-      for(int j = 0; j < number; j++)
+      std::cout << "Find best (y) or another guess (n)? " << std::endl;
+      std::cin >> temp;
+    }
+    std::string guess;
+    if(temp == 'y')
+    {
+      if(loops != 1)
       {
-        if(valids[j].size() > 2)
+        for(int j = 0; j < number; j++)
         {
-          std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-          std::ifstream fin;
-          fin.open(fileLocation[j]);
-          if(fin)
+          if(valids[j].size() > 2)
           {
-            std::string g;
-            fin >> g;
-            double a;
-            fin >> a;
-            std::cout << g << std::endl;
-            std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
-            fin.close();
-          }
-          else
-          {
-            fin.close();
-            std::ofstream fout(fileLocation[j]);
-            std::pair<std::string, double> best = findBest1(valids[j]);
-            std::pair<std::string, double> best2 = findBestDiff(valids[j], validWords);
-            if(best2.second == best.second)
+            std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
+            std::ifstream fin;
+            fin.open(fileLocation[j]);
+            if(fin)
             {
-              fout << best.first << " " << best.second;
-              std::cout << best.first << std::endl;
-              std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl << std::endl;
+              std::string g;
+              fin >> g;
+              double a;
+              fin >> a;
+              std::cout << g << std::endl;
+              std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+              fin.close();
             }
             else
             {
-              fout << best2.first << " " << best2.second;
-              std::cout << best2.first << std::endl;
-              std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl << std::endl;
+              fin.close();
+              std::ofstream fout(fileLocation[j]);
+              std::pair<std::string, double> best = findBest1(valids[j]);
+              std::pair<std::string, double> best2 = findBestDiff(valids[j], validWords);
+              if(best2.second == best.second)
+              {
+                fout << best.first << " " << best.second;
+                std::cout << best.first << std::endl;
+                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl << std::endl;
+              }
+              else
+              {
+                fout << best2.first << " " << best2.second;
+                std::cout << best2.first << std::endl;
+                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl << std::endl;
+              }
             }
-          }
-          if(valids[j].size() < 10)
-          {
-            for(unsigned int i = 0; i < valids[j].size(); i++)
+            if(valids[j].size() < 10)
             {
-              std::cout << valids[j][i] << std::endl;
+              for(unsigned int i = 0; i < valids[j].size(); i++)
+              {
+                std::cout << valids[j][i] << std::endl;
+              }
             }
           }
-        }
-        else
-        {
-          std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
-          if(valids[j].size() == 2)
+          else
           {
-            std::cout << " " << valids[j][1];
+            std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
+            if(valids[j].size() == 2)
+            {
+              std::cout << " " << valids[j][1];
+            }
+            std::cout << std::endl << std::endl;
           }
-          std::cout << std::endl << std::endl;
         }
       }
     }

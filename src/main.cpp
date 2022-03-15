@@ -28,11 +28,26 @@ int main()
   while(true)
   {
     loops++;
-    char temp;
+    bool stillGood = true;
+    for(unsigned int k = 0; k < valids.size() && stillGood; k++)
+    {
+      if(valids[k].size() > 2)
+      {
+        stillGood = false;
+      }
+    }
+    char temp = 'n';
     if(loops != 1)
     {
-      std::cout << "Find best (y) or another guess (n)? " << std::endl;
-      std::cin >> temp;
+      if(stillGood)
+      {
+        temp = 'y';
+      }
+      else
+      {
+        std::cout << "Find best (y) or another guess (n)? " << std::endl;
+        std::cin >> temp;
+      }
     }
     std::string guess;
     if(temp == 'y')
@@ -66,13 +81,13 @@ int main()
               {
                 fout << best.first << " " << best.second;
                 std::cout << best.first << std::endl;
-                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl << std::endl;
+                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
               }
               else
               {
                 fout << best2.first << " " << best2.second;
                 std::cout << best2.first << std::endl;
-                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl << std::endl;
+                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
               }
             }
             if(valids[j].size() < 10)
@@ -88,19 +103,12 @@ int main()
             std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
             if(valids[j].size() == 2)
             {
-              std::cout << " " << valids[j][1];
+              std::cout << std::endl << valids[j][1];
             }
-            std::cout << std::endl << std::endl;
+            std::cout << std::endl;
           }
+          std::cout << std::endl;
         }
-      }
-    }
-    bool stillGood = true;
-    for(unsigned int k = 0; k < valids.size() && stillGood; k++)
-    {
-      if(valids[k].size() > 2)
-      {
-        stillGood = false;
       }
     }
     if(stillGood)

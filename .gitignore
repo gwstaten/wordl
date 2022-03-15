@@ -6,5 +6,6 @@
 *.bin
 *.exe
 
-# PROS
+# other
 bin/
+log/

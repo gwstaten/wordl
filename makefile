@@ -4,7 +4,7 @@ SRC_DIR := src
 OBJ_DIR := bin
 BIN_DIR := .
 
-EXE := $(BIN_DIR)\run
+EXE := $(BIN_DIR)\wordle
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 

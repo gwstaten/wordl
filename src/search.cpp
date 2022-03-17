@@ -38,7 +38,7 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
             found = true;
           }
         }
-        if(!found)
+        if(!found || filter.first.at(filterL) == word.at(filterL))
         {
           notDone = false;
         }

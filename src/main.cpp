@@ -134,4 +134,104 @@ int main()
       }
     }
   }
+
+  /*std::ifstream fin("wordlists/n");
+  std::string temp;
+  while(!fin.eof())
+  {
+    fin >> temp;
+    validWords.push_back(temp);
+  }
+  double guesses = 0;
+  int max = 0;
+  int priorGuesses = 0;
+  std::vector<int> frequencies(6,0);
+  for(double i = 0; i < validWords.size(); i++)
+  {
+    std::string fileLocation = "log/n/";
+    std::string answer = validWords[i];
+    std::vector<std::string> wordsLeft = validWords;
+    bool done = false;
+    int round = 0;
+    while(!done)
+    {
+      guesses++;
+      std::string guess;
+      if(round == 0)
+      {
+        guess = "salet";
+      }
+      else
+      {
+        std::ifstream fin;
+        fin.open(fileLocation);
+        if(fin)
+        {
+          fin >> guess;
+          fin.close();
+        }
+        else
+        {
+          fin.close();
+          if(wordsLeft.size() >= 3)
+          {
+            std::ofstream fout(fileLocation);
+            std::pair<std::string, double> best = findBest1(wordsLeft);
+            std::pair<std::string, double> best2 = findBestDiff(wordsLeft, validWords);
+            if(best2.second == best.second)
+            {
+              fout << best.first << " " << best.second;
+              guess = best.first;
+            }
+            else
+            {
+              fout << best2.first << " " << best2.second;
+              guess = best2.first;
+            }
+            fout.close();
+          }
+          else
+          {
+            guess = wordsLeft[0];
+          }
+        }
+      }
+      fileLocation+=guess;
+      round++;
+      std::vector<int> rating = grade(guess,answer);
+      int sum = 0;
+      for(unsigned int j = 0; j < guess.length(); j++)
+      {
+        sum+=rating[j];
+        fileLocation+=std::to_string(rating[j]);
+        std::cout << rating[j];
+      }
+      if(sum != 10)
+      {
+        wordsLeft = filter(wordsLeft, std::make_pair(guess, rating));
+        std::cout << "    " << wordsLeft.size() << std::endl;
+      }
+      else
+      {
+        std::cout << std::endl << answer << " " << i << " " << (i+1)/2309 << std::endl;
+        done = true;
+      }
+    }
+    if(guesses - priorGuesses > max)
+    {
+      max = guesses - priorGuesses;
+    }
+    frequencies[guesses - priorGuesses] = frequencies[guesses - priorGuesses] + 1;
+    priorGuesses = guesses;
+    std::cout << guesses / (i+1) << "       " << max << std::endl;
+    for(int i = 1; i < 6; i++)
+    {
+      std::cout << i << ": " << frequencies[i] << std::endl;
+    }
+    std::cout << std::endl;
+  }
+  for(int i = 1; i < 6; i++)
+  {
+    std::cout << i << ": " << frequencies[i] << std::endl;
+  }*/
 }

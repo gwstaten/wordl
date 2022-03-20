@@ -1,0 +1,92 @@
+#include "search.h"
+std::vector<std::string> validWords;
+std::ifstream mainfin("commands");
+std::ofstream mainfout("out");
+int main()
+{
+  std::string in;
+  std::vector<std::string> valids;
+  mainfin >> in;
+  std::ifstream fin("wordl/wordlists/" + in);
+  std::string temp;
+  while(!fin.eof())
+  {
+    fin >> temp;
+    validWords.push_back(temp);
+  }
+  valids = validWords;
+
+  std::string fileLocation = "wordl/log/" + in + "/";
+  while(!mainfin.eof())
+  {
+    std::string command;
+    mainfin >> command;
+    if(command == "filter")
+    {
+      std::string guess;
+      mainfin >> guess;
+      std::string temp;
+      mainfin >> temp;
+      fileLocation = fileLocation + guess;
+      std::vector<int> rating;
+      fileLocation = fileLocation + temp;
+      for(unsigned int i = 0; i < guess.length(); i++)
+      {
+        rating.push_back(temp.at(i) - '0');
+      }
+      valids = filter(valids,std::make_pair(guess, rating));
+    }
+    else if(command == "printBest")
+    {
+      std::ifstream fin;
+      fin.open(fileLocation);
+      if(fin)
+      {
+        std::string g;
+        fin >> g;
+        double a;
+        fin >> a;
+        mainfout << g << "` narrows down to  `" << a << "` possibilities on average";
+        fin.close();
+      }
+      else
+      {
+        fin.close();
+        std::ofstream fout(fileLocation);
+        std::pair<std::string, double> best;
+        std::pair<std::string, double> best2;
+        if(valids.size() > 150)
+        {
+          best = findBest1(valids);
+          best2 = best;
+        }
+        else
+        {
+          best = findBest1(valids);
+          best2 = findBestDiff(valids, validWords);
+        }
+        if(best2.second == best.second)
+        {
+          mainfout << best.first << "` narrows down to  `" << best.second << "` possibilities on average";
+          fout << best.first << " " << best.second;
+        }
+        else
+        {
+          mainfout << best2.first << "` narrows down to  `" << best2.second << "` possibilities on average";
+          fout << best2.first << " " << best2.second;
+        }
+      }
+    }
+    else if(command == "printRemaining")
+    {
+      mainfout << valids.size() << " ";
+    }
+    else if(command == "printPossibilities")
+    {
+      for(unsigned int i = 0; i < valids.size(); i++)
+      {
+        mainfout << valids[i] << " ";
+      }
+    }
+  }
+}

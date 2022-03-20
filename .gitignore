@@ -5,7 +5,10 @@
 # Executables
 *.bin
 *.exe
+wordl
 
-# other
+# Other
 bin/
 log/
+.vscode
+.DS_Store

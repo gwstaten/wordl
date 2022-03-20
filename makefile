@@ -1,16 +1,14 @@
-CC := g++
+CXX := g++
 
 SRC_DIR := src
 OBJ_DIR := bin
 BIN_DIR := .
 
-EXE := $(BIN_DIR)\wordle
+EXE := $(BIN_DIR)/wordl
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
-CPPFLAGS := -Iinclude -MMD -MP -static-libgcc -static-libstdc++ -static
-CXXFLAGS := -Wall
-LDFLAGS  := -Llib
+CXXFLAGS := -Wall -Iinclude -MMD -MP -static -std=c++17
 LDLIBS   := -lm
 
 .PHONY: all clean
@@ -18,10 +16,10 @@ LDLIBS   := -lm
 all: $(EXE)
 
 $(EXE): $(OBJ) | $(BIN_DIR)
-	@$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
+	@$(CXX) $^ $(LDLIBS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
-	@$(CC) $(CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(BIN_DIR) $(OBJ_DIR):
 	@mkdir -p $@

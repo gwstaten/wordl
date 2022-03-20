@@ -5,6 +5,7 @@
 # Executables
 *.bin
 *.exe
+wordle
 
 # Other
 bin/

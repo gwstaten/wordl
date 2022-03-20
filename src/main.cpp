@@ -27,7 +27,20 @@ int main()
     valids.push_back(validWords);
   }
 
-  std::vector<std::string> fileLocation(number,"log/" + in + "/");
+  char hardmode;
+  std::cout << "Hard mode? (y / n) ";
+  std::cin >> hardmode;
+
+  std::string filePath;
+  if(hardmode == 'y')
+  {
+    filePath = "log/" + in + "-hard/";
+  }
+  else
+  {
+    filePath = "log/" + in + "/";
+  }
+  std::vector<std::string> fileLocation(number,filePath);
 
   int loops = 0;
   while(true)
@@ -80,9 +93,9 @@ int main()
             {
               fin.close();
               std::ofstream fout(fileLocation[j]);
-              std::pair<std::string, double> best = findBest1(valids[j]);
+    y          std::pair<std::string, double> best = findBest1(valids[j]);
               std::pair<std::string, double> best2 = findBestDiff(valids[j], validWords);
-              if(best2.second == best.second)
+              if(best2.second == best.second || hardmode == 'y')
               {
                 fout << best.first << " " << best.second;
                 std::cout << best.first << std::endl;

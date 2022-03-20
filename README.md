@@ -99,6 +99,7 @@ A3: When entering your guess, make sure the guess is the correct word length. Al
 $ ./wordle
 Word list? n
 Number of parallel wordls? 1
+Hard mode? (y / n) n
 
 guess: adiou
 01001

@@ -6,6 +6,8 @@
 *.bin
 *.exe
 
-# other
+# Other
 bin/
 log/
+.vscode
+.DS_Store

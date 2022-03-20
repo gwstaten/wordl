@@ -41,8 +41,17 @@ When prompted with this, enter one of the [wordlist](#word-lists). For the next 
 
 ```bash
 $ ./wordl
-Word List? n
+Word list? n
 Number of parallel wordls? 1
+Hard mode? (y / n)
+```
+You can then enter either y or n to say if you are playing in hard mode or not, saying y will make sure the solver always chooses a word that is still a possible answer, but will on average take a few more guesses to guess the word. At this point, you should have something similar to
+
+```bash
+$ ./wordl
+Word list? n
+Number of parallel wordls? 1
+Hard mode? (y / n) n
 
 guess:
 ```
@@ -51,8 +60,9 @@ At this point, you can start inputting the results you get from entering words i
 
 ```bash
 $ ./wordl
-Word List? n
+Word list? n
 Number of parallel wordls? 1
+Hard mode? (y / n) n
 
 guess: adiou
 01001
@@ -67,8 +77,7 @@ At this point, typing `y` would result in the program finding the best guess. Th
 |---------------|-------------|----------|
 | 4-11 | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
 | n | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
-| m | Can only guess words that use the given information | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
-| foodle | Used only for foodle | [https://food-le.co](https://food-le.co) |
+| food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 
 ## Q&A
 
@@ -92,8 +101,8 @@ Word list? n
 Number of parallel wordls? 1
 
 guess: adiou
-01001 
-Find best (y) or another guess (n)? 
+01001
+Find best (y) or another guess (n)?
 y
 Best guess for 34 possibilities: dunce
 Narrows down to 2.70588 possibilities on average

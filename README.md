@@ -47,7 +47,7 @@ Number of parallel wordls? 1
 guess:
 ```
 
-At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will apparently happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and in the correct position. 0 for grey, 1 for yellow, and 2 for green. **Parallel Wordle Note: In parallel wordle, you would enter the result of each wordle board one after another.** At this point, you should have something similar to
+At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and the correct position. 0 for grey, 1 for yellow, and 2 for green. **Parallel Wordle Note: In parallel wordle, you would enter the result of each wordle board one after another.** At this point, you should have something similar to
 
 ```bash
 $ ./wordl
@@ -78,11 +78,11 @@ A1: Make sure you have spelled the wordlist correctly, and chosen one from [word
 
 ### Q2: The code exited when I entered `Number of parallel words`
 
-A2: Insure you have not inputted anything other than numbers.
+A2: Ensure you have not inputted anything other than numbers.
 
-### Q3: I recieved `libc++abi: terminating with uncaught exception of type std::out_of_range: basic_string` when I inputted my guess
+### Q3: I received `libc++abi: terminating with uncaught exception of type std::out_of_range: basic_string` when I inputted my guess
 
-A3: When entering your guess, make sure the guess is the correct word length. Also insure that the result you inputted is also the correct length (it should be the same as the word).
+A3: When entering your guess, make sure the guess is the correct word length. Also ensure that the result you inputted is also the correct length (it should be the same as the word).
 
 ## Example Output
 

@@ -4,12 +4,11 @@ SRC_DIR := src
 OBJ_DIR := bin
 BIN_DIR := .
 
-EXE := $(BIN_DIR)/wordle
+EXE := $(BIN_DIR)/wordl
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
 CXXFLAGS := -Wall -Iinclude -MMD -MP -static -std=c++17
-LDFLAGS  := -Llib
 LDLIBS   := -lm
 
 .PHONY: all clean

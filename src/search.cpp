@@ -1,4 +1,5 @@
 #include "search.hpp"
+
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
 {
   for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)

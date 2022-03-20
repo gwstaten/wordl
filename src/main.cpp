@@ -1,15 +1,20 @@
 #include "search.hpp"
-std::vector<std::string> validWords;
 
 int main()
 {
-  std::string in;
   int number;
+
+  std::string in;
+
+  std::vector<std::string> validWords;
   std::vector<std::vector<std::string>> valids;
+
   std::cout << "Word list? ";
   std::cin >> in;
+
   std::ifstream fin("wordlists/" + in);
   std::string temp;
+
   while(!fin.eof())
   {
     fin >> temp;

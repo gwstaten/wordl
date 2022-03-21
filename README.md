@@ -45,6 +45,7 @@ Word list? n
 Number of parallel wordls? 1
 Hard mode? (y / n)
 ```
+
 You can then enter either y or n to say if you are playing in hard mode or not, saying y will make sure the solver always chooses a word that is still a possible answer, but will on average take a few more guesses to guess the word. At this point, you should have something similar to
 
 ```bash
@@ -115,3 +116,7 @@ Only 1 possibility remaining: duchy
 
 $
 ```
+
+## Acknowledgements
+
+- [Steffen Schümann 03/20/2022 filesystem (filesystem.hpp) v1.5.10](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)

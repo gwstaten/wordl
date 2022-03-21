@@ -4,6 +4,8 @@
 #include <fstream>
 #include <cmath>
 
+#include "filesystem.hpp"
+
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter);
 std::vector<int> grade(std::string guess, std::string answer);
 std::pair<std::string,double> findBest1(std::vector<std::string> words);

@@ -42,6 +42,17 @@ int main()
   }
   std::vector<std::string> fileLocation(number,filePath);
 
+  if(!ghc::filesystem::exists("log"))
+  {
+    std::cout << "Creating log directory..." << std::endl;
+    ghc::filesystem::create_directories("log/" + in);
+  }
+  else if(!ghc::filesystem::exists("log/" + in))
+  {
+    std::cout << "Creating log directory " << in << "..." << std::endl;
+    ghc::filesystem::create_directories("log/" + in);
+  }
+
   int loops = 0;
   while(true)
   {

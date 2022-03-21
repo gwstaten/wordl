@@ -34,19 +34,21 @@ int main()
   std::string filePath;
   if(hardmode == 'y')
   {
-    filePath = "log/" + in + "-hard/";
+    filePath = "log/" + in + "-hard";
   }
   else
   {
-    filePath = "log/" + in + "/";
+    filePath = "log/" + in;
   }
-  std::vector<std::string> fileLocation(number,filePath);
 
-  if(!ghc::filesystem::exists("log/" + in))
+  if(!ghc::filesystem::exists(filePath ))
   {
     std::cout << "Creating log directory " << in << "..." << std::endl;
-    ghc::filesystem::create_directories("log/" + in);
+    ghc::filesystem::create_directories(filePath);
   }
+
+  filePath += "/";
+  std::vector<std::string> fileLocation(number,filePath);
 
   int loops = 0;
   while(true)

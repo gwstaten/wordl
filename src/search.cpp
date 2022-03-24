@@ -159,29 +159,27 @@ std::pair<std::string,double> findBestDiff(std::vector<std::string> words, std::
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
     //std::cout << guess << " " << words[guess] << " ";
-    std::vector<std::pair<int,double>> ratingFrequencies(std::pow(3,validWords[guess].length()),std::make_pair(0,0));
+    std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
     for(unsigned int answer = 0; answer < words.size(); answer++)
     {
       std::vector<int> rating = grade(validWords[guess], words[answer]);
-      int total = 0;
+      unsigned long long int total = 0;
       for(unsigned int i = 0; i < validWords[guess].length(); i++)
       {
         total *= 3;
         total += rating[i];
       }
-      if(ratingFrequencies[total].first == 0)
+      if(ratingsMap.find(total) == ratingsMap.end())
       {
-        ratingFrequencies[total].second = filter(words, std::make_pair(validWords[guess],rating)).size();
+        ratingsMap[total] = std::make_pair(0,filter(words, std::make_pair(validWords[guess],rating)).size());
       }
-      ratingFrequencies[total].first++;
+      ratingsMap[total].first++;
     }
     double total = 0;
-    for(unsigned int ratingLoop = 0; ratingLoop < ratingFrequencies.size(); ratingLoop++)
+    std::map<unsigned long long int, std::pair<int, double>>::iterator it;
+    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
     {
-      if(ratingFrequencies[ratingLoop].first != 0)
-      {
-        total += (ratingFrequencies[ratingLoop].first * ratingFrequencies[ratingLoop].second);
-      }
+        total += ((it->second).first * (it->second).second);
     }
     total /= words.size();
     scores.push_back(total);

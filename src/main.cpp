@@ -88,7 +88,14 @@ int main()
           {
             std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
             std::ifstream fin;
-            fin.open(fileLocation[j]);
+            if(fileLocation[j].length == 0)
+            {
+              fin.open("start");
+            }
+            else
+            {
+              fin.open(fileLocation[j]);
+            }
             if(fin)
             {
               std::string g;

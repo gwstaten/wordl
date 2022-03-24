@@ -78,13 +78,13 @@ int main()
         std::pair<std::string, double> best2;
         if(valids.size() > 150)
         {
-          best = findBest1(valids);
+          best = findBest(valids, valids);
           best2 = best;
         }
         else
         {
-          best = findBest1(valids);
-          best2 = findBestDiff(valids, validWords);
+          best = findBest(valids, valids);
+          best2 = findBest(valids, validWords);
         }
         if(best2.second == best.second || hardmode.at(0) == 'y')
         {

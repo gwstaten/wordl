@@ -103,8 +103,8 @@ int main()
             {
               fin.close();
               std::ofstream fout(fileLocation[j]);
-              std::pair<std::string, double> best = findBestDiff(valids[j], valids[j]);
-              std::pair<std::string, double> best2 = findBestDiff(valids[j], validWords);
+              std::pair<std::string, double> best = findBest(valids[j], valids[j]);
+              std::pair<std::string, double> best2 = findBest(valids[j], validWords);
               if(best2.second == best.second || hardmode == 'y')
               {
                 fout << best.first << " " << best.second;

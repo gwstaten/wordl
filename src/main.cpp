@@ -15,11 +15,13 @@ int main()
   std::ifstream fin("wordlists/" + in);
   std::string temp;
 
+  fin >> temp;
   while(!fin.eof())
   {
-    fin >> temp;
     validWords.push_back(temp);
+    fin >> temp;
   }
+
   std::cout << "Number of parallel wordls? ";
   std::cin >> number;
   for(int i = 0; i < number; i++)
@@ -71,7 +73,7 @@ int main()
       }
       else
       {
-        std::cout << "Find best (y) or another guess (n)? " << std::endl;
+        std::cout << "Find best (y) or guess (n)? " << std::endl;
         std::cin >> temp;
       }
     }

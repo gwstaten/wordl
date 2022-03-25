@@ -60,7 +60,7 @@ int main()
     else if(command == "printBest")
     {
       std::ifstream fin;
-      if(fileLocation.length() == 0)
+      if(fileLocation.at(fileLocation.length()-1) == '/')
       {
         fin.open("start");
       }

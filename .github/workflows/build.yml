@@ -1,0 +1,28 @@
+name: Compile Wordls
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Compile UserWordl
+        run: make
+
+      - name: Swap Compile Files
+        run: |
+          chmod +x ./scripts/switchCppFiles.sh
+          ./scripts/switchCppFiles.sh
+        shell: bash
+
+      - name: Compile WordlBot
+        run: make

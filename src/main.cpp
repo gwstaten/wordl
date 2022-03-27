@@ -14,7 +14,6 @@ int main()
 
   std::ifstream fin("wordlists/" + in);
   std::string temp;
-
   fin >> temp;
   while(!fin.eof())
   {
@@ -27,6 +26,18 @@ int main()
   for(int i = 0; i < number; i++)
   {
     valids.push_back(validWords);
+  }
+
+  std::ifstream fin2("wordlists/&" + in);
+  if(fin2)
+  {
+    validWords.clear();
+    fin2 >> temp;
+    while(!fin2.eof())
+    {
+      validWords.push_back(temp);
+      fin2 >> temp;
+    }
   }
 
   char hardmode;

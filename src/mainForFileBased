@@ -30,12 +30,24 @@ int main()
   filePath += "/";
   std::ifstream fin("wordl/wordlists/" + in);
   std::string temp;
+  fin >> temp;
   while(!fin.eof())
   {
-    fin >> temp;
     validWords.push_back(temp);
+    fin >> temp;
   }
   valids = validWords;
+  std::ifstream fin2("wordl/wordlists/&" + in);
+  if(fin2)
+  {
+    validWords.clear();
+    fin >> temp;
+    while(!fin.eof())
+    {
+      validWords.push_back(temp);
+      fin >> temp;
+    }
+  }
 
   std::string fileLocation = filePath;
   while(!mainfin.eof())

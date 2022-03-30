@@ -29,6 +29,11 @@ int main()
 
   filePath += "/";
   std::ifstream fin("wordl/wordlists/" + in);
+  if(!fin)
+  {
+    mainfout << "ERROR invalid word list";
+    return 0;
+  }
   std::string temp;
   fin >> temp;
   while(!fin.eof())
@@ -60,14 +65,17 @@ int main()
       mainfin >> guess;
       std::string temp;
       mainfin >> temp;
-      fileLocation = fileLocation + guess;
-      std::vector<int> rating;
-      fileLocation = fileLocation + temp;
-      for(unsigned int i = 0; i < guess.length(); i++)
+      if((temp.length() == valids[0].size() && guess.length() == valids[0].size()))
       {
-        rating.push_back(temp.at(i) - '0');
+        fileLocation = fileLocation + guess;
+        std::vector<int> rating;
+        fileLocation = fileLocation + temp;
+        for(unsigned int i = 0; i < guess.length(); i++)
+        {
+          rating.push_back(temp.at(i) - '0');
+        }
+        valids = filter(valids,std::make_pair(guess, rating));
       }
-      valids = filter(valids,std::make_pair(guess, rating));
     }
     else if(command == "printBest")
     {

@@ -1,5 +1,4 @@
 #include "search.hpp"
-
 int main()
 {
   int number;
@@ -13,6 +12,11 @@ int main()
   std::cin >> in;
 
   std::ifstream fin("wordlists/" + in);
+  if(!fin)
+  {
+    std::cout << "Invalid word list name" << std::endl;
+    return 0;
+  }
   std::string temp;
   fin >> temp;
   while(!fin.eof())
@@ -151,9 +155,9 @@ int main()
             {
               std::cout << std::endl << valids[j][1];
             }
-            std::cout << std::endl;
+            //std::cout << std::endl;
           }
-          std::cout << std::endl;
+          //std::cout << std::endl;
         }
       }
     }

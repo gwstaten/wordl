@@ -74,7 +74,7 @@ std::vector<int> grade(std::string guess, std::string answer)
   {
     if(guess.at(i) == answer.at(i))
     {
-      ////std::cout << i << " 2    ";
+      //std::cout << i << " 2    ";
       output[i] = 2;
       usedAnswer[i] = 1;
     }
@@ -87,7 +87,7 @@ std::vector<int> grade(std::string guess, std::string answer)
       {
         if(usedAnswer[answerSpot] == 0 && guess.at(guessSpot) == answer.at(answerSpot))
         {
-          ////std::cout << guessSpot << " 1    ";
+          //std::cout << guessSpot << " 1    ";
           output[guessSpot] = 1;
           usedAnswer[answerSpot] = 1;
         }
@@ -143,13 +143,13 @@ std::pair<std::string,double> findBest(std::vector<std::string> words, std::vect
     {
       for(unsigned int i = 0; i < scores.size(); i++)
       {
-        ////std::cout << scores[i] << ", ";
+        //std::cout << scores[i] << ", ";
       }
     }
   }
   for(unsigned int i = 0; i < scores.size(); i++)
   {
-    ////std::cout << scores[i] << ", ";
+    //std::cout << scores[i] << ", ";
   }
   return std::make_pair(validWords[lowest],lowestAve);
 }

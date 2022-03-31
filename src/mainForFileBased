@@ -55,6 +55,7 @@ int main()
   }
 
   std::string fileLocation = filePath;
+  int loops = 0;
   while(!mainfin.eof())
   {
     std::string command;
@@ -79,7 +80,7 @@ int main()
     }
     else if(command == "printBest")
     {
-      if(valids.size() >= 1)
+      if(valids.size() >= 1 ** valids.size() < 250)
       {
         std::ifstream fin;
         if(fileLocation.at(fileLocation.length()-1) == '/')
@@ -129,7 +130,7 @@ int main()
       }
       else
       {
-        mainfout << "` error no remaining words`";
+        mainfout << "` cannot run find best with the remaining number of words (either there are no words remaining or there are too many remaining)`";
       }
     }
     else if(command == "printRemaining")

@@ -1,6 +1,46 @@
 #include "search.hpp"
-int main()
+#include <unordered_map>
+int countDistinct(std::string s)
 {
+  std::unordered_map<char, int> m;
+  for(unsigned int i = 0; i < s.length(); i++)
+  {
+    m[s[i]]++;
+  }
+  return m.size();
+}
+int main()
+{/*
+  std::vector<std::string> validWords;
+  std::ifstream fin("wordlists/17");
+  std::string temp;
+  fin >> temp;
+  while(!fin.eof())
+  {
+    validWords.push_back(temp);
+    fin >> temp;
+  }
+  std::ifstream fin2("wordlists/words_alpha.txt");
+  fin2 >> temp;
+  std::vector<std::string> valids;
+  for(unsigned int i = 0; i < validWords.size(); i++)
+  {
+    if(validWords[i].length() == 17 && countDistinct(validWords[i]) > 12)
+    {
+      valids.push_back(validWords[i]);
+    }
+  }
+  while(!fin2.eof())
+  {
+    if(temp.length() == 17 && countDistinct(temp) > 12)
+    {
+      valids.push_back(temp);
+    }
+    fin2 >> temp;
+  }
+  std::cout << valids.size() << std::endl;
+  findBest(validWords,valids);
+  */
   int number;
 
   std::string in;
@@ -33,7 +73,7 @@ int main()
   }
 
   std::ifstream fin2("wordlists/&" + in);
-  if(fin2)
+  if(fin2.is_open())
   {
     validWords.clear();
     fin2 >> temp;
@@ -155,9 +195,9 @@ int main()
             {
               std::cout << std::endl << valids[j][1];
             }
-            //std::cout << std::endl;
+            std::cout << std::endl;
           }
-          //std::cout << std::endl;
+          std::cout << std::endl;
         }
       }
     }

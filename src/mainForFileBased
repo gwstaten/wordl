@@ -130,7 +130,7 @@ int main()
       }
       else
       {
-        mainfout << "` cannot run find best with the remaining number of words (either there are no words remaining or there are too many remaining)`";
+        mainfout << "cannot run find best with the remaining number of words (either there are no words remaining or there are too many remaining)`";
       }
     }
     else if(command == "printRemaining")

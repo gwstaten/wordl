@@ -80,7 +80,7 @@ int main()
     }
     else if(command == "printBest")
     {
-      if(valids.size() >= 1 ** valids.size() < 250)
+      if(valids.size() >= 1 && valids.size() < 250)
       {
         std::ifstream fin;
         if(fileLocation.at(fileLocation.length()-1) == '/')

@@ -1,3 +1,8 @@
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
 #include "search.hpp"
 #include <unordered_map>
 int countDistinct(std::string s)
@@ -10,37 +15,7 @@ int countDistinct(std::string s)
   return m.size();
 }
 int main()
-{/*
-  std::vector<std::string> validWords;
-  std::ifstream fin("wordlists/17");
-  std::string temp;
-  fin >> temp;
-  while(!fin.eof())
-  {
-    validWords.push_back(temp);
-    fin >> temp;
-  }
-  std::ifstream fin2("wordlists/words_alpha.txt");
-  fin2 >> temp;
-  std::vector<std::string> valids;
-  for(unsigned int i = 0; i < validWords.size(); i++)
-  {
-    if(validWords[i].length() == 17 && countDistinct(validWords[i]) > 12)
-    {
-      valids.push_back(validWords[i]);
-    }
-  }
-  while(!fin2.eof())
-  {
-    if(temp.length() == 17 && countDistinct(temp) > 12)
-    {
-      valids.push_back(temp);
-    }
-    fin2 >> temp;
-  }
-  std::cout << valids.size() << std::endl;
-  findBest(validWords,valids);
-  */
+{
   int number;
 
   std::string in;

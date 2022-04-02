@@ -73,7 +73,7 @@ Find best (y) or another guess (n)?
 At this point, typing `y` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `n` will bypass that step, and give prompt you for another guess you inputted. This will repeat until the program has one possible solution left, in which the program will cleanly exit. Look through [Q&A](#qa) if you encounter any issues running the code. You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
-
+https://wordle.at/
 | WordList Name | Description | Website  |
 |---------------|-------------|----------|
 | 4-11 | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
@@ -81,6 +81,7 @@ At this point, typing `y` would result in the program finding the best guess. Th
 | n | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
+| german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
 
 To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the answer list)
 

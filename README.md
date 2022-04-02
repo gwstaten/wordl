@@ -80,6 +80,7 @@ At this point, typing `y` would result in the program finding the best guess. Th
 | 2-25 | For words that are length 2-25 | [https://gwstaten.github.io](https://gwstaten.github.io) |
 | n | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
+| shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 
 To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the answer list)
 

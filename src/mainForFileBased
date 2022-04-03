@@ -121,7 +121,7 @@ int main()
             best = findBest(valids, valids);
             best2 = findBest(valids, validWords);
           }
-          if(best2.second == best.second || hardmode.at(0) == 'y')
+          if(best2.second >= best.second || hardmode.at(0) == 'y')
           {
             mainfout << best.first << "` narrows down to  `" << best.second << "` possibilities on average";
             fout << best.first << " " << best.second;

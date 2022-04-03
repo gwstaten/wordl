@@ -137,7 +137,7 @@ int main()
             std::pair<std::string, double> best = findBest(valids[j], valids[j]);
             std::pair<std::string, double> best2 = findBest(valids[j], validWords);
             std::ofstream fout(fileLocation[j]);
-            if(best2.second == best.second || hardmode == 'y')
+            if(best2.second >= best.second || hardmode == 'y')
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;

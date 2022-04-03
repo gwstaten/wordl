@@ -108,13 +108,13 @@ std::vector<int> grade(std::string guess, std::string answer)
 
 std::pair<std::string,double> findBest(std::vector<std::string> words, std::vector<std::string> validWords)
 {
-  std::cout << std::endl;
+  //std::cout << std::endl;
   int lowest = 0;
   double lowestAve = 10000;
   std::vector<double> scores;
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
-    std::cout << guess << " " << validWords[guess] << " ";
+    //std::cout << guess << " " << validWords[guess] << " ";
     std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
     for(unsigned int answer = 0; answer < words.size(); answer++)
     {
@@ -140,14 +140,14 @@ std::pair<std::string,double> findBest(std::vector<std::string> words, std::vect
     }
     total /= words.size();
     scores.push_back(total);
-    std::cout << total << " ";
+    //std::cout << total << " ";
     if(total <= lowestAve || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
-      std::cout << "new or tied best!";
+      //std::cout << "new or tied best!";
     }
-    std::cout << std::endl;
+    //std::cout << std::endl;
   }
   return std::make_pair(validWords[lowest],lowestAve);
 }

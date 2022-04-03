@@ -144,17 +144,6 @@ std::pair<std::string,double> findBest(std::vector<std::string> words, std::vect
       //std::cout << "new or tied best!";
     }
     //std::cout << std::endl;
-    if(guess % 10 == 9)
-    {
-      for(unsigned int i = 0; i < scores.size(); i++)
-      {
-        //std::cout << scores[i] << ", ";
-      }
-    }
-  }
-  for(unsigned int i = 0; i < scores.size(); i++)
-  {
-    //std::cout << scores[i] << ", ";
   }
   return std::make_pair(validWords[lowest],lowestAve);
 }

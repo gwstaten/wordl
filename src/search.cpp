@@ -7,6 +7,7 @@
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
 {
+  std::vector<std::string> stillGood;
   for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
   {
     std::vector<bool> accountedfor(wordList.size(),false);
@@ -62,13 +63,12 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
         }
       }
     }
-    if(!notDone)
+    if(notDone)
     {
-      wordList.erase(wordList.begin()+wordn);
-      wordn--;
+      stillGood.push_back(word);
     }
   }
-  return wordList;
+  return stillGood;
 }
 
 std::vector<int> grade(std::string guess, std::string answer)

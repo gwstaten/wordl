@@ -95,85 +95,79 @@ int main()
       }
     }
     char temp = 'n';
-    if(loops != 1)
+    if(stillGood)
     {
-      if(stillGood)
-      {
-        temp = 'y';
-      }
-      else
-      {
-        std::cout << "Find best (y) or guess (n)? " << std::endl;
-        std::cin >> temp;
-      }
+      temp = 'y';
+    }
+    else
+    {
+      std::cout << "Find best (y) or guess (n)? " << std::endl;
+      std::cin >> temp;
     }
     std::string guess;
     if(temp == 'y')
     {
-      if(loops != 1)
+      for(int j = 0; j < number; j++)
       {
-        for(int j = 0; j < number; j++)
+        if(valids[j].size() > 2)
         {
-          if(valids[j].size() > 2)
+          std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
+          std::ifstream fin;
+          if(fileLocation[j].at(fileLocation[j].length()-1) == '/')
           {
-            std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-            std::ifstream fin;
-            if(fileLocation[j].at(fileLocation[j].length()-1) == '/')
-            {
-              fin.open("start");
-            }
-            else
-            {
-              fin.open(fileLocation[j]);
-            }
-            if(fin)
-            {
-              std::string g;
-              fin >> g;
-              double a;
-              fin >> a;
-              std::cout << g << std::endl;
-              std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
-              fin.close();
-            }
-            else
-            {
-              fin.close();
-              std::pair<std::string, double> best = findBest(valids[j], valids[j]);
-              std::pair<std::string, double> best2 = findBest(valids[j], validWords);
-              std::ofstream fout(fileLocation[j]);
-              if(best2.second == best.second || hardmode == 'y')
-              {
-                fout << best.first << " " << best.second;
-                std::cout << best.first << std::endl;
-                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
-              }
-              else
-              {
-                fout << best2.first << " " << best2.second;
-                std::cout << best2.first << std::endl;
-                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
-              }
-            }
-            if(valids[j].size() < 10)
-            {
-              for(unsigned int i = 0; i < valids[j].size(); i++)
-              {
-                std::cout << valids[j][i] << std::endl;
-              }
-            }
+            fin.open("start");
           }
           else
           {
-            std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
-            if(valids[j].size() == 2)
+            fin.open(fileLocation[j]);
+          }
+          if(fin)
+          {
+            std::string g;
+            fin >> g;
+            double a;
+            fin >> a;
+            std::cout << g << std::endl;
+            std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+            fin.close();
+          }
+          else
+          {
+            fin.close();
+            std::pair<std::string, double> best = findBest(valids[j], valids[j]);
+            std::pair<std::string, double> best2 = findBest(valids[j], validWords);
+            std::ofstream fout(fileLocation[j]);
+            if(best2.second == best.second || hardmode == 'y')
             {
-              std::cout << std::endl << valids[j][1];
+              fout << best.first << " " << best.second;
+              std::cout << best.first << std::endl;
+              std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
             }
-            std::cout << std::endl;
+            else
+            {
+              fout << best2.first << " " << best2.second;
+              std::cout << best2.first << std::endl;
+              std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+            }
+          }
+          if(valids[j].size() < 10)
+          {
+            for(unsigned int i = 0; i < valids[j].size(); i++)
+            {
+              std::cout << valids[j][i] << std::endl;
+            }
+          }
+        }
+        else
+        {
+          std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
+          if(valids[j].size() == 2)
+          {
+            std::cout << std::endl << valids[j][1];
           }
           std::cout << std::endl;
         }
+        std::cout << std::endl;
       }
     }
     if(stillGood)

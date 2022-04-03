@@ -111,7 +111,7 @@ int main()
           std::pair<std::string, double> best;
           std::pair<std::string, double> best2;
           std::ofstream fout(fileLocation);
-          if(valids.size() > 400)
+          if(valids.size() > 150)
           {
             best = findBest(valids, valids);
             best2 = best;

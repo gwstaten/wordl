@@ -228,10 +228,10 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   std::pair<std::string,double> results2;
   std::pair<std::string,double> results3;
   std::pair<std::string,double> results4;
-  std::thread one(findBest,words, validWordsChunks[0], std::ref(results1));
-  std::thread two(findBest,words, validWordsChunks[1], std::ref(results2));
-  std::thread three(findBest,words, validWordsChunks[2], std::ref(results3));
-  std::thread four(findBest,words, validWordsChunks[3], std::ref(results4));
+  std::thread one(findBestThread,words, validWordsChunks[0], std::ref(results1));
+  std::thread two(findBestThread,words, validWordsChunks[1], std::ref(results2));
+  std::thread three(findBestThread,words, validWordsChunks[2], std::ref(results3));
+  std::thread four(findBestThread,words, validWordsChunks[3], std::ref(results4));
 
   one.join();
   two.join();

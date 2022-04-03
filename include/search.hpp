@@ -9,6 +9,10 @@
 #include <fstream>
 #include <cmath>
 #include <map>
+#include <cassert>
+#include <future>
+#include <thread>
+#include <vector>
 
 #include "filesystem.hpp"
 

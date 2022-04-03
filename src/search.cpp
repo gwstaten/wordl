@@ -151,3 +151,110 @@ std::pair<std::string,double> findBest(std::vector<std::string> words, std::vect
   }
   return std::make_pair(validWords[lowest],lowestAve);
 }
+
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out)
+{
+  //std::cout << std::endl;
+  int lowest = 0;
+  double lowestAve = 10000;
+  std::vector<double> scores;
+  for(unsigned int guess = 0; guess < validWords.size(); guess++)
+  {
+    //std::cout << guess << " " << validWords[guess] << " ";
+    std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
+    for(unsigned int answer = 0; answer < words.size(); answer++)
+    {
+      std::vector<int> rating = grade(validWords[guess], words[answer]);
+      unsigned long long int total = 0;
+      for(unsigned int i = 0; i < validWords[guess].length(); i++)
+      {
+        total *= 3;
+        total += rating[i];
+      }
+      if(ratingsMap.find(total) == ratingsMap.end())
+      {
+        std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
+        ratingsMap[total] = std::make_pair(0,remaining.size());
+      }
+      ratingsMap[total].first++;
+    }
+    double total = 0;
+    std::map<unsigned long long int, std::pair<int, double>>::iterator it;
+    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
+    {
+        total += ((it->second).first * (it->second).second);
+    }
+    total /= words.size();
+    scores.push_back(total);
+    //std::cout << total << " ";
+    if(total <= lowestAve || guess == 0)
+    {
+      lowest = guess;
+      lowestAve = total;
+      //std::cout << "new or tied best!";
+    }
+    //std::cout << std::endl;
+  }
+  out = std::make_pair(validWords[lowest],lowestAve);
+}
+
+template<typename T>
+std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
+{
+    std::vector<std::vector<T>> outVec;
+
+    size_t length = vec.size() / n;
+    size_t remain = vec.size() % n;
+
+    size_t begin = 0;
+    size_t end = 0;
+
+    for (size_t i = 0; i < std::min(n, vec.size()); ++i)
+    {
+        end += (remain > 0) ? (length + !!(remain--)) : length;
+
+        outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
+
+        begin = end;
+    }
+
+    return outVec;
+}
+
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords)
+{
+  std::vector<std::vector<std::string>> validWordsChunks = SplitVector(validWords, 4);
+  std::pair<std::string,double> results1;
+  std::pair<std::string,double> results2;
+  std::pair<std::string,double> results3;
+  std::pair<std::string,double> results4;
+  std::thread one(findBest,words, validWordsChunks[0], std::ref(results1));
+  std::thread two(findBest,words, validWordsChunks[1], std::ref(results2));
+  std::thread three(findBest,words, validWordsChunks[2], std::ref(results3));
+  std::thread four(findBest,words, validWordsChunks[3], std::ref(results4));
+
+  one.join();
+  two.join();
+  three.join();
+  four.join();
+
+  double min = results1.second;
+  std::string minWord = results1.first;
+
+  if(results2.second < min)
+  {
+    min = results2.second;
+    minWord = results2.first;
+  }
+  if(results3.second < min)
+  {
+    min = results3.second;
+    minWord = results3.first;
+  }
+  if(results4.second < min)
+  {
+    min = results4.second;
+    minWord = results4.first;
+  }
+  return std::make_pair(minWord,min);
+}

@@ -85,7 +85,7 @@ int main()
     }
     else if(command == "printBest")
     {
-      if(valids.size() >= 1 && valids.size() < 400)
+      if(valids.size() >= 1)
       {
         std::ifstream fin;
         if(fileLocation.at(fileLocation.length()-1) == '/')
@@ -111,7 +111,7 @@ int main()
           std::pair<std::string, double> best;
           std::pair<std::string, double> best2;
           std::ofstream fout(fileLocation);
-          if(valids.size() > 150)
+          if(hardmode.at(0) == 'y')
           {
             best = findBest(valids, valids);
             best2 = best;

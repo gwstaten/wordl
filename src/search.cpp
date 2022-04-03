@@ -15,6 +15,16 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
     bool notDone = true;
     for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
     {
+      if(filter.second[filterL] == 2)
+      {
+        if(word.at(filterL) != filter.first.at(filterL))
+        {
+          notDone = false;
+        }
+      }
+    }
+    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
+    {
       if(filter.second[filterL] == 0)
       {
         for(unsigned int i = 0; i < word.length() && notDone; i++)
@@ -36,7 +46,10 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
           }
         }
       }
-      else if(filter.second[filterL] == 1)
+    }
+    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
+    {
+      if(filter.second[filterL] == 1)
       {
         bool found = false;
         if(!(filter.first.at(filterL) == word.at(filterL)))
@@ -51,13 +64,6 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
           }
         }
         if(!found)
-        {
-          notDone = false;
-        }
-      }
-      else
-      {
-        if(word.at(filterL) != filter.first.at(filterL))
         {
           notDone = false;
         }
@@ -79,7 +85,6 @@ std::vector<int> grade(std::string guess, std::string answer)
   {
     if(guess.at(i) == answer.at(i))
     {
-      //std::cout << i << " 2    ";
       output[i] = 2;
       usedAnswer[i] = 1;
     }
@@ -92,7 +97,6 @@ std::vector<int> grade(std::string guess, std::string answer)
       {
         if(usedAnswer[answerSpot] == 0 && guess.at(guessSpot) == answer.at(answerSpot))
         {
-          //std::cout << guessSpot << " 1    ";
           output[guessSpot] = 1;
           usedAnswer[answerSpot] = 1;
         }
@@ -104,13 +108,13 @@ std::vector<int> grade(std::string guess, std::string answer)
 
 std::pair<std::string,double> findBest(std::vector<std::string> words, std::vector<std::string> validWords)
 {
-  //std::cout << std::endl;
+  std::cout << std::endl;
   int lowest = 0;
   double lowestAve = 10000;
   std::vector<double> scores;
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
-    //std::cout << guess << " " << validWords[guess] << " ";
+    std::cout << guess << " " << validWords[guess] << " ";
     std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
     for(unsigned int answer = 0; answer < words.size(); answer++)
     {
@@ -136,14 +140,14 @@ std::pair<std::string,double> findBest(std::vector<std::string> words, std::vect
     }
     total /= words.size();
     scores.push_back(total);
-    //std::cout << total << " ";
+    std::cout << total << " ";
     if(total <= lowestAve || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
-      //std::cout << "new or tied best!";
+      std::cout << "new or tied best!";
     }
-    //std::cout << std::endl;
+    std::cout << std::endl;
   }
   return std::make_pair(validWords[lowest],lowestAve);
 }

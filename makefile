@@ -8,7 +8,7 @@ EXE := $(BIN_DIR)/wordl
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
-CXXFLAGS := -g -Wall -Iinclude -MMD -MP -static -std=c++17
+CXXFLAGS := -g -Wall -Iinclude -MMD -MP -pthread -static -std=c++17
 LDLIBS   := -lm
 
 .PHONY: all clean

@@ -228,7 +228,19 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   {
     numThreads = validWords.size() / 10;
   }
-  std::vector<std::vector<std::string>> validWordsChunks = SplitVector(validWords, numThreads);
+  if(validWords.size() / 10 < 1)
+  {
+    numThreads = 1;
+  }
+  std::vector<std::vector<std::string>> validWordsChunks;
+  if(numThreads != 1)
+  {
+    validWordsChunks = SplitVector(validWords, numThreads);
+  }
+  else
+  {
+    validWordsChunks.push_back(validWords);
+  }
   std::vector<std::pair<std::string,double>> results(numThreads,std::make_pair("",0));
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)

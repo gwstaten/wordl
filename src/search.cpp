@@ -187,11 +187,11 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     total /= words.size();
     scores.push_back(total);
     //std::cout << total << " ";
-    if(total <= lowestAve || guess == 0)
+    if(total < lowestAve || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
-      //std::cout << "new or tied best!";
+      //std::cout << "new best!";
     }
     //std::cout << std::endl;
   }
@@ -221,40 +221,38 @@ std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
     return outVec;
 }
 
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords)
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads)
 {
-  std::vector<std::vector<std::string>> validWordsChunks = SplitVector(validWords, 4);
-  std::pair<std::string,double> results1;
-  std::pair<std::string,double> results2;
-  std::pair<std::string,double> results3;
-  std::pair<std::string,double> results4;
-  std::thread one(findBestThread,words, validWordsChunks[0], std::ref(results1));
-  std::thread two(findBestThread,words, validWordsChunks[1], std::ref(results2));
-  std::thread three(findBestThread,words, validWordsChunks[2], std::ref(results3));
-  std::thread four(findBestThread,words, validWordsChunks[3], std::ref(results4));
-
-  one.join();
-  two.join();
-  three.join();
-  four.join();
-
-  double min = results1.second;
-  std::string minWord = results1.first;
-
-  if(results2.second < min)
+  unsigned int numThreads = threads;
+  if(numThreads > validWords.size() / 10)
   {
-    min = results2.second;
-    minWord = results2.first;
+    numThreads = validWords.size() / 10;
   }
-  if(results3.second < min)
+  std::vector<std::vector<std::string>> validWordsChunks = SplitVector(validWords, numThreads);
+  std::vector<std::pair<std::string,double>> results(numThreads,std::make_pair("",0));
+  std::vector<std::thread> threadVector;
+  for(unsigned int i = 0; i < numThreads; i++)
   {
-    min = results3.second;
-    minWord = results3.first;
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i])));
   }
-  if(results4.second < min)
+  double min;
+  std::string minWord;
+  for(unsigned int i = 0; i < numThreads; i++)
   {
-    min = results4.second;
-    minWord = results4.first;
+    if(threadVector[i].joinable())
+    {
+      threadVector[i].join();
+    }
+    if(i == 0)
+    {
+      min = results[i].second;
+      minWord = results[i].first;
+    }
+    else if(min > results[i].second)
+    {
+      min = results[i].second;
+      minWord = results[i].first;
+    }
   }
   return std::make_pair(minWord,min);
 }

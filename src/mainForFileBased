@@ -118,8 +118,8 @@ int main()
           }
           else
           {
-            best = fbThreads(valids, valids);
-            best2 = fbThreads(valids, validWords);
+            best = fbThreads(valids, valids, 4);
+            best2 = fbThreads(valids, validWords, 4);
           }
           if(best2.second >= best.second || hardmode.at(0) == 'y')
           {

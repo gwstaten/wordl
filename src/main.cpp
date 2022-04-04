@@ -16,10 +16,12 @@ int countDistinct(std::string s)
 }
 int main()
 {
+  int numThreads;
+  std::cout << "Number of threads? ";
+  std::cin >> numThreads;
+
   int number;
-
   std::string in;
-
   std::vector<std::string> validWords;
   std::vector<std::vector<std::string>> valids;
 
@@ -134,8 +136,8 @@ int main()
           else
           {
             fin.close();
-            std::pair<std::string, double> best = fbThreads(valids[j], valids[j]);
-            std::pair<std::string, double> best2 = fbThreads(valids[j], validWords);
+            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validWords, numThreads);
             std::ofstream fout(fileLocation[j]);
             if(best2.second >= best.second || hardmode == 'y')
             {

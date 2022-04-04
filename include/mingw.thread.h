@@ -52,12 +52,15 @@
 #include <processthreadsapi.h>  //  For GetCurrentThreadId
 #endif
 #include <process.h>  //  For _beginthreadex
+
 #ifndef NDEBUG
 #include <cstdio>
 #endif
+
 #if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0501)
 #error To use the MinGW-std-threads library, you will need to define the macro _WIN32_WINNT to be 0x0501 (Windows XP) or higher.
 #endif
+
 //  Instead of INVALID_HANDLE_VALUE, _beginthreadex returns 0.
 namespace mingw_stdthread
 {
@@ -65,10 +68,13 @@ namespace detail
 {
     template<std::size_t...>
     struct IntSeq {};
+
     template<std::size_t N, std::size_t... S>
     struct GenIntSeq : GenIntSeq<N-1, N-1, S...> { };
+
     template<std::size_t... S>
     struct GenIntSeq<0, S...> { typedef IntSeq<S...> type; };
+
 //    Use a template specialization to avoid relying on compiler optimization
 //  when determining the parameter integer sequence.
     template<class Func, class T, typename... Args>
@@ -81,20 +87,24 @@ namespace detail
         using Tuple = std::tuple<typename std::decay<Args>::type...>;
         typename std::decay<Func>::type mFunc;
         Tuple mArgs;
+
     public:
         ThreadFuncCall(Func&& aFunc, Args&&... aArgs)
           : mFunc(std::forward<Func>(aFunc)),
             mArgs(std::forward<Args>(aArgs)...)
         {
         }
+
         void callFunc()
         {
             detail::invoke(std::move(mFunc), std::move(std::get<S>(mArgs)) ...);
         }
     };
+
 //  Allow construction of threads without exposing implementation.
     class ThreadIdTool;
 } //  Namespace "detail"
+
 class thread
 {
 public:
@@ -113,6 +123,7 @@ public:
         friend bool operator<=(id x, id y) noexcept {return x.mId <= y.mId; }
         friend bool operator> (id x, id y) noexcept {return x.mId >  y.mId; }
         friend bool operator>=(id x, id y) noexcept {return x.mId >= y.mId; }
+
         template<class _CharT, class _Traits>
         friend std::basic_ostream<_CharT, _Traits>&
         operator<<(std::basic_ostream<_CharT, _Traits>& __out, id __id)
@@ -132,6 +143,7 @@ private:
     static constexpr DWORD kInfinite = 0xffffffffl;
     HANDLE mHandle;
     id mThreadId;
+
     template <class Call>
     static unsigned __stdcall threadfunc(void* arg)
     {
@@ -139,6 +151,7 @@ private:
         call->callFunc();
         return 0;
     }
+
     static unsigned int _hardware_concurrency_helper() noexcept
     {
         SYSTEM_INFO sysinfo;
@@ -157,13 +170,16 @@ public:
     id get_id() const noexcept {return mThreadId;}
     native_handle_type native_handle() const {return mHandle;}
     thread(): mHandle(kInvalidHandle), mThreadId(){}
+
     thread(thread&& other)
     :mHandle(other.mHandle), mThreadId(other.mThreadId)
     {
         other.mHandle = kInvalidHandle;
         other.mThreadId = id{};
     }
+
     thread(const thread &other)=delete;
+
     template<class Func, typename... Args>
     explicit thread(Func&& func, Args&&... args) : mHandle(), mThreadId()
     {
@@ -186,7 +202,9 @@ public:
             mHandle = reinterpret_cast<HANDLE>(int_handle);
         }
     }
+
     bool joinable() const {return mHandle != kInvalidHandle;}
+
 //    Note: Due to lack of synchronization, this function has a race condition
 //  if called concurrently, which leads to undefined behavior. The same applies
 //  to all other member functions of this class, but this one is mentioned
@@ -205,6 +223,7 @@ public:
         mHandle = kInvalidHandle;
         mThreadId = id{};
     }
+
     ~thread()
     {
         if (joinable())

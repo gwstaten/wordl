@@ -14,11 +14,15 @@
 #include <vector>
 #include <unordered_map>
 
-#undef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501
-
 #include "filesystem.hpp"
-#include "mingw.thread.h"
+
+#ifdef _WIN32
+  #undef _WIN32_WINNT
+  #define _WIN32_WINNT 0x0501
+  #include "mingw.thread.h"
+#else
+  #include <thread>
+#endif
 
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter);

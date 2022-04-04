@@ -77,6 +77,7 @@ Find best (y) or another guess (n)?
 At this point, typing `y` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `n` will bypass that step, and give prompt you for another guess you inputted. This will repeat until the program has one possible solution left, in which the program will cleanly exit. Look through [Q&A](#qa) if you encounter any issues running the code. You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
+
 | WordList Name | Description | Website  |
 |---------------|-------------|----------|
 | 4-11 | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|

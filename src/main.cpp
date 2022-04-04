@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #include "search.hpp"
-#include <unordered_map>
+
 int countDistinct(std::string s)
 {
   std::unordered_map<char, int> m;
@@ -134,8 +134,8 @@ int main()
           else
           {
             fin.close();
-            std::pair<std::string, double> best = findBest(valids[j], valids[j]);
-            std::pair<std::string, double> best2 = findBest(valids[j], validWords);
+            std::pair<std::string, double> best = fbThreads(valids[j], valids[j]);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validWords);
             std::ofstream fout(fileLocation[j]);
             if(best2.second >= best.second || hardmode == 'y')
             {

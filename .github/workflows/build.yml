@@ -3,6 +3,10 @@ name: Compile Wordls
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+        - '**.md'
+        - '**.gitignore'
+        - 'LICENSE'
   pull_request:
     branches: [ main ]
 

@@ -128,4 +128,5 @@ $
 
 ## Acknowledgements
 
-- [Steffen Schümann 03/20/2022 filesystem (filesystem.hpp) v1.5.10](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)
+- Steffen Schümann 03/20/2022 filesystem ([filesystem.hpp](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)) v1.5.10
+- Mega Limited 04/03/2022 mingw-std-threads ([mingw.thread.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.thread.h)) ([mingw.invoke.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.invoke.h)) v1.0.0

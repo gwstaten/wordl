@@ -128,5 +128,5 @@ $
 
 ## Acknowledgements
 
-- Steffen Schümann 03/20/2022 filesystem ([filesystem.hpp](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)) v1.5.10
-- Mega Limited 04/03/2022 mingw-std-threads ([mingw.thread.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.thread.h)) ([mingw.invoke.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.invoke.h)) v1.0.0
+- Steffen Schümann 03/20/2022 [filesystem](https://github.com/gulrak/filesystem/tree/e8a17c131952c86563ff0ba7e08896a4f2594216) ([filesystem.hpp](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)) v1.5.10
+- Mega Limited 04/03/2022 [mingw-std-threads](https://github.com/meganz/mingw-std-threads/tree/7e2507915900f5589febf0d8972cd5c9c03191f2) ([mingw.thread.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.thread.h)) ([mingw.invoke.h](https://github.com/gwstaten/wordl/blob/threads/include/mingw.invoke.h)) v1.0.0

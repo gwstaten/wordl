@@ -11,11 +11,15 @@
 #include <map>
 #include <cassert>
 #include <future>
-#include <thread>
 #include <vector>
 #include <unordered_map>
 
+#undef _WIN32_WINNT
+#define _WIN32_WINNT 0x0501
+
 #include "filesystem.hpp"
+#include "mingw.thread.h"
+
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter);
 std::vector<int> grade(std::string guess, std::string answer);

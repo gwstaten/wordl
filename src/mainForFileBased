@@ -113,13 +113,13 @@ int main()
           std::ofstream fout(fileLocation);
           if(hardmode.at(0) == 'y')
           {
-            best = findBest(valids, valids);
+            best = fbThreads(valids, valids);
             best2 = best;
           }
           else
           {
-            best = findBest(valids, valids);
-            best2 = findBest(valids, validWords);
+            best = fbThreads(valids, valids);
+            best2 = fbThreads(valids, validWords);
           }
           if(best2.second >= best.second || hardmode.at(0) == 'y')
           {

@@ -1,6 +1,10 @@
 # wordl
 
-## Compile
+## Prerequisite
+
+To compile this code, you will need to install make and c++ (17).
+
+### Compile
 
 To compile `wordl`, run
 

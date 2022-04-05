@@ -4,7 +4,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 #include "search.hpp"
-#include <unordered_map>
+
 int countDistinct(std::string s)
 {
   std::unordered_map<char, int> m;
@@ -16,10 +16,12 @@ int countDistinct(std::string s)
 }
 int main()
 {
+  int numThreads;
+  std::cout << "Number of threads? ";
+  std::cin >> numThreads;
+
   int number;
-
   std::string in;
-
   std::vector<std::string> validWords;
   std::vector<std::vector<std::string>> valids;
 
@@ -79,7 +81,7 @@ int main()
     ghc::filesystem::create_directories(filePath);
   }
 
-  filePath += "/";
+  filePath += "/S";
   std::vector<std::string> fileLocation(number,filePath);
 
   int loops = 0;
@@ -113,14 +115,7 @@ int main()
         {
           std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
           std::ifstream fin;
-          if(fileLocation[j].at(fileLocation[j].length()-1) == '/')
-          {
-            fin.open("start");
-          }
-          else
-          {
-            fin.open(fileLocation[j]);
-          }
+          fin.open(fileLocation[j]);
           if(fin)
           {
             std::string g;
@@ -134,8 +129,8 @@ int main()
           else
           {
             fin.close();
-            std::pair<std::string, double> best = findBest(valids[j], valids[j]);
-            std::pair<std::string, double> best2 = findBest(valids[j], validWords);
+            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validWords, numThreads);
             std::ofstream fout(fileLocation[j]);
             if(best2.second >= best.second || hardmode == 'y')
             {

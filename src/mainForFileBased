@@ -32,7 +32,7 @@ int main()
     ghc::filesystem::create_directories(filePath);
   }
 
-  filePath += "/";
+  filePath += "/S";
   std::ifstream fin("wordl/wordlists/" + in);
   if(!fin)
   {
@@ -51,11 +51,11 @@ int main()
   if(fin2)
   {
     validWords.clear();
-    fin >> temp;
-    while(!fin.eof())
+    fin2 >> temp;
+    while(!fin2.eof())
     {
       validWords.push_back(temp);
-      fin >> temp;
+      fin2 >> temp;
     }
   }
 
@@ -88,14 +88,7 @@ int main()
       if(valids.size() >= 1)
       {
         std::ifstream fin;
-        if(fileLocation.at(fileLocation.length()-1) == '/')
-        {
-          fin.open("start");
-        }
-        else
-        {
-          fin.open(fileLocation);
-        }
+        fin.open(fileLocation);
         if(fin)
         {
           std::string g;
@@ -113,13 +106,13 @@ int main()
           std::ofstream fout(fileLocation);
           if(hardmode.at(0) == 'y')
           {
-            best = findBest(valids, valids);
+            best = fbThreads(valids, valids, 4);
             best2 = best;
           }
           else
           {
-            best = findBest(valids, valids);
-            best2 = findBest(valids, validWords);
+            best = fbThreads(valids, valids, 4);
+            best2 = fbThreads(valids, validWords, 4);
           }
           if(best2.second >= best.second || hardmode.at(0) == 'y')
           {

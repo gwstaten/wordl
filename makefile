@@ -9,7 +9,7 @@ SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
 CXXFLAGS := -g -Wall -Iinclude -MMD -MP -static -std=c++17
-LDLIBS   := -lm
+LDLIBS   := -lm -pthread
 
 .PHONY: all clean
 

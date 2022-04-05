@@ -54,7 +54,7 @@ When prompted with this, enter one of the [wordlist](#word-lists). For the next 
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? n
+Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n)
 ```
@@ -64,7 +64,7 @@ You can then enter either `y` or `n` to say if you are playing in hard mode or n
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? n
+Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
 Find best (y) or guess (n)?
@@ -75,7 +75,7 @@ Here, most of you would want to type `n`, so you can get to having the bot solve
 
 ```bash
 $ ./wordl
-Word list? n
+Word list? nytimes
 Number of threads? 4
 Number of parallel wordls? 1
 Hard mode? (y / n) n
@@ -90,7 +90,7 @@ At this point, you can start inputting the results you get from entering words i
 ```bash
 Number of threads? 4
 $ ./wordl
-Word list? n
+Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
 Find best (y) or guess (n)?
@@ -140,7 +140,7 @@ A4: This will happen if you enter a guess that contradicts any of your previous 
 ```bash
 $ ./wordle
 Number of threads? 4
-Word list? n
+Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
 Find best (y) or guess (y)?

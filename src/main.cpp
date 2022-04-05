@@ -81,7 +81,7 @@ int main()
     ghc::filesystem::create_directories(filePath);
   }
 
-  filePath += "/";
+  filePath += "/*";
   std::vector<std::string> fileLocation(number,filePath);
 
   int loops = 0;
@@ -115,14 +115,7 @@ int main()
         {
           std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
           std::ifstream fin;
-          if(fileLocation[j].at(fileLocation[j].length()-1) == '/')
-          {
-            fin.open("start");
-          }
-          else
-          {
-            fin.open(fileLocation[j]);
-          }
+          fin.open(fileLocation[j]);
           if(fin)
           {
             std::string g;

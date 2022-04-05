@@ -2,7 +2,11 @@
 
 ## Prerequisite
 
-To compile this code, you will need to install make and c++ (17).
+To compile this code, you will need to install make and c++ (17). You will also need to clone this entire repository, using
+
+```bash
+git clone https://github.com/gwstaten
+```
 
 ### Compile
 
@@ -67,11 +71,10 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Find best (y) or guess (n)?
-
+Find best (f), list (l) or guess (g)?
 ```
 
-Here, most of you would want to type `n`, so you can get to having the bot solve the wordl. But for those of you interested in `Find best`, the code will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed.
+Here, most of you would want to type `g`, so you can get to having the bot solve the wordl. But for those of you interested in `Find best`, the code will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed. If your interested, you can also type `l` to see all the words the code will search through and count as valid words.
 
 ```bash
 $ ./wordl
@@ -79,8 +82,7 @@ Word list? nytimes
 Number of threads? 4
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Find best (y) or guess (n)?
-n
+Find best (f), list (l) or guess (g)? g
 
 guess:
 ```
@@ -93,15 +95,14 @@ $ ./wordl
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Find best (y) or guess (n)?
-n
+Find best (f), list (l) or guess (g)? g
 
 guess: adiou
 01001
-Find best (y) or another guess (n)?
+Find best (f), list (l) or guess (g)?
 ```
 
-At this point, typing `y` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `n` will bypass that step, and give prompt you for another guess you inputted. This will repeat until the program has one possible solution left, in which the program will cleanly exit. Look through [Q&A](#qa) if you encounter any issues running the code. You can also look at [Example Output](#example-output) to see what the code running would look like.
+At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. This will repeat until the program has one possible solution left, in which the program will cleanly exit. Look through [Q&A](#qa) if you encounter any issues running the code. You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
 
@@ -135,6 +136,10 @@ A3: When entering your guess, make sure the guess is the correct word length. Al
 
 A4: This will happen if you enter a guess that contradicts any of your previous guesses. Make sure you entered it correctly!
 
+### Q5: What does it mean when the code says `Creating log directory x...`
+
+A5: This code creates log files in order to optimize performance of the code, and making this code run faster. These log files are located entirely on your computer, in the directory `log` inside the directory in which you cloned this repository.
+
 ## Example Program Run
 
 ```bash
@@ -143,16 +148,15 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Find best (y) or guess (y)?
-n
+Find best (f), list (l) or guess (g)? g
 
 guess: adiou
 01001
-Find best (y) or another guess (n)?
-y
+Find best (f), list (l) or guess (g)? f
 Best guess for 34 possibilities: dunce
 Narrows down to 2.70588 possibilities on average
 
+Find best (f), list (l) or guess (g)? g
 
 guess: dunce
 22010

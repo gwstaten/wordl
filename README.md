@@ -38,6 +38,14 @@ When running wordl, you will be greeted with
 
 ```bash
 $ ./wordl
+Number of threads?
+```
+
+This is what the program will show each time you run it. This is prompting you to input the number of threads you are willing to allow the program to use. If you don't really understand it, use `4` as it will give the best performance. You can experiment with different numbers. Next, the code will show
+
+```bash
+$ ./wordl
+Number of threads? 4
 Word List?
 ```
 
@@ -45,18 +53,34 @@ When prompted with this, enter one of the [wordlist](#word-lists). For the next 
 
 ```bash
 $ ./wordl
+Number of threads? 4
 Word list? n
 Number of parallel wordls? 1
 Hard mode? (y / n)
 ```
 
-You can then enter either y or n to say if you are playing in hard mode or not, saying y will make sure the solver always chooses a word that is still a possible answer, but will on average take a few more guesses to guess the word. At this point, you should have something similar to
+You can then enter either `y` or `n` to say if you are playing in hard mode or not, saying y will make sure the solver always chooses a word that is still a possible answer, but will on average take a few more guesses to guess the word. At this point, you should have something similar to
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? n
+Number of parallel wordls? 1
+Hard mode? (y / n) n
+Find best (y) or guess (n)?
+
+```
+
+Here, most of you would want to type `n`, so you can get to having the bot solve the wordl. But for those of you interested in `Find best`, the code will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed.
 
 ```bash
 $ ./wordl
 Word list? n
+Number of threads? 4
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Find best (y) or guess (n)?
+n
 
 guess:
 ```
@@ -64,10 +88,13 @@ guess:
 At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and the correct position. 0 for grey, 1 for yellow, and 2 for green. **Parallel Wordle Note: In parallel wordle, you would enter the result of each wordle board one after another.** At this point, you should have something similar to
 
 ```bash
+Number of threads? 4
 $ ./wordl
 Word list? n
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Find best (y) or guess (n)?
+n
 
 guess: adiou
 01001
@@ -82,12 +109,13 @@ At this point, typing `y` would result in the program finding the best guess. Th
 |---------------|-------------|----------|
 | 4-11 | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
 | 2-25 | For words that are length 2-25 | [https://gwstaten.github.io](https://gwstaten.github.io) |
-| n | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
+| (&)nytimes(2) | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
+| (&)taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
 
-To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list)
+To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues)
 
 ## Q&A
 
@@ -103,13 +131,20 @@ A2: Ensure you have not inputted anything other than numbers.
 
 A3: When entering your guess, make sure the guess is the correct word length. Also ensure that the result you inputted is also the correct length (it should be the same as the word).
 
+### Q4: When I input my second (or x) guess, I get `segmentation fault` or `core dump`
+
+A4: This will happen if you enter a guess that contradicts any of your previous guesses. Make sure you entered it correctly!
+
 ## Example Output
 
 ```bash
+Number of threads? 4
 $ ./wordle
 Word list? n
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Find best (y) or guess (y)?
+n
 
 guess: adiou
 01001

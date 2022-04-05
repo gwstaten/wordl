@@ -27,6 +27,7 @@ int main()
 
   std::cout << "Word list? ";
   std::cin >> in;
+  std::transform(in.begin(), in.end(), in.begin(), [](unsigned char c){ return std::tolower(c); });
 
   std::ifstream fin("wordlists/" + in);
   if(!fin)
@@ -64,6 +65,7 @@ int main()
   char hardmode;
   std::cout << "Hard mode? (y / n) ";
   std::cin >> hardmode;
+  hardmode = std::tolower(hardmode);
 
   std::string filePath;
   if(hardmode == 'y')
@@ -75,7 +77,7 @@ int main()
     filePath = "log/" + in;
   }
 
-  if(!ghc::filesystem::exists(filePath ))
+  if(!ghc::filesystem::exists(filePath))
   {
     std::cout << "Creating log directory " << in << "..." << std::endl;
     ghc::filesystem::create_directories(filePath);
@@ -103,9 +105,10 @@ int main()
     }
     else
     {
-      std::cout << "Find best (f), List (l) or guess (g)? ";
+      std::cout << "Find best (f), list (l) or guess (g)? ";
       std::cin >> temp;
     }
+    temp = std::tolower(temp);
     std::string guess;
     if(temp == 'f')
     {
@@ -193,6 +196,7 @@ int main()
     {
       std::cout << std::endl << "guess: ";
       std::cin >> guess;
+      std::transform(guess.begin(), guess.end(), guess.begin(), [](unsigned char c){ return std::tolower(c); });
       for(int i = 0; i < number; i++)
       {
         fileLocation[i] = fileLocation[i] + guess;

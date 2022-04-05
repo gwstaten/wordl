@@ -51,11 +51,11 @@ int main()
   if(fin2)
   {
     validWords.clear();
-    fin >> temp;
+    fin2 >> temp;
     while(!fin2.eof())
     {
       validWords.push_back(temp);
-      fin >> temp;
+      fin2 >> temp;
     }
   }
 

@@ -5,7 +5,7 @@
 To compile this code, you will need to install make and c++ (17). You will also need to clone this entire repository, using
 
 ```bash
-git clone https://github.com/gwstaten
+git clone https://github.com/gwstaten/wordl
 ```
 
 ### Compile

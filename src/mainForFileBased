@@ -32,7 +32,7 @@ int main()
     ghc::filesystem::create_directories(filePath);
   }
 
-  filePath += "/";
+  filePath += "/S";
   std::ifstream fin("wordl/wordlists/" + in);
   if(!fin)
   {
@@ -88,14 +88,7 @@ int main()
       if(valids.size() >= 1)
       {
         std::ifstream fin;
-        if(fileLocation.at(fileLocation.length()-1) == '/')
-        {
-          fin.open("start");
-        }
-        else
-        {
-          fin.open(fileLocation);
-        }
+        fin.open(fileLocation);
         if(fin)
         {
           std::string g;

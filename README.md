@@ -135,11 +135,11 @@ A3: When entering your guess, make sure the guess is the correct word length. Al
 
 A4: This will happen if you enter a guess that contradicts any of your previous guesses. Make sure you entered it correctly!
 
-## Example Output
+## Example Program Run
 
 ```bash
-Number of threads? 4
 $ ./wordle
+Number of threads? 4
 Word list? n
 Number of parallel wordls? 1
 Hard mode? (y / n) n

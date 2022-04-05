@@ -58,6 +58,7 @@ int main()
       fin >> temp;
     }
   }
+  mainfout << validWords.size() << " " << valids.size() << " ";
 
   std::string fileLocation = filePath;
   int loops = 0;

@@ -81,7 +81,7 @@ int main()
     ghc::filesystem::create_directories(filePath);
   }
 
-  filePath += "/*";
+  filePath += "/S";
   std::vector<std::string> fileLocation(number,filePath);
 
   int loops = 0;

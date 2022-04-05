@@ -103,11 +103,11 @@ int main()
     }
     else
     {
-      std::cout << "Find best (y) or guess (n)? " << std::endl;
+      std::cout << "Find best (f), List (l) or guess (g)? ";
       std::cin >> temp;
     }
     std::string guess;
-    if(temp == 'y')
+    if(temp == 'f')
     {
       for(int j = 0; j < number; j++)
       {
@@ -165,26 +165,40 @@ int main()
         std::cout << std::endl;
       }
     }
+    if(temp == 'l')
+    {
+      for(unsigned int j = 0; j <valids.size(); j++)
+      {
+        for(unsigned int i = 0; i < valids[j].size(); i++)
+        {
+          std::cout << valids[j][i] << std::endl;
+        }
+        std::cout << std::endl;
+      }
+    }
     if(stillGood)
     {
       return 1;
     }
-    std::cout << std::endl << "guess: ";
-    std::cin >> guess;
-    for(int i = 0; i < number; i++)
+    if(temp == 'g')
     {
-      fileLocation[i] = fileLocation[i] + guess;
-      if(valids[i].size() > 1)
+      std::cout << std::endl << "guess: ";
+      std::cin >> guess;
+      for(int i = 0; i < number; i++)
       {
-        std::string temp;
-        std::vector<int> rating;
-        std::cin >> temp;
-        fileLocation[i] = fileLocation[i] + temp;
-        for(unsigned int i = 0; i < guess.length(); i++)
+        fileLocation[i] = fileLocation[i] + guess;
+        if(valids[i].size() > 1)
         {
-          rating.push_back(temp.at(i) - '0');
+          std::string temp;
+          std::vector<int> rating;
+          std::cin >> temp;
+          fileLocation[i] = fileLocation[i] + temp;
+          for(unsigned int i = 0; i < guess.length(); i++)
+          {
+            rating.push_back(temp.at(i) - '0');
+          }
+          valids[i] = filter(valids[i],std::make_pair(guess, rating));
         }
-        valids[i] = filter(valids[i],std::make_pair(guess, rating));
       }
     }
   }

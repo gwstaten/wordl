@@ -178,6 +178,15 @@ int main()
     }
     if(stillGood)
     {
+      for(unsigned int j = 0; j <valids.size(); j++)
+      {
+        std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
+        if(valids[j].size() == 2)
+        {
+          std::cout << std::endl << valids[j][1];
+        }
+        std::cout << std::endl;
+      }
       return 1;
     }
     if(temp == 'g')
@@ -202,4 +211,5 @@ int main()
       }
     }
   }
+
 }

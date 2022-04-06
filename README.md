@@ -108,9 +108,10 @@ At this point, typing `f` would result in the program finding the best guess. Th
 
 | WordList Name | Description | Website  |
 |---------------|-------------|----------|
-| 4-11 | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
+| 4-11(2) | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
 | 2-25 | For words that are length 2-25 | [https://gwstaten.github.io](https://gwstaten.github.io) |
 | nytimes(2) | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
+| nytimesOld(2) | Used for wordle clones with the old nytimes list |     |
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |

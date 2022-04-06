@@ -24,6 +24,7 @@ int main()
   std::string in;
   std::vector<std::string> validWords;
   std::vector<std::vector<std::string>> valids;
+  std::vector<std::vector<std::string>> validGuesses;
 
   std::cout << "Word list? ";
   std::cin >> in;
@@ -60,6 +61,10 @@ int main()
       validWords.push_back(temp);
       fin2 >> temp;
     }
+  }
+  for(int i = 0; i < number; i++)
+  {
+    validGuesses.push_back(validWords);
   }
 
   char hardmode;
@@ -133,9 +138,9 @@ int main()
           {
             fin.close();
             std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads);
-            std::pair<std::string, double> best2 = fbThreads(valids[j], validWords, numThreads);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads);
             std::ofstream fout(fileLocation[j]);
-            if(best2.second >= best.second || hardmode == 'y')
+            if(best2.second >= best.second)
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;
@@ -211,6 +216,10 @@ int main()
             rating.push_back(temp.at(i) - '0');
           }
           valids[i] = filter(valids[i],std::make_pair(guess, rating));
+          if(hardmode == 'y')
+          {
+            validGuesses[i] = filter(validGuesses[i],std::make_pair(guess, rating));
+          }
         }
       }
     }

@@ -81,6 +81,10 @@ int main()
           rating.push_back(temp.at(i) - '0');
         }
         valids = filter(valids,std::make_pair(guess, rating));
+        if(hardmode.at(0) == 'y')
+        {
+          validWords = filter(validWords,std::make_pair(guess, rating));
+        }
       }
     }
     else if(command == "printBest")
@@ -104,16 +108,8 @@ int main()
           std::pair<std::string, double> best;
           std::pair<std::string, double> best2;
           std::ofstream fout(fileLocation);
-          if(hardmode.at(0) == 'y')
-          {
-            best = fbThreads(valids, valids, 4);
-            best2 = best;
-          }
-          else
-          {
-            best = fbThreads(valids, valids, 4);
-            best2 = fbThreads(valids, validWords, 4);
-          }
+          best = fbThreads(valids, valids, 4);
+          best2 = fbThreads(valids, validWords, 4);
           if(best2.second >= best.second || hardmode.at(0) == 'y')
           {
             mainfout << best.first << "` narrows down to  `" << best.second << "` possibilities on average";

@@ -71,14 +71,10 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode?
+Search mode (1, 2, 3)?
 ```
-You then enter the search mode to be used, the search modes are as follows:
-| Search mode | Description |
-|---------------|-------------|
-| 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n sum) |
-| 2 | Finds the word that splits the word set up into the most separate groups (aka 1/n sum) |
-| 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
+
+Each search method uses a different algorithm and can be found [here](#search-modes). The recommended search method is 2, though the three have not been thoroughly tested and you can experiment with each one.
 
 ```bash
 $ ./wordl
@@ -86,7 +82,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode? 1
+Search mode (1, 2, 3)? 2
 Find best (f), list (l) or guess (g)?
 ```
 
@@ -98,7 +94,7 @@ Word list? nytimes
 Number of threads? 4
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode? (1, 2, 3) 1
+Search mode (1, 2, 3)? 2
 Find best (f), list (l) or guess (g)? g
 
 guess:
@@ -112,6 +108,7 @@ $ ./wordl
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Search mode (1, 2, 3)? 2
 Find best (f), list (l) or guess (g)? g
 
 guess: adiou
@@ -135,6 +132,14 @@ At this point, typing `f` would result in the program finding the best guess. Th
 | taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
 
 To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues)
+
+## Search Modes
+
+| Search mode | Description |
+|---------------|-------------|
+| 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n sum) |
+| 2 | Finds the word that splits the word set up into the most separate groups (aka 1/n sum) |
+| 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
 
 ## Q&A
 
@@ -165,22 +170,13 @@ $ ./wordle
 Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
-Hard mode? (y / n) n
-Search mode? (1, 2, 3) 1
+Hard mode (y / n)? n
+Search mode (1, 2, 3)? 2
 Find best (f), list (l) or guess (g)? g
 
-guess: adiou
-01001
-Find best (f), list (l) or guess (g)? f
-Best guess for 34 possibilities: dunce
-Narrows down to 2.70588 possibilities on average
-
-Find best (f), list (l) or guess (g)? g
-
-guess: dunce
-22010
-Only 1 possibility remaining: duchy
-
+guess: trace
+01212
+Only 1 possibility remaining: scare
 $
 ```
 

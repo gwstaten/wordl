@@ -68,12 +68,12 @@ int main()
   }
 
   char hardmode;
-  std::cout << "Hard mode? (y / n) ";
+  std::cout << "Hard mode (y / n)? ";
   std::cin >> hardmode;
   hardmode = std::tolower(hardmode);
 
   int searchMode;
-  std::cout << "Search mode? ";
+  std::cout << "Search mode (1, 2, 3)? ";
   std::cin >> searchMode;
 
   std::string filePath;

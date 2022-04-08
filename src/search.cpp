@@ -141,7 +141,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     total /= words.size();
     scores.push_back(total);
     //std::cout << total << " ";
-    if(total < lowestAve || guess == 0)
+    if((total < lowestAve && searchMode == 1) || (total > lowestAve && searchMode != 1) || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
@@ -214,7 +214,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
       min = results[i].second;
       minWord = results[i].first;
     }
-    else if(min > results[i].second)
+    else if((min > results[i].second && searchMode == 1) || (min < results[i].second && searchMode != 1))
     {
       min = results[i].second;
       minWord = results[i].first;

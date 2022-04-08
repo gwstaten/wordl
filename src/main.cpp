@@ -135,7 +135,18 @@ int main()
             double a;
             fin >> a;
             std::cout << g << std::endl;
-            std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+            if(searchMode == 1)
+            {
+              std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+            }
+            else if(searchMode == 2)
+            {
+              std::cout << "Splits up into " << a << " groups on average" << std::endl;
+            }
+            else
+            {
+              std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
+            }
             fin.close();
           }
           else
@@ -144,17 +155,39 @@ int main()
             std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
             std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
             std::ofstream fout(fileLocation[j]);
-            if(best2.second >= best.second)
+            if((best2.second >= best.second && searchMode == 1) || (best2.second <= best.second && searchMode != 1))
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;
-              std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
+              if(searchMode == 1)
+              {
+                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
+              }
+              else if(searchMode == 2)
+              {
+                std::cout << "Splits up into " << best.second << " groups on average" << std::endl;
+              }
+              else
+              {
+                std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
+              }
             }
             else
             {
               fout << best2.first << " " << best2.second;
               std::cout << best2.first << std::endl;
-              std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+              if(searchMode == 1)
+              {
+                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+              }
+              else if(searchMode == 2)
+              {
+                std::cout << "Splits up into " << best2.second << " groups on average" << std::endl;
+              }
+              else
+              {
+                std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
+              }
             }
           }
           if(valids[j].size() < 10)

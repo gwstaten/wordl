@@ -79,11 +79,11 @@ int main()
   std::string filePath;
   if(hardmode == 'y')
   {
-    filePath = "log/" + std::to_string(searchMode) + in + "-hard";
+    filePath = "log/" + std::to_string(searchMode) + "/" + in + "-hard";
   }
   else
   {
-    filePath = "log/" + std::to_string(searchMode) + in;
+    filePath = "log/" + std::to_string(searchMode) + "/" + in;
   }
 
   if(!ghc::filesystem::exists(filePath))

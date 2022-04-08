@@ -5,78 +5,6 @@
  */
 #include "search.hpp"
 
-std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
-{
-  std::vector<std::string> stillGood;
-  for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
-  {
-    std::vector<bool> accountedfor(wordList.size(),false);
-    std::string word = wordList[wordn];
-    bool notDone = true;
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 2)
-      {
-        if(word.at(filterL) != filter.first.at(filterL))
-        {
-          notDone = false;
-        }
-      }
-    }
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 0)
-      {
-        for(unsigned int i = 0; i < word.length() && notDone; i++)
-        {
-          if(word.at(i) == filter.first.at(filterL))
-          {
-            bool good = true;
-            for(unsigned int j = 0; j < word.length() && good; j++)
-            {
-              if((filter.second[j] == 2 || filter.second[j] == 1) && filter.first.at(j) == filter.first.at(filterL) && i != filterL)
-              {
-                good = false;
-              }
-            }
-            if(good)
-            {
-              notDone = false;
-            }
-          }
-        }
-      }
-    }
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 1)
-      {
-        bool found = false;
-        if(!(filter.first.at(filterL) == word.at(filterL)))
-        {
-          for(unsigned int i = 0; i < word.length() && !found; i++)
-          {
-            if(filter.first.at(filterL) == word.at(i) && i != filterL && !accountedfor[i] && !(filter.first.at(i) == word.at(i) && filter.second[i] == 2))
-            {
-              accountedfor[i] = true;
-              found = true;
-            }
-          }
-        }
-        if(!found)
-        {
-          notDone = false;
-        }
-      }
-    }
-    if(notDone)
-    {
-      stillGood.push_back(word);
-    }
-  }
-  return stillGood;
-}
-
 std::vector<int> grade(std::string guess, std::string answer)
 {
   std::vector<int> output(guess.length(),0);
@@ -104,6 +32,20 @@ std::vector<int> grade(std::string guess, std::string answer)
     }
   }
   return output;
+}
+
+std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
+{
+  std::vector<std::string> stillGood;
+  for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
+  {
+    std::string word = wordList[wordn];
+    if(grade(filter.first, word) == filter.second)
+    {
+      stillGood.push_back(word);
+    }
+  }
+  return stillGood;
 }
 
 void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode)

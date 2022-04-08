@@ -127,8 +127,15 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       if(ratingsMap.find(total) == ratingsMap.end())
       {
-        std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
-        ratingsMap[total] = std::make_pair(0,remaining.size());
+        if(searchMode == 1 || searchMode == 3)
+        {
+          std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
+          ratingsMap[total] = std::make_pair(0,remaining.size());
+        }
+        else if(searchMode == 2)
+        {
+          ratingsMap[total] = std::make_pair(0,1);
+        }
       }
       ratingsMap[total].first++;
     }
@@ -136,7 +143,25 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     std::map<unsigned long long int, std::pair<int, double>>::iterator it;
     for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
     {
-        total += ((it->second).first * (it->second).second);
+      switch(searchMode)
+      {
+        case 1:
+          total += ((it->second).first * (it->second).second);
+          break;
+        case 2:
+          total++;
+          break;
+        case 3:
+          if((it->second).second == 1)
+          {
+            total++;
+          }
+          break;
+      }
+    }
+    if(searchMode == 3)
+    {
+      total--;
     }
     total /= words.size();
     scores.push_back(total);
@@ -155,24 +180,18 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 template<typename T>
 std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
 {
-    std::vector<std::vector<T>> outVec;
-
-    size_t length = vec.size() / n;
-    size_t remain = vec.size() % n;
-
-    size_t begin = 0;
-    size_t end = 0;
-
-    for (size_t i = 0; i < std::min(n, vec.size()); ++i)
-    {
-        end += (remain > 0) ? (length + !!(remain--)) : length;
-
-        outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
-
-        begin = end;
-    }
-
-    return outVec;
+  std::vector<std::vector<T>> outVec;
+  size_t length = vec.size() / n;
+  size_t remain = vec.size() % n;
+  size_t begin = 0;
+  size_t end = 0;
+  for (size_t i = 0; i < std::min(n, vec.size()); ++i)
+  {
+    end += (remain > 0) ? (length + !!(remain--)) : length;
+    outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
+    begin = end;
+  }
+  return outVec;
 }
 
 std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode)

@@ -68,18 +68,22 @@ int main()
   }
 
   char hardmode;
-  std::cout << "Hard mode? (y / n) ";
+  std::cout << "Hard mode (y / n)? ";
   std::cin >> hardmode;
   hardmode = std::tolower(hardmode);
+
+  int searchMode;
+  std::cout << "Search mode (1, 2, 3)? ";
+  std::cin >> searchMode;
 
   std::string filePath;
   if(hardmode == 'y')
   {
-    filePath = "log/" + in + "-hard";
+    filePath = "log/" + std::to_string(searchMode) + "/" + in + "-hard";
   }
   else
   {
-    filePath = "log/" + in;
+    filePath = "log/" + std::to_string(searchMode) + "/" + in;
   }
 
   if(!ghc::filesystem::exists(filePath))
@@ -131,26 +135,59 @@ int main()
             double a;
             fin >> a;
             std::cout << g << std::endl;
-            std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+            if(searchMode == 1)
+            {
+              std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+            }
+            else if(searchMode == 2)
+            {
+              std::cout << "Splits up into " << a << " groups" << std::endl;
+            }
+            else
+            {
+              std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
+            }
             fin.close();
           }
           else
           {
             fin.close();
-            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads);
-            std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads);
+            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
             std::ofstream fout(fileLocation[j]);
-            if(best2.second >= best.second)
+            if((best2.second >= best.second && searchMode == 1) || (best2.second <= best.second && searchMode != 1))
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;
-              std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
+              if(searchMode == 1)
+              {
+                std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
+              }
+              else if(searchMode == 2)
+              {
+                std::cout << "Splits up into " << best.second << " groups" << std::endl;
+              }
+              else
+              {
+                std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
+              }
             }
             else
             {
               fout << best2.first << " " << best2.second;
               std::cout << best2.first << std::endl;
-              std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+              if(searchMode == 1)
+              {
+                std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+              }
+              else if(searchMode == 2)
+              {
+                std::cout << "Splits up into " << best2.second << " groups" << std::endl;
+              }
+              else
+              {
+                std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
+              }
             }
           }
           if(valids[j].size() < 10)
@@ -224,5 +261,4 @@ int main()
       }
     }
   }
-
 }

@@ -5,78 +5,6 @@
  */
 #include "search.hpp"
 
-std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
-{
-  std::vector<std::string> stillGood;
-  for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
-  {
-    std::vector<bool> accountedfor(wordList.size(),false);
-    std::string word = wordList[wordn];
-    bool notDone = true;
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 2)
-      {
-        if(word.at(filterL) != filter.first.at(filterL))
-        {
-          notDone = false;
-        }
-      }
-    }
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 0)
-      {
-        for(unsigned int i = 0; i < word.length() && notDone; i++)
-        {
-          if(word.at(i) == filter.first.at(filterL))
-          {
-            bool good = true;
-            for(unsigned int j = 0; j < word.length() && good; j++)
-            {
-              if((filter.second[j] == 2 || filter.second[j] == 1) && filter.first.at(j) == filter.first.at(filterL) && i != filterL)
-              {
-                good = false;
-              }
-            }
-            if(good)
-            {
-              notDone = false;
-            }
-          }
-        }
-      }
-    }
-    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
-    {
-      if(filter.second[filterL] == 1)
-      {
-        bool found = false;
-        if(!(filter.first.at(filterL) == word.at(filterL)))
-        {
-          for(unsigned int i = 0; i < word.length() && !found; i++)
-          {
-            if(filter.first.at(filterL) == word.at(i) && i != filterL && !accountedfor[i] && !(filter.first.at(i) == word.at(i) && filter.second[i] == 2))
-            {
-              accountedfor[i] = true;
-              found = true;
-            }
-          }
-        }
-        if(!found)
-        {
-          notDone = false;
-        }
-      }
-    }
-    if(notDone)
-    {
-      stillGood.push_back(word);
-    }
-  }
-  return stillGood;
-}
-
 std::vector<int> grade(std::string guess, std::string answer)
 {
   std::vector<int> output(guess.length(),0);
@@ -106,53 +34,21 @@ std::vector<int> grade(std::string guess, std::string answer)
   return output;
 }
 
-std::pair<std::string,double> findBest(std::vector<std::string> words, std::vector<std::string> validWords)
+std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
 {
-  //std::cout << std::endl;
-  int lowest = 0;
-  double lowestAve = 10000;
-  std::vector<double> scores;
-  for(unsigned int guess = 0; guess < validWords.size(); guess++)
+  std::vector<std::string> stillGood;
+  for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
   {
-    //std::cout << guess << " " << validWords[guess] << " ";
-    std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
-    for(unsigned int answer = 0; answer < words.size(); answer++)
+    std::string word = wordList[wordn];
+    if(grade(filter.first, word) == filter.second)
     {
-      std::vector<int> rating = grade(validWords[guess], words[answer]);
-      unsigned long long int total = 0;
-      for(unsigned int i = 0; i < validWords[guess].length(); i++)
-      {
-        total *= 3;
-        total += rating[i];
-      }
-      if(ratingsMap.find(total) == ratingsMap.end())
-      {
-        std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
-        ratingsMap[total] = std::make_pair(0,remaining.size());
-      }
-      ratingsMap[total].first++;
+      stillGood.push_back(word);
     }
-    double total = 0;
-    std::map<unsigned long long int, std::pair<int, double>>::iterator it;
-    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-    {
-        total += ((it->second).first * (it->second).second);
-    }
-    total /= words.size();
-    scores.push_back(total);
-    //std::cout << total << " ";
-    if(total <= lowestAve || guess == 0)
-    {
-      lowest = guess;
-      lowestAve = total;
-      //std::cout << "new or tied best!";
-    }
-    //std::cout << std::endl;
   }
-  return std::make_pair(validWords[lowest],lowestAve);
+  return stillGood;
 }
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode)
 {
   //std::cout << std::endl;
   int lowest = 0;
@@ -173,8 +69,15 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       if(ratingsMap.find(total) == ratingsMap.end())
       {
-        std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
-        ratingsMap[total] = std::make_pair(0,remaining.size());
+        if(searchMode == 1 || searchMode == 3)
+        {
+          std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
+          ratingsMap[total] = std::make_pair(0,remaining.size());
+        }
+        else if(searchMode == 2)
+        {
+          ratingsMap[total] = std::make_pair(0,1);
+        }
       }
       ratingsMap[total].first++;
     }
@@ -182,12 +85,33 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     std::map<unsigned long long int, std::pair<int, double>>::iterator it;
     for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
     {
-        total += ((it->second).first * (it->second).second);
+      switch(searchMode)
+      {
+        case 1:
+          total += ((it->second).first * (it->second).second);
+          break;
+        case 2:
+          total++;
+          break;
+        case 3:
+          if((it->second).second == 1)
+          {
+            total++;
+          }
+          break;
+      }
     }
-    total /= words.size();
+    if(searchMode == 3)
+    {
+      total--;
+    }
+    if(searchMode == 1)
+    {
+      total /= words.size();
+    }
     scores.push_back(total);
     //std::cout << total << " ";
-    if(total < lowestAve || guess == 0)
+    if((total < lowestAve && searchMode == 1) || (total > lowestAve && searchMode != 1) || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
@@ -201,27 +125,21 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 template<typename T>
 std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
 {
-    std::vector<std::vector<T>> outVec;
-
-    size_t length = vec.size() / n;
-    size_t remain = vec.size() % n;
-
-    size_t begin = 0;
-    size_t end = 0;
-
-    for (size_t i = 0; i < std::min(n, vec.size()); ++i)
-    {
-        end += (remain > 0) ? (length + !!(remain--)) : length;
-
-        outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
-
-        begin = end;
-    }
-
-    return outVec;
+  std::vector<std::vector<T>> outVec;
+  size_t length = vec.size() / n;
+  size_t remain = vec.size() % n;
+  size_t begin = 0;
+  size_t end = 0;
+  for (size_t i = 0; i < std::min(n, vec.size()); ++i)
+  {
+    end += (remain > 0) ? (length + !!(remain--)) : length;
+    outVec.push_back(std::vector<T>(vec.begin() + begin, vec.begin() + end));
+    begin = end;
+  }
+  return outVec;
 }
 
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads)
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode)
 {
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
@@ -245,7 +163,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i])));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode));
   }
   double min;
   std::string minWord;
@@ -260,7 +178,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
       min = results[i].second;
       minWord = results[i].first;
     }
-    else if(min > results[i].second)
+    else if((min > results[i].second && searchMode == 1) || (min < results[i].second && searchMode != 1))
     {
       min = results[i].second;
       minWord = results[i].first;

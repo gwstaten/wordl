@@ -21,12 +21,3 @@ jobs:
 
       - name: Compile UserWordl
         run: make
-
-      - name: Swap Compile Files
-        run: |
-          chmod +x ./scripts/switchCppFiles.sh
-          ./scripts/switchCppFiles.sh
-        shell: bash
-
-      - name: Compile WordlBot
-        run: make

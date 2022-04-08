@@ -141,7 +141,7 @@ int main()
             }
             else if(searchMode == 2)
             {
-              std::cout << "Splits up into " << a << " groups on average" << std::endl;
+              std::cout << "Splits up into " << a << " groups" << std::endl;
             }
             else
             {
@@ -165,7 +165,7 @@ int main()
               }
               else if(searchMode == 2)
               {
-                std::cout << "Splits up into " << best.second << " groups on average" << std::endl;
+                std::cout << "Splits up into " << best.second << " groups" << std::endl;
               }
               else
               {
@@ -182,7 +182,7 @@ int main()
               }
               else if(searchMode == 2)
               {
-                std::cout << "Splits up into " << best2.second << " groups on average" << std::endl;
+                std::cout << "Splits up into " << best2.second << " groups" << std::endl;
               }
               else
               {

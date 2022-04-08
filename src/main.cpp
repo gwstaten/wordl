@@ -72,14 +72,18 @@ int main()
   std::cin >> hardmode;
   hardmode = std::tolower(hardmode);
 
+  int searchMode;
+  std::cout << "Search mode? ";
+  std::cin >> searchMode;
+
   std::string filePath;
   if(hardmode == 'y')
   {
-    filePath = "log/" + in + "-hard";
+    filePath = "log/" + std::to_string(searchMode) + in + "-hard";
   }
   else
   {
-    filePath = "log/" + in;
+    filePath = "log/" + std::to_string(searchMode) + in;
   }
 
   if(!ghc::filesystem::exists(filePath))
@@ -137,8 +141,8 @@ int main()
           else
           {
             fin.close();
-            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads);
-            std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads);
+            std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
+            std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
             std::ofstream fout(fileLocation[j]);
             if(best2.second >= best.second)
             {

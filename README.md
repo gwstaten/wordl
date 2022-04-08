@@ -71,6 +71,22 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Search mode?
+```
+You then enter the search mode to be used, the search modes are as follows:
+| Search mode | Description |
+|---------------|-------------|
+| 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n sum) |
+| 2 | Finds the word that splits the word set up into the most separate (aka 1/n sum) |
+| 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Hard mode? (y / n) n
+Search mode? 1
 Find best (f), list (l) or guess (g)?
 ```
 
@@ -82,6 +98,7 @@ Word list? nytimes
 Number of threads? 4
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Search mode? (1, 2, 3) 1
 Find best (f), list (l) or guess (g)? g
 
 guess:
@@ -149,6 +166,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
+Search mode? (1, 2, 3) 1
 Find best (f), list (l) or guess (g)? g
 
 guess: adiou

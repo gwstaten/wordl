@@ -106,53 +106,7 @@ std::vector<int> grade(std::string guess, std::string answer)
   return output;
 }
 
-std::pair<std::string,double> findBest(std::vector<std::string> words, std::vector<std::string> validWords)
-{
-  //std::cout << std::endl;
-  int lowest = 0;
-  double lowestAve = 10000;
-  std::vector<double> scores;
-  for(unsigned int guess = 0; guess < validWords.size(); guess++)
-  {
-    //std::cout << guess << " " << validWords[guess] << " ";
-    std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
-    for(unsigned int answer = 0; answer < words.size(); answer++)
-    {
-      std::vector<int> rating = grade(validWords[guess], words[answer]);
-      unsigned long long int total = 0;
-      for(unsigned int i = 0; i < validWords[guess].length(); i++)
-      {
-        total *= 3;
-        total += rating[i];
-      }
-      if(ratingsMap.find(total) == ratingsMap.end())
-      {
-        std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
-        ratingsMap[total] = std::make_pair(0,remaining.size());
-      }
-      ratingsMap[total].first++;
-    }
-    double total = 0;
-    std::map<unsigned long long int, std::pair<int, double>>::iterator it;
-    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-    {
-        total += ((it->second).first * (it->second).second);
-    }
-    total /= words.size();
-    scores.push_back(total);
-    //std::cout << total << " ";
-    if(total <= lowestAve || guess == 0)
-    {
-      lowest = guess;
-      lowestAve = total;
-      //std::cout << "new or tied best!";
-    }
-    //std::cout << std::endl;
-  }
-  return std::make_pair(validWords[lowest],lowestAve);
-}
-
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode)
 {
   //std::cout << std::endl;
   int lowest = 0;
@@ -221,7 +175,7 @@ std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
     return outVec;
 }
 
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads)
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode)
 {
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
@@ -245,7 +199,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i])));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode));
   }
   double min;
   std::string minWord;

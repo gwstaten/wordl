@@ -163,7 +163,10 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       total--;
     }
-    total /= words.size();
+    if(searchMode == 1)
+    {
+      total /= words.size();
+    }
     scores.push_back(total);
     //std::cout << total << " ";
     if((total < lowestAve && searchMode == 1) || (total > lowestAve && searchMode != 1) || guess == 0)

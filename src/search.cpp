@@ -21,12 +21,14 @@ std::vector<int> grade(std::string guess, std::string answer)
   {
     if(output[guessSpot] == 0)
     {
-      for(unsigned int answerSpot = 0; answerSpot < guess.length(); answerSpot++)
+      bool stillSearching = true;
+      for(unsigned int answerSpot = 0; answerSpot < guess.length() && stillSearching; answerSpot++)
       {
         if(usedAnswer[answerSpot] == 0 && guess.at(guessSpot) == answer.at(answerSpot))
         {
           output[guessSpot] = 1;
           usedAnswer[answerSpot] = 1;
+          stillSearching = false;
         }
       }
     }

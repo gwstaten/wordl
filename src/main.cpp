@@ -100,15 +100,8 @@ int main()
   {
     loops++;
     char temp = 'n';
-    if(stillGood)
-    {
-      temp = 'y';
-    }
-    else
-    {
-      std::cout << "Find best (f), list (l), guess (g), or exit (e)? ";
-      std::cin >> temp;
-    }
+    std::cout << "Find best (f), list (l), guess (g), or exit (e)? ";
+    std::cin >> temp;
     temp = std::tolower(temp);
     std::string guess;
     if(temp == 'e')

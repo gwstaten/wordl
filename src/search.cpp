@@ -112,10 +112,6 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
           break;
       }
     }
-    if(searchMode == 3)
-    {
-      total--;
-    }
     if(searchMode == 1 || searchMode == 5)
     {
       total /= words.size();

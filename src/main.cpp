@@ -99,14 +99,6 @@ int main()
   while(true)
   {
     loops++;
-    bool stillGood = true;
-    for(unsigned int k = 0; k < valids.size() && stillGood; k++)
-    {
-      if(valids[k].size() > 2)
-      {
-        stillGood = false;
-      }
-    }
     char temp = 'n';
     if(stillGood)
     {
@@ -114,11 +106,15 @@ int main()
     }
     else
     {
-      std::cout << "Find best (f), list (l) or guess (g)? ";
+      std::cout << "Find best (f), list (l), guess (g), or exit (e)? ";
       std::cin >> temp;
     }
     temp = std::tolower(temp);
     std::string guess;
+    if(temp == 'e')
+    {
+      return 1;
+    }
     if(temp == 'f')
     {
       for(int j = 0; j < number; j++)
@@ -220,19 +216,6 @@ int main()
         }
         std::cout << std::endl;
       }
-    }
-    if(stillGood)
-    {
-      for(unsigned int j = 0; j <valids.size(); j++)
-      {
-        std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
-        if(valids[j].size() == 2)
-        {
-          std::cout << std::endl << valids[j][1];
-        }
-        std::cout << std::endl;
-      }
-      return 1;
     }
     if(temp == 'g')
     {

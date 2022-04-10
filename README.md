@@ -153,6 +153,7 @@ At this point, typing `f` would result in the program finding the best guess. Th
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
 | taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
+| obscordle | Used for obscordle | [https://wordreaper.github.io/wordle/](https://wordreaper.github.io/wordle/) |
 
 To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues)
 

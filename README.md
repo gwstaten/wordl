@@ -83,7 +83,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode (1, 2, 3)?
+Search mode (1, 2, 3, 4)?
 ```
 
 Each search method uses a different algorithm and can be found [here](#search-modes). The recommended search method is 2, though the three have not been thoroughly tested and you can experiment with each one.
@@ -94,20 +94,26 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode (1, 2, 3)? 2
-Find best (f), list (l) or guess (g)?
+Search mode (1, 2, 3, 4)? 2
+
+Wordlist initialized with 2309 answers and an additional 2309 guesses
+
+Find best (f), list (l), guess (g), or exit (e)?
 ```
 
 Here, most of you would want to type `g`, so you can get to having the bot solve the wordl. But for those of you interested in `Find best`, the code will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed. If your interested, you can also type `l` to see all the words the code will search through and count as valid words.
 
 ```bash
 $ ./wordl
-Word list? nytimes
 Number of threads? 4
+Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode (1, 2, 3)? 2
-Find best (f), list (l) or guess (g)? g
+Search mode (1, 2, 3, 4)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), or exit (e)? g
 
 guess:
 ```
@@ -115,16 +121,21 @@ guess:
 At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and the correct position. 0 for grey, 1 for yellow, and 2 for green. **Parallel Wordle Note: In parallel wordle, you would enter the result of each wordle board one after another.** At this point, you should have something similar to
 
 ```bash
-Number of threads? 4
 $ ./wordl
+Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode? (y / n) n
-Search mode (1, 2, 3)? 2
-Find best (f), list (l) or guess (g)? g
+Search mode (1, 2, 3, 4)? 2
 
-guess: adiou
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), or exit (e)? g
+
+guess: adieu
 01001
+There are now 30 answers remaining
+
 Find best (f), list (l) or guess (g)?
 ```
 
@@ -152,6 +163,7 @@ To add your own word list, add a file to the wordlists directory that contains t
 | 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n sum) |
 | 2 | Finds the word that splits the word set up into the most separate groups (aka 1/n sum) |
 | 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
+| 4 | Finds the word that narrows down to the least number of remaining possibilities in the worst case scenario (aka max(n)) |
 
 ## Q&A
 
@@ -183,12 +195,20 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Hard mode (y / n)? n
-Search mode (1, 2, 3)? 2
-Find best (f), list (l) or guess (g)? g
+Search mode (1, 2, 3, 4)? 2
+
+Wordlist initialized with 2309 answers and an additional 2309 guesses
+
+Find best (f), list (l), guess (g), or exit (e)? g
 
 guess: trace
 01212
-Only 1 possibility remaining: scare
+There are now 1 answers remaining
+
+Find best (f), list (l), guess (g), or exit (e)? l
+scare
+
+Find best (f), list (l), guess (g), or exit (e)? e
 $
 ```
 

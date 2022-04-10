@@ -73,7 +73,7 @@ int main()
   hardmode = std::tolower(hardmode);
 
   int searchMode;
-  std::cout << "Search mode (1, 2, 3)? ";
+  std::cout << "Search mode (1, 2, 3, 4)? ";
   std::cin >> searchMode;
 
   std::string filePath;
@@ -96,7 +96,12 @@ int main()
   std::vector<std::string> fileLocation(number,filePath);
 
 
-  std::cout << std::endl << "Wordlist initialized with " << valids[0].size() << " answers and an additional " << validGuesses[0].size() << " guesses" << std::endl << std::endl;
+  std::cout << std::endl << "Wordlist initialized with " << valids[0].size() << " answers";
+  if(fin2.is_open())
+  {
+    std::cout << " and an additional " << validGuesses[0].size() << " guesses";
+  }
+  std::cout << std::endl << std::endl;
 
   int loops = 0;
   while(true)
@@ -135,9 +140,13 @@ int main()
             {
               std::cout << "Splits up into " << a << " groups" << std::endl;
             }
-            else
+            else if(searchMode == 3)
             {
               std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
+            }
+            else
+            {
+              std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
             }
             fin.close();
           }
@@ -147,7 +156,7 @@ int main()
             std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
             std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
             std::ofstream fout(fileLocation[j]);
-            if((best2.second >= best.second && searchMode == 1) || (best2.second <= best.second && searchMode != 1))
+            if((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3)))
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;
@@ -159,9 +168,13 @@ int main()
               {
                 std::cout << "Splits up into " << best.second << " groups" << std::endl;
               }
-              else
+              else if(searchMode == 3)
               {
                 std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
+              }
+              else
+              {
+                std::cout << "Narrows down to " << best.second << " possibilities in the worst case scenario" << std::endl;
               }
             }
             else
@@ -176,9 +189,13 @@ int main()
               {
                 std::cout << "Splits up into " << best2.second << " groups" << std::endl;
               }
-              else
+              else if(searchMode == 3)
               {
                 std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
+              }
+              else
+              {
+                std::cout << "Narrows down to " << best2.second << " possibilities in the worst case scenario" << std::endl;
               }
             }
           }

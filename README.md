@@ -161,10 +161,11 @@ To add your own word list, add a file to the wordlists directory that contains t
 
 | Search mode | Description |
 |---------------|-------------|
-| 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n sum) |
+| 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n average) |
 | 2 | Finds the word that splits the word set up into the most separate groups (aka 1/n sum) |
 | 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
 | 4 | Finds the word that narrows down to the least number of remaining possibilities in the worst case scenario (aka max(n)) |
+| 5 | Finds the word that gets the most bits of information on average (aka logBASE(n/p,0.5) average) |
 
 ## Q&A
 

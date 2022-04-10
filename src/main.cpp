@@ -73,7 +73,7 @@ int main()
   hardmode = std::tolower(hardmode);
 
   int searchMode;
-  std::cout << "Search mode (1, 2, 3, 4)? ";
+  std::cout << "Search mode (1, 2, 3, 4, 5)? ";
   std::cin >> searchMode;
 
   std::string filePath;
@@ -144,9 +144,13 @@ int main()
             {
               std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
             }
-            else
+            else if(searchMode == 4)
             {
               std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
+            }
+            else
+            {
+              std::cout << "Gives " << a << " bits of information on average" << std::endl;
             }
             fin.close();
           }
@@ -156,7 +160,7 @@ int main()
             std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
             std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
             std::ofstream fout(fileLocation[j]);
-            if((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3)))
+            if((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5)))
             {
               fout << best.first << " " << best.second;
               std::cout << best.first << std::endl;
@@ -172,9 +176,13 @@ int main()
               {
                 std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
               }
-              else
+              else if(searchMode == 4)
               {
                 std::cout << "Narrows down to " << best.second << " possibilities in the worst case scenario" << std::endl;
+              }
+              else
+              {
+                std::cout << "Gives " << best.second << " bits of information on average" << std::endl;
               }
             }
             else
@@ -193,9 +201,13 @@ int main()
               {
                 std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
               }
-              else
+              else if(searchMode == 4)
               {
                 std::cout << "Narrows down to " << best2.second << " possibilities in the worst case scenario" << std::endl;
+              }
+              else
+              {
+                std::cout << "Gives " << best2.second << " bits of information on average" << std::endl;
               }
             }
           }

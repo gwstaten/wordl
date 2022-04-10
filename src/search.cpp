@@ -71,7 +71,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       if(ratingsMap.find(total) == ratingsMap.end())
       {
-        if(searchMode == 1 || searchMode == 3 || searchMode == 4)
+        if(searchMode == 1 || searchMode == 3 || searchMode == 4 || searchMode == 5)
         {
           std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
           ratingsMap[total] = std::make_pair(0,remaining.size());
@@ -107,13 +107,16 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
             total = (it->second).second;
           }
           break;
+        case 5:
+          total += (it->second).first * std::log((it->second).second / words.size()) / std::log(0.5);
+          break;
       }
     }
     if(searchMode == 3)
     {
       total--;
     }
-    if(searchMode == 1)
+    if(searchMode == 1 || searchMode == 5)
     {
       total /= words.size();
     }
@@ -186,7 +189,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
       min = results[i].second;
       minWord = results[i].first;
     }
-    else if((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3)))
+    else if((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5)))
     {
       min = results[i].second;
       minWord = results[i].first;

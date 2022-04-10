@@ -95,6 +95,9 @@ int main()
   filePath += "/S";
   std::vector<std::string> fileLocation(number,filePath);
 
+
+  std::cout << std::endl << "Wordlist initialized with " << valids[0].size() << " answers and an additional " << validGuesses[0].size() << " guesses" << std::endl << std::endl;
+
   int loops = 0;
   while(true)
   {
@@ -229,12 +232,16 @@ int main()
             rating.push_back(temp.at(i) - '0');
           }
           valids[i] = filter(valids[i],std::make_pair(guess, rating));
+          std::cout << "There are now " << valids[i].size() << " answers";
           if(hardmode == 'y')
           {
             validGuesses[i] = filter(validGuesses[i],std::make_pair(guess, rating));
+            std::cout << " and " << validGuesses[i].size() << " guesses";
           }
+          std::cout << " remaining" << std::endl;
         }
       }
+      std::cout << std::endl;
     }
   }
 }

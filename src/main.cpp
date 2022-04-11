@@ -14,6 +14,28 @@ int countDistinct(std::string s)
   }
   return m.size();
 }
+
+std::vector<std::string> split(std::string str, std::string token)
+{
+    std::vector<std::string> result;
+    while(str.size())
+    {
+        unsigned int index = str.find(token);
+        if(index != std::string::npos)
+        {
+            result.push_back(str.substr(0,index));
+            str = str.substr(index+token.size());
+            if(str.size()==0)result.push_back(str);
+        }
+        else
+        {
+            result.push_back(str);
+            str = "";
+        }
+    }
+    return result;
+}
+
 int main()
 {
   int numThreads;
@@ -108,13 +130,28 @@ int main()
   {
     loops++;
     char temp = 'n';
-    std::cout << "Find best (f), list (l), guess (g), or exit (e)? ";
+    std::cout << "Find best (f), list (l), guess (g), rate (a), or exit (e)? ";
     std::cin >> temp;
     temp = std::tolower(temp);
     std::string guess;
     if(temp == 'e')
     {
       return 1;
+    }
+    if(temp == 'a')
+    {
+      for(int j = 0; j < number; j++)
+      {
+        std::cout << std::endl << "Words to rate (list separated by commas)? ";
+        std::string wordliststring;
+        std::cin >> wordliststring;
+        std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+
+        std::vector<std::string> wordSet = split(wordliststring, ",");
+        std::cout << "Guaranteed solves: " << rate(wordSet, valids[j], 3) << "/" << valids[j].size() << std::endl;
+        std::cout << "Average bits of info: " << rate(wordSet, valids[j], 5) << std::endl;
+        std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl << std::endl;
+      }
     }
     if(temp == 'f')
     {

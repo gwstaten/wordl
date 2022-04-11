@@ -50,6 +50,82 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
   return stillGood;
 }
 
+double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
+{
+  std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
+  for(unsigned int answer = 0; answer < words.size(); answer++)
+  {
+    std::vector<int> rating;
+    std::vector<std::vector<int>> ratings;
+    for(unsigned int i = 0; i < guess.size(); i++)
+    {
+      std::vector<int> tempRating = grade(guess[i], words[answer]);
+      ratings.push_back(tempRating);
+      for(unsigned int j = 0; j < tempRating.size(); j++)
+      {
+        rating.push_back(tempRating[j]);
+      }
+    }
+    unsigned long long int total = 0;
+    for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
+    {
+      total *= 3;
+      total += rating[i];
+    }
+    if(ratingsMap.find(total) == ratingsMap.end())
+    {
+      if(searchMode == 1 || searchMode == 3 || searchMode == 4 || searchMode == 5)
+      {
+        std::vector<std::string> remaining = words;
+        for(unsigned int i = 0; i < guess.size(); i++)
+        {
+          remaining = filter(remaining, std::make_pair(guess[i],ratings[i]));
+        }
+        ratingsMap[total] = std::make_pair(0,remaining.size());
+      }
+      else if(searchMode == 2)
+      {
+        ratingsMap[total] = std::make_pair(0,1);
+      }
+    }
+    ratingsMap[total].first++;
+  }
+  double total = 0;
+  std::map<unsigned long long int, std::pair<int, double>>::iterator it;
+  for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
+  {
+    switch(searchMode)
+    {
+      case 1:
+        total += ((it->second).first * (it->second).second);
+        break;
+      case 2:
+        total++;
+        break;
+      case 3:
+        if((it->second).second == 1)
+        {
+          total++;
+        }
+        break;
+      case 4:
+        if(total < (it->second).second)
+        {
+          total = (it->second).second;
+        }
+        break;
+      case 5:
+        total += (it->second).first * std::log((it->second).second / words.size()) / std::log(0.5);
+        break;
+    }
+  }
+  if(searchMode == 1 || searchMode == 5)
+  {
+    total /= words.size();
+  }
+  return total;
+}
+
 void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode)
 {
   //std::cout << std::endl;
@@ -59,67 +135,8 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
     //std::cout << guess << " " << validWords[guess] << " ";
-    std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
-    for(unsigned int answer = 0; answer < words.size(); answer++)
-    {
-      std::vector<int> rating = grade(validWords[guess], words[answer]);
-      unsigned long long int total = 0;
-      for(unsigned int i = 0; i < validWords[guess].length(); i++)
-      {
-        total *= 3;
-        total += rating[i];
-      }
-      if(ratingsMap.find(total) == ratingsMap.end())
-      {
-        if(searchMode == 1 || searchMode == 3 || searchMode == 4 || searchMode == 5)
-        {
-          std::vector<std::string> remaining = filter(words, std::make_pair(validWords[guess],rating));
-          ratingsMap[total] = std::make_pair(0,remaining.size());
-        }
-        else if(searchMode == 2)
-        {
-          ratingsMap[total] = std::make_pair(0,1);
-        }
-      }
-      ratingsMap[total].first++;
-    }
-    double total = 0;
-    std::map<unsigned long long int, std::pair<int, double>>::iterator it;
-    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-    {
-      switch(searchMode)
-      {
-        case 1:
-          total += ((it->second).first * (it->second).second);
-          break;
-        case 2:
-          total++;
-          break;
-        case 3:
-          if((it->second).second == 1)
-          {
-            total++;
-          }
-          break;
-        case 4:
-          if(total < (it->second).second)
-          {
-            total = (it->second).second;
-          }
-          break;
-        case 5:
-          total += (it->second).first * std::log((it->second).second / words.size()) / std::log(0.5);
-          break;
-      }
-    }
-    if(searchMode == 3)
-    {
-      total--;
-    }
-    if(searchMode == 1 || searchMode == 5)
-    {
-      total /= words.size();
-    }
+    std::vector<std::string> guessVec = {validWords[guess]};
+    double total = rate(guessVec, words, searchMode);
     scores.push_back(total);
     //std::cout << total << " ";
     if((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3)) || guess == 0)

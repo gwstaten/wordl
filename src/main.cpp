@@ -42,7 +42,14 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
   {
     if(valids[j].size() > 2 || reversed)
     {
-      std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
+      if(reversed)
+      {
+        std::cout << "Worst guess for " << valids[j].size() << " possibilities: ";
+      }
+      else
+      {
+        std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
+      }
       std::ifstream fin;
       if(reversed)
       {

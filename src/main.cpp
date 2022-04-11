@@ -36,6 +36,129 @@ std::vector<std::string> split(std::string str, std::string token)
     return result;
 }
 
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
+{
+  for(unsigned int j = 0; j < valids.size(); j++)
+  {
+    if(valids[j].size() > 2 || reversed)
+    {
+      std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
+      std::ifstream fin;
+      if(reversed)
+      {
+        fin.open(fileLocation[j] + "-worst");
+      }
+      else
+      {
+        fin.open(fileLocation[j]);
+      }
+      if(fin)
+      {
+        std::string g;
+        fin >> g;
+        double a;
+        fin >> a;
+        std::cout << g << std::endl;
+        if(searchMode == 1)
+        {
+          std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+        }
+        else if(searchMode == 2)
+        {
+          std::cout << "Splits up into " << a << " groups" << std::endl;
+        }
+        else if(searchMode == 3)
+        {
+          std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
+        }
+        else if(searchMode == 4)
+        {
+          std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
+        }
+        else
+        {
+          std::cout << "Gives " << a << " bits of information on average" << std::endl;
+        }
+        fin.close();
+      }
+      else
+      {
+        fin.close();
+        std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
+        std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
+        std::ofstream fout(fileLocation[j]);
+        if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
+        {
+          fout << best.first << " " << best.second;
+          std::cout << best.first << std::endl;
+          if(searchMode == 1)
+          {
+            std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
+          }
+          else if(searchMode == 2)
+          {
+            std::cout << "Splits up into " << best.second << " groups" << std::endl;
+          }
+          else if(searchMode == 3)
+          {
+            std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
+          }
+          else if(searchMode == 4)
+          {
+            std::cout << "Narrows down to " << best.second << " possibilities in the worst case scenario" << std::endl;
+          }
+          else
+          {
+            std::cout << "Gives " << best.second << " bits of information on average" << std::endl;
+          }
+        }
+        else
+        {
+          fout << best2.first << " " << best2.second;
+          std::cout << best2.first << std::endl;
+          if(searchMode == 1)
+          {
+            std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
+          }
+          else if(searchMode == 2)
+          {
+            std::cout << "Splits up into " << best2.second << " groups" << std::endl;
+          }
+          else if(searchMode == 3)
+          {
+            std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
+          }
+          else if(searchMode == 4)
+          {
+            std::cout << "Narrows down to " << best2.second << " possibilities in the worst case scenario" << std::endl;
+          }
+          else
+          {
+            std::cout << "Gives " << best2.second << " bits of information on average" << std::endl;
+          }
+        }
+      }
+      if(valids[j].size() < 10)
+      {
+        for(unsigned int i = 0; i < valids[j].size(); i++)
+        {
+          std::cout << valids[j][i] << std::endl;
+        }
+      }
+    }
+    else
+    {
+      std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
+      if(valids[j].size() == 2)
+      {
+        std::cout << std::endl << valids[j][1];
+      }
+      std::cout << std::endl;
+    }
+    std::cout << std::endl;
+  }
+}
+
 int main()
 {
   int numThreads;
@@ -45,6 +168,7 @@ int main()
   int number;
   std::string in;
   std::vector<std::string> validWords;
+  std::vector<std::string> validWordss;
 
   std::cout << "Word list? ";
   std::cin >> in;
@@ -60,7 +184,7 @@ int main()
   fin >> temp;
   while(!fin.eof())
   {
-    validWords.push_back(temp);
+    validWordss.push_back(temp);
     fin >> temp;
   }
 
@@ -93,7 +217,7 @@ int main()
     std::vector<std::vector<std::string>> validGuesses;
     for(int i = 0; i < number; i++)
     {
-      valids.push_back(validWords);
+      valids.push_back(validWordss);
     }
     for(int i = 0; i < number; i++)
     {
@@ -157,118 +281,11 @@ int main()
       }
       if(temp == 'f')
       {
-        for(int j = 0; j < number; j++)
-        {
-          if(valids[j].size() > 2)
-          {
-            std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-            std::ifstream fin;
-            fin.open(fileLocation[j]);
-            if(fin)
-            {
-              std::string g;
-              fin >> g;
-              double a;
-              fin >> a;
-              std::cout << g << std::endl;
-              if(searchMode == 1)
-              {
-                std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
-              }
-              else if(searchMode == 2)
-              {
-                std::cout << "Splits up into " << a << " groups" << std::endl;
-              }
-              else if(searchMode == 3)
-              {
-                std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
-              }
-              else if(searchMode == 4)
-              {
-                std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
-              }
-              else
-              {
-                std::cout << "Gives " << a << " bits of information on average" << std::endl;
-              }
-              fin.close();
-            }
-            else
-            {
-              fin.close();
-              std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode);
-              std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode);
-              std::ofstream fout(fileLocation[j]);
-              if((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5)))
-              {
-                fout << best.first << " " << best.second;
-                std::cout << best.first << std::endl;
-                if(searchMode == 1)
-                {
-                  std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
-                }
-                else if(searchMode == 2)
-                {
-                  std::cout << "Splits up into " << best.second << " groups" << std::endl;
-                }
-                else if(searchMode == 3)
-                {
-                  std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
-                }
-                else if(searchMode == 4)
-                {
-                  std::cout << "Narrows down to " << best.second << " possibilities in the worst case scenario" << std::endl;
-                }
-                else
-                {
-                  std::cout << "Gives " << best.second << " bits of information on average" << std::endl;
-                }
-              }
-              else
-              {
-                fout << best2.first << " " << best2.second;
-                std::cout << best2.first << std::endl;
-                if(searchMode == 1)
-                {
-                  std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
-                }
-                else if(searchMode == 2)
-                {
-                  std::cout << "Splits up into " << best2.second << " groups" << std::endl;
-                }
-                else if(searchMode == 3)
-                {
-                  std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
-                }
-                else if(searchMode == 4)
-                {
-                  std::cout << "Narrows down to " << best2.second << " possibilities in the worst case scenario" << std::endl;
-                }
-                else
-                {
-                  std::cout << "Gives " << best2.second << " bits of information on average" << std::endl;
-                }
-              }
-            }
-            if(valids[j].size() < 10)
-            {
-              for(unsigned int i = 0; i < valids[j].size(); i++)
-              {
-                std::cout << valids[j][i] << std::endl;
-              }
-            }
-          }
-          else
-          {
-            std::cout << "Only " << valids[j].size() << " possibility remaining: " << valids[j][0];
-            if(valids[j].size() == 2)
-            {
-              std::cout << std::endl << valids[j][1];
-            }
-            std::cout << std::endl;
-          }
-          std::cout << std::endl;
-        }
+        findbest(valids, validGuesses, numThreads, searchMode, fileLocation, false);
+      }
+      if(temp == 'w')
+      {
+        findbest(valids, validGuesses, numThreads, searchMode, fileLocation, true);
       }
       if(temp == 'l')
       {

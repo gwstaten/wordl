@@ -126,7 +126,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode, bool reversed)
 {
   //std::cout << std::endl;
   int lowest = 0;
@@ -139,7 +139,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     double total = rate(guessVec, words, searchMode);
     scores.push_back(total);
     //std::cout << total << " ";
-    if((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3)) || guess == 0)
+    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3))) && !reversed) || (((total > lowestAve && (searchMode == 1 || searchMode == 4)) || (total < lowestAve && (searchMode == 2 || searchMode == 3))) && reversed) || guess == 0)
     {
       lowest = guess;
       lowestAve = total;
@@ -167,7 +167,7 @@ std::vector<std::vector<T>> SplitVector(const std::vector<T>& vec, size_t n)
   return outVec;
 }
 
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode)
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, bool reversed)
 {
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
@@ -191,7 +191,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, reversed));
   }
   double min;
   std::string minWord;
@@ -206,7 +206,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
       min = results[i].second;
       minWord = results[i].first;
     }
-    else if((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5)))
+    else if((((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((min < results[i].second && (searchMode == 1 || searchMode == 4)) || (min > results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
     {
       min = results[i].second;
       minWord = results[i].first;

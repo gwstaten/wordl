@@ -317,7 +317,7 @@ int main()
         for(int i = 0; i < number; i++)
         {
           fileLocation[i] = fileLocation[i] + guess;
-          if(valids[i].size() > 1)
+          if(valids[i].size() > 1 || valids.size() == 1)
           {
             std::string temp;
             std::vector<int> rating;

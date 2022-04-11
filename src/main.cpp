@@ -202,6 +202,10 @@ int main()
       fin2 >> temp;
     }
   }
+  else
+  {
+    validWords = validWordss;
+  }
 
   char hardmode;
   std::cout << "Hard mode (y / n)? ";
@@ -256,7 +260,7 @@ int main()
     {
       loops++;
       temp = 'n';
-      std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
+      std::cout << "Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
       std::cin >> temp;
       temp = std::tolower(temp);
       std::string guess;

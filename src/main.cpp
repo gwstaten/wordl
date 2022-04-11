@@ -93,7 +93,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         fin.close();
         std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
         std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
-        std::ofstream fout(fileLocation[j]);
+        std::ofstream fout(fileLocation[j] + "-worst");
         if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
         {
           fout << best.first << " " << best.second;

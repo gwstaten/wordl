@@ -116,6 +116,80 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
   return stillGood;
 }
 
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
+{
+  std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
+  for(unsigned int answer = 0; answer < words.size(); answer++)
+  {
+    std::vector<int> rating;
+    std::vector<std::vector<int>> ratings;
+    for(unsigned int i = 0; i < guess.size(); i++)
+    {
+      std::vector<int> tempRating = grade(guess[i], words[answer]);
+      ratings.push_back(tempRating);
+      for(unsigned int j = 0; j < tempRating.size(); j++)
+      {
+        rating.push_back(tempRating[j]);
+      }
+    }
+    unsigned long long int total = 0;
+    for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
+    {
+      total *= 3;
+      total += rating[i];
+    }
+    if(ratingsMap.find(total) == ratingsMap.end())
+    {
+      std::vector<std::string> remaining = words;
+      for(unsigned int i = 0; i < guess.size(); i++)
+      {
+        remaining = filter(remaining, std::make_pair(guess[i],ratings[i]));
+      }
+      ratingsMap[total] = std::make_pair(0,remaining.size());
+    }
+    ratingsMap[total].first++;
+  }
+  std::vector<double> total(5,0);
+  std::map<unsigned long long int, std::pair<int, double>>::iterator it;
+  for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
+  {
+    for(unsigned int searchMode = 0; searchMode < total.size(); searchMode++)
+    {
+      switch(searchMode)
+      {
+        case 0:
+          total[searchMode] += ((it->second).first * (it->second).second);
+          break;
+        case 1:
+          total[searchMode]++;
+        case 2:
+          if((it->second).second == 1)
+          {
+            total[searchMode]++;
+          }
+          break;
+        case 3:
+          if(total[searchMode] < (it->second).second)
+          {
+            total[searchMode] = (it->second).second;
+          }
+          break;
+        case 4:
+          total[searchMode] += (it->second).first * std::log((it->second).second / words.size()) / std::log(0.5);
+          break;
+      }
+    }
+  }
+  total[0] /= words.size();
+  total[4] /= words.size();
+  std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl;
+  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
+  std::cout << "Average bits of info: " << total[4] << std::endl;
+  std::cout << "Average remaining possibilities: " << total[0] << std::endl;
+  std::cout << "1/n score (number of unique ratings that can be recieved): " << total[1] << std::endl;
+  std::cout << "Number of remaining possibilities in worst case scenario: " << total[3] << std::endl << std::endl;
+}
+
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
 {
   std::map<unsigned long long int, std::pair<int, double>> ratingsMap;

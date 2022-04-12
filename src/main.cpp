@@ -272,12 +272,12 @@ int main()
       {
         for(int j = 0; j < number; j++)
         {
-          std::cout << std::endl << "Words to rate (list separated by commas)? ";
+          std::cout << std::endl << "Words to rate (list separated by spaces)? ";
           std::string wordliststring;
           std::cin >> wordliststring;
           std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
 
-          std::vector<std::string> wordSet = split(wordliststring, ",");
+          std::vector<std::string> wordSet = split(wordliststring, " ");
           std::cout << "Guaranteed solves: " << rate(wordSet, valids[j], 3) << "/" << valids[j].size() << std::endl;
           std::cout << "Average bits of info: " << rate(wordSet, valids[j], 5) << std::endl;
           std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl << std::endl;

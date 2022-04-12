@@ -271,7 +271,9 @@ int main()
               break;
             }
           }
-          std::cout << "Guaranteed solves: " << rate(wordSet, valids[j], 3) << "/" << valids[j].size() << std::endl;
+          int guaranteed = rate(wordSet, valids[j], 3);
+          std::cout << "Guaranteed solves: " << guaranteed << "/" << valids[j].size() << std::endl;
+          std::cout << "Ambiguity: " << valids[j].size() - guaranteed << "/" << valids[j].size() << std::endl;
           std::cout << "Average bits of info: " << rate(wordSet, valids[j], 5) << std::endl;
           std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl << std::endl;
         }

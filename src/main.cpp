@@ -18,21 +18,14 @@ int countDistinct(std::string s)
 std::vector<std::string> split(std::string str, std::string token)
 {
     std::vector<std::string> result;
-    while(str.size())
-    {
-        unsigned int index = str.find(token);
-        if(index != std::string::npos)
-        {
-            result.push_back(str.substr(0,index));
-            str = str.substr(index+token.size());
-            if(str.size()==0)result.push_back(str);
-        }
-        else
-        {
-            result.push_back(str);
-            str = "";
-        }
+    std::string space_delimiter = token;
+
+    size_t pos = 0;
+    while ((pos = str.find(space_delimiter)) != std::string::npos) {
+        result.push_back(str.substr(0, pos));
+        str.erase(0, pos + space_delimiter.length());
     }
+    result.push_back(str.substr(0, pos));
     return result;
 }
 

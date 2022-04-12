@@ -193,8 +193,8 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
   std::cout << "Average bits of info: " << total[4] << std::endl;
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
-  std::cout << "1/n score (number of unique ratings that can be recieved): " << total[1] << std::endl;
-  std::cout << "Number of remaining possibilities in worst case scenario: " << total[3] << std::endl << std::endl;
+  std::cout << "1/n score: " << total[1] << std::endl;
+  std::cout << "Largest ambiguous set: " << total[3] << std::endl << std::endl;
 }
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)

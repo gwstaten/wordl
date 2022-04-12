@@ -146,11 +146,20 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
         remaining = filter(remaining, std::make_pair(guess[i],ratings[i]));
       }
       ratingsMap[total] = std::make_pair(0,remaining.size());
+      /*if(remaining.size() == 10)
+      {
+        for(unsigned int i = 0; i < remaining.size(); i++)
+        {
+          std::cout << remaining[i] << std::endl;
+        }
+        std::cout << std::endl;
+      }*/
     }
     ratingsMap[total].first++;
   }
   std::vector<double> total(5,0);
   std::map<unsigned long long int, std::pair<int, double>>::iterator it;
+  total[1] = ratingsMap.size();
   for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
   {
     for(unsigned int searchMode = 0; searchMode < total.size(); searchMode++)
@@ -160,8 +169,6 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
         case 0:
           total[searchMode] += ((it->second).first * (it->second).second);
           break;
-        case 1:
-          total[searchMode]++;
         case 2:
           if((it->second).second == 1)
           {

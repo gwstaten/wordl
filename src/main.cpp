@@ -286,7 +286,9 @@ int main()
           std::cout << "Guaranteed solves: " << guaranteed << "/" << valids[j].size() << std::endl;
           std::cout << "Ambiguity: " << valids[j].size() - guaranteed << "/" << valids[j].size() << std::endl;
           std::cout << "Average bits of info: " << rate(wordSet, valids[j], 5) << std::endl;
-          std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl << std::endl;
+          std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl;
+          std::cout << "1/n score (number of unique ratings that can be recieved): " << rate(wordSet, valids[j], 2) << std::endl;
+          std::cout << "Number of remaining possibilities in worst case scenario: " << rate(wordSet, valids[j], 4) << std::endl << std::endl;
         }
       }
       if(temp == 'f')

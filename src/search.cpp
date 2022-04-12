@@ -49,6 +49,72 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
   }
   return stillGood;
 }
+std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
+{
+  std::vector<std::string> stillGood;
+  for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
+  {
+    std::string word = wordList[wordn];
+    bool notDone = true;
+    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
+    {
+      if(filter.second[filterL] == 2)
+      {
+        if(word.at(filterL) != filter.first.at(filterL))
+        {
+          notDone = false;
+        }
+      }
+    }
+    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
+    {
+      if(filter.second[filterL] == 0)
+      {
+        for(unsigned int i = 0; i < word.length() && notDone; i++)
+        {
+          if(word.at(i) == filter.first.at(filterL))
+          {
+            bool good = true;
+            for(unsigned int j = 0; j < word.length() && good; j++)
+            {
+              if((filter.second[j] == 2 || filter.second[j] == 1) && filter.first.at(j) == filter.first.at(filterL) && i != filterL)
+              {
+                good = false;
+              }
+            }
+            if(good)
+            {
+              notDone = false;
+            }
+          }
+        }
+      }
+    }
+    for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
+    {
+      if(filter.second[filterL] == 1)
+      {
+        bool found = false;
+        for(unsigned int i = 0; i < word.length() && !found; i++)
+        {
+          if(filter.first.at(filterL) == word.at(i))
+          {
+            found = true;
+          }
+        }
+        if(!found)
+        {
+          notDone = false;
+        }
+      }
+    }
+    if(notDone)
+    {
+      stillGood.push_back(word);
+    }
+  }
+  return stillGood;
+}
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
 {

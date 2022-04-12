@@ -180,11 +180,18 @@ int main()
   std::ifstream fin2("wordlists/&" + in);
   if(fin2.is_open())
   {
-    validWords.clear();
     fin2 >> temp;
     while(!fin2.eof())
     {
-      validWords.push_back(temp);
+      bool found = false;
+      for(unsigned int i = 0; i < validWordss.size() && !found; i++)
+      {
+        found = (temp == validWordss[i]);
+      }
+      if(!found)
+      {
+        validWords.push_back(temp);
+      }
       fin2 >> temp;
     }
   }
@@ -194,7 +201,7 @@ int main()
   }
 
   char hardmode;
-  std::cout << "Hard mode (y / n)? ";
+  std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
   std::cin >> hardmode;
   hardmode = std::tolower(hardmode);
 
@@ -214,9 +221,13 @@ int main()
       validGuesses.push_back(validWords);
     }
     std::string filePath;
-    if(hardmode == 'y')
+    if(hardmode == 'h')
     {
       filePath = "log/" + std::to_string(searchMode) + "/" + in + "-hard";
+    }
+    else if(hardmode == 'u')
+    {
+      filePath = "log/" + std::to_string(searchMode) + "/" + in + "-ultrahard";
     }
     else
     {
@@ -317,9 +328,14 @@ int main()
             }
             valids[i] = filter(valids[i],std::make_pair(guess, rating));
             std::cout << "There are now " << valids[i].size() << " answers";
-            if(hardmode == 'y')
+            if(hardmode == 'u')
             {
               validGuesses[i] = filter(validGuesses[i],std::make_pair(guess, rating));
+              std::cout << " and " << validGuesses[i].size() << " guesses";
+            }
+            else if(hardmode == 'h')
+            {
+              validGuesses[i] = filterHM(validGuesses[i],std::make_pair(guess, rating));
               std::cout << " and " << validGuesses[i].size() << " guesses";
             }
             std::cout << " remaining" << std::endl;

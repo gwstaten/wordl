@@ -15,20 +15,6 @@ int countDistinct(std::string s)
   return m.size();
 }
 
-std::vector<std::string> split(std::string str, std::string token)
-{
-    std::vector<std::string> result;
-    std::string space_delimiter = token;
-
-    size_t pos = 0;
-    while ((pos = str.find(space_delimiter)) != std::string::npos) {
-        result.push_back(str.substr(0, pos));
-        str.erase(0, pos + space_delimiter.length());
-    }
-    result.push_back(str.substr(0, pos));
-    return result;
-}
-
 void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
@@ -272,12 +258,19 @@ int main()
       {
         for(int j = 0; j < number; j++)
         {
-          std::cout << std::endl << "Words to rate (list separated by commas)? ";
+          std::cout << std::endl << "Words to rate (list separated by spaces)? ";
           std::string wordliststring;
-          std::cin >> wordliststring;
-          std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
-
-          std::vector<std::string> wordSet = split(wordliststring, ",");
+          std::vector<std::string> wordSet;
+          while(true)
+          {
+            std::cin >> wordliststring;
+            std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+            wordSet.push_back(wordliststring);
+            if(std::cin.peek() == '\n')
+            {
+              break;
+            }
+          }
           std::cout << "Guaranteed solves: " << rate(wordSet, valids[j], 3) << "/" << valids[j].size() << std::endl;
           std::cout << "Average bits of info: " << rate(wordSet, valids[j], 5) << std::endl;
           std::cout << "Average remaining possibilities: " << rate(wordSet, valids[j], 1) << std::endl << std::endl;

@@ -119,6 +119,8 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
 void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
 {
   std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
+  std::vector<std::string> forSure;
+  std::vector<std::vector<std::string>> ambiguous;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
     std::vector<int> rating;
@@ -146,14 +148,14 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
         remaining = filter(remaining, std::make_pair(guess[i],ratings[i]));
       }
       ratingsMap[total] = std::make_pair(0,remaining.size());
-      /*if(remaining.size() == 10)
+      if(remaining.size() == 1)
       {
-        for(unsigned int i = 0; i < remaining.size(); i++)
-        {
-          std::cout << remaining[i] << std::endl;
-        }
-        std::cout << std::endl;
-      }*/
+        forSure.push_back(remaining[0]);
+      }
+      else
+      {
+        ambiguous.push_back(remaining);
+      }
     }
     ratingsMap[total].first++;
   }
@@ -189,12 +191,40 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
   }
   total[0] /= words.size();
   total[4] /= words.size();
-  std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl;
-  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
   std::cout << "Average bits of info: " << total[4] << std::endl;
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
   std::cout << "1/n score: " << total[1] << std::endl;
-  std::cout << "Largest ambiguous set: " << total[3] << std::endl << std::endl;
+  std::cout << "Largest ambiguous set: " << total[3] << std::endl;
+  std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << " ( ";
+  for(unsigned int i = 0; i < 5 && i < forSure.size(); i++)
+  {
+    std::cout << forSure[i] << " ";
+  }
+  if(forSure.size() > 5)
+  {
+    std::cout << "... " << forSure.size() - 5 << " more ";
+  }
+  std::cout << ")" << std::endl;
+  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
+  std::cout << "Ambiguous sets: " << std::endl;
+  for(unsigned int j = 0; j < 5 && j < ambiguous.size(); j++)
+  {
+    std::cout << "( ";
+    for(unsigned int i = 0; i < 5 && i < ambiguous[j].size(); i++)
+    {
+      std::cout << ambiguous[j][i] << " ";
+    }
+    if(ambiguous[j].size() > 5)
+    {
+      std::cout << "... " << ambiguous[j].size() - 5 << " more ";
+    }
+    std::cout << ")" << std::endl;
+  }
+  if(ambiguous.size() > 5)
+  {
+    std::cout << "... " << ambiguous.size() - 5 << " more ";
+  }
+  std::cout << std::endl << std::endl;
 }
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)

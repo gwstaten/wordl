@@ -272,17 +272,28 @@ int main()
           std::cout << std::endl << "Words to rate (list separated by spaces)? ";
           std::string wordliststring;
           std::vector<std::string> wordSet;
+          bool exited = false;
           while(true)
           {
             std::cin >> wordliststring;
             std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+            if(wordliststring.length() != valids[j][0].length())
+            {
+              std::cout << wordliststring << std::endl;
+              std::cout << "Invalid word lengths" << std::endl << std::endl;
+              exited = true;
+              break;
+            }
             wordSet.push_back(wordliststring);
             if(std::cin.peek() == '\n')
             {
               break;
             }
           }
-          rateAll(wordSet, valids[j]);
+          if(!exited)
+          {
+            rateAll(wordSet, valids[j]);
+          }
         }
       }
       if(temp == 'f')

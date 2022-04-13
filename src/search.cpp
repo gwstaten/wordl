@@ -206,7 +206,6 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
   }
   std::cout << ")" << std::endl;
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
-  std::cout << "Ambiguous sets: " << std::endl;
   for(unsigned int j = 0; j < 5 && j < ambiguous.size(); j++)
   {
     std::cout << "( ";

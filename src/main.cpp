@@ -283,11 +283,11 @@ int main()
               exited = true;
               while(true)
               {
-                std::cin >> wordliststring;
-                if(std::cin.peek() == '\n')
+                if(std::cin.peek() == '\n' || std::cin.peek() == ' ')
                 {
                   break;
                 }
+                std::cin >> wordliststring;
               }
               break;
             }

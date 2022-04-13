@@ -195,7 +195,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words)
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
   std::cout << "1/n score: " << total[1] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
-  std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << " ( ";
+  std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << " ( ";
   for(unsigned int i = 0; i < 5 && i < forSure.size(); i++)
   {
     std::cout << forSure[i] << " ";

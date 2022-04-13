@@ -279,9 +279,16 @@ int main()
             std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
             if(wordliststring.length() != valids[j][0].length())
             {
-              std::cout << wordliststring << std::endl;
               std::cout << "Invalid word lengths" << std::endl << std::endl;
               exited = true;
+              while(true)
+              {
+                std::cin >> wordliststring;
+                if(std::cin.peek() == '\n')
+                {
+                  break;
+                }
+              }
               break;
             }
             wordSet.push_back(wordliststring);

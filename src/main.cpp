@@ -283,7 +283,7 @@ int main()
               exited = true;
               while(true)
               {
-                if(std::cin.peek() == '\n' || std::cin.peek() == ' ')
+                if(std::cin.peek() == '\n')
                 {
                   break;
                 }

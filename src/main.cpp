@@ -134,6 +134,12 @@ int main()
   std::cout << "Number of parallel wordls? ";
   std::cin >> number;
 
+  char hardmode;
+  std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
+  std::cin >> hardmode;
+  hardmode = std::tolower(hardmode);
+
+  validWords = validWordss;
   std::ifstream fin2("wordlists/&" + in);
   if(fin2.is_open())
   {
@@ -152,15 +158,6 @@ int main()
       fin2 >> temp;
     }
   }
-  for(unsigned int i = 0; i < validWordss.size(); i++)
-  {
-    validWords.push_back(validWordss[i]);
-  }
-
-  char hardmode;
-  std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
-  std::cin >> hardmode;
-  hardmode = std::tolower(hardmode);
 
   int searchMode;
   std::cout << "Search mode (1, 2, 3, 4, 5)? ";

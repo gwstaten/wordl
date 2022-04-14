@@ -15,6 +15,30 @@ int countDistinct(std::string s)
   return m.size();
 }
 
+void printBest(double a, int searchMode)
+{
+  if(searchMode == 1)
+  {
+    std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
+  }
+  else if(searchMode == 2)
+  {
+    std::cout << "Splits up into " << a << " groups" << std::endl;
+  }
+  else if(searchMode == 3)
+  {
+    std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
+  }
+  else if(searchMode == 4)
+  {
+    std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
+  }
+  else
+  {
+    std::cout << "Gives " << a << " bits of information on average" << std::endl;
+  }
+}
+
 void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
@@ -45,84 +69,17 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         double a;
         fin >> a;
         std::cout << g << std::endl;
-        if(searchMode == 1)
-        {
-          std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
-        }
-        else if(searchMode == 2)
-        {
-          std::cout << "Splits up into " << a << " groups" << std::endl;
-        }
-        else if(searchMode == 3)
-        {
-          std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
-        }
-        else if(searchMode == 4)
-        {
-          std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
-        }
-        else
-        {
-          std::cout << "Gives " << a << " bits of information on average" << std::endl;
-        }
+        printBest(a, searchMode);
         fin.close();
       }
       else
       {
         fin.close();
-        std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
-        std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
+        std::pair<std::string, double> best = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
         std::ofstream fout(fileLocation[j] + "-worst");
-        if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
-        {
-          fout << best.first << " " << best.second;
-          std::cout << best.first << std::endl;
-          if(searchMode == 1)
-          {
-            std::cout << "Narrows down to " << best.second << " possibilities on average" << std::endl;
-          }
-          else if(searchMode == 2)
-          {
-            std::cout << "Splits up into " << best.second << " groups" << std::endl;
-          }
-          else if(searchMode == 3)
-          {
-            std::cout << "Will get it on the following guess for " << best.second << " words" << std::endl;
-          }
-          else if(searchMode == 4)
-          {
-            std::cout << "Narrows down to " << best.second << " possibilities in the worst case scenario" << std::endl;
-          }
-          else
-          {
-            std::cout << "Gives " << best.second << " bits of information on average" << std::endl;
-          }
-        }
-        else
-        {
-          fout << best2.first << " " << best2.second;
-          std::cout << best2.first << std::endl;
-          if(searchMode == 1)
-          {
-            std::cout << "Narrows down to " << best2.second << " possibilities on average" << std::endl;
-          }
-          else if(searchMode == 2)
-          {
-            std::cout << "Splits up into " << best2.second << " groups" << std::endl;
-          }
-          else if(searchMode == 3)
-          {
-            std::cout << "Will get it on the following guess for " << best2.second << " words" << std::endl;
-          }
-          else if(searchMode == 4)
-          {
-            std::cout << "Narrows down to " << best2.second << " possibilities in the worst case scenario" << std::endl;
-          }
-          else
-          {
-            std::cout << "Gives " << best2.second << " bits of information on average" << std::endl;
-          }
-        }
+        fout << best.first << " " << best.second;
+        std::cout << best.first << std::endl;
+        printBest(best.second, searchMode);
       }
       if(valids[j].size() < 10)
       {
@@ -195,9 +152,9 @@ int main()
       fin2 >> temp;
     }
   }
-  else
+  for(unsigned int i = 0; i < validWordss.size(); i++)
   {
-    validWords = validWordss;
+    validWords.push_back(validWordss[i]);
   }
 
   char hardmode;

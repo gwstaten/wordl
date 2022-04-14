@@ -208,7 +208,12 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
   if(genFile == 'y')
   {
-    std::string name = std::to_string(std::rand()) + std::to_string(std::rand()) + std::to_string(std::rand()) + ".amb";
+    if(!ghc::filesystem::exists("ratelogs"))
+    {
+      ghc::filesystem::create_directory("ratelogs");
+    }
+
+    std::string name = "ratelogs/" + std::to_string(std::rand()) + std::to_string(std::rand()) + std::to_string(std::rand()) + ".amb";
     std::ofstream fout(name);
     for(unsigned int j = 0; j < ambiguous.size(); j++)
     {

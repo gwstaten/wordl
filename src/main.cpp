@@ -104,6 +104,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
 
 int main()
 {
+  std::srand((unsigned) std::time(NULL)); 
   int numThreads;
   std::cout << "Number of threads? ";
   std::cin >> numThreads;
@@ -253,7 +254,11 @@ int main()
           }
           if(!exited)
           {
-            rateAll(wordSet, valids[j]);
+            std::cout << "Generate ambiguity file (y / n)? ";
+            char genFile;
+            std::cin >> genFile;
+            genFile = std::tolower(genFile);
+            rateAll(wordSet, valids[j], genFile);
           }
         }
       }

@@ -258,7 +258,7 @@ int main()
             char genFile;
             std::cin >> genFile;
             genFile = std::tolower(genFile);
-            rateAll(wordSet, valids[j], genFile);
+            rateAll(wordSet, valids[j], genFile, in);
           }
         }
       }

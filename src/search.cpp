@@ -116,7 +116,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
   return stillGood;
 }
 
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile)
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist)
 {
   std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
   std::vector<std::string> forSure;
@@ -212,19 +212,35 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
     {
       ghc::filesystem::create_directory("ratelogs");
     }
-
-    std::string name = "ratelogs/" + std::to_string(std::rand()) + std::to_string(std::rand()) + ".amb";
-    std::ofstream fout(name);
-    for(unsigned int j = 0; j < ambiguous.size(); j++)
+    std::string name = "ratelogs/" + wordlist;
+    for(unsigned int i = 0; i < guess.size(); i++)
     {
-      fout << "( ";
-      for(unsigned int i = 0; i < ambiguous[j].size(); i++)
-      {
-        fout << ambiguous[j][i] << " ";
-      }
-      fout << ")" << std::endl;
+      name += "-";
+      name += guess[i];
     }
-    fout.close();
+    name += ".amb";
+    std::ofstream fout;
+    std::ifstream fin;
+    fin.open(name);
+    if(!fin)
+    {
+      fin.close();
+      fout.open(name);
+      for(unsigned int j = 0; j < ambiguous.size(); j++)
+      {
+        fout << "( ";
+        for(unsigned int i = 0; i < ambiguous[j].size(); i++)
+        {
+          fout << ambiguous[j][i] << " ";
+        }
+        fout << ")" << std::endl;
+      }
+      fout.close();
+    }
+    else
+    {
+      fin.close();
+    }
     std::cout << "Output file name: " << name << std::endl;
   }
   std::cout << std::endl;

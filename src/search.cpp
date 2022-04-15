@@ -213,7 +213,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
       ghc::filesystem::create_directory("ratelogs");
     }
 
-    std::string name = "ratelogs/" + std::to_string(std::rand()) + std::to_string(std::rand()) + std::to_string(std::rand()) + ".amb";
+    std::string name = "ratelogs/" + std::to_string(std::rand()) + std::to_string(std::rand()) + ".amb";
     std::ofstream fout(name);
     for(unsigned int j = 0; j < ambiguous.size(); j++)
     {

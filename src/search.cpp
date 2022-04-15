@@ -228,7 +228,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
       name += "-";
       name += guess[i];
     }
-    name += ".amb";
+    name += ".txt";
     std::ofstream fout;
     std::ifstream fin;
     fin.open(name);

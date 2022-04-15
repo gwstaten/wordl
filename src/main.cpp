@@ -258,7 +258,27 @@ int main()
             char genFile;
             std::cin >> genFile;
             genFile = std::tolower(genFile);
-            rateAll(wordSet, valids[j], genFile, in);
+            if(!ghc::filesystem::exists("log/rate/"))
+            {
+              ghc::filesystem::create_directory("log/rate/");
+            }
+            std::string name = "log/rate/" + in;
+            for(unsigned int i = 0; i < wordSet.size(); i++)
+            {
+              name += "-";
+              name += wordSet[i];
+            }
+            name += genFile;
+            std::ifstream fin;
+            fin.open(name);
+            if(fin)
+            {
+              std::cout << fin.rdbuf();
+            }
+            else
+            {
+              rateAll(wordSet, valids[j], genFile, in, name);
+            }
           }
         }
       }

@@ -116,7 +116,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
   return stillGood;
 }
 
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist)
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist, std::string logLocation)
 {
   std::map<unsigned long long int, std::pair<int, double>> ratingsMap;
   std::vector<std::string> forSure;
@@ -191,21 +191,31 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   }
   total[0] /= words.size();
   total[4] /= words.size();
+  std::ofstream fout2(logLocation);
   std::cout << "Average bits of info: " << total[4] << std::endl;
+  fout2 << "Average bits of info: " << total[4] << std::endl;
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
+  fout2 << "Average remaining possibilities: " << total[0] << std::endl;
   std::cout << "1/n score: " << total[1] << std::endl;
+  fout2 << "1/n score: " << total[1] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
+  fout2 << "Largest ambiguous set: " << total[3] << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
+  fout2 << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   for(unsigned int i = 0; i < 4 && i < forSure.size(); i++)
   {
     std::cout << forSure[i] << " ";
+    fout2 << forSure[i] << " ";
   }
   if(forSure.size() > 4)
   {
     std::cout << "... " << forSure.size() - 4 << " more ";
+    fout2 << "... " << forSure.size() - 4 << " more ";
   }
   std::cout << ")" << std::endl;
+  fout2 << ")" << std::endl;
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
+  fout2 << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
   if(genFile == 'y')
   {
     if(!ghc::filesystem::exists("ratelogs"))
@@ -242,8 +252,10 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
       fin.close();
     }
     std::cout << "Output file name: " << name << std::endl;
+    fout2 << "Output file name: " << name << std::endl;
+    std::cout << std::endl;
+    fout2 << std::endl;
   }
-  std::cout << std::endl;
 }
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)

@@ -5,40 +5,6 @@
  */
 #include "search.hpp"
 
-int countDistinct(std::string s)
-{
-  std::unordered_map<char, int> m;
-  for(unsigned int i = 0; i < s.length(); i++)
-  {
-    m[s[i]]++;
-  }
-  return m.size();
-}
-
-void printBest(double a, int searchMode)
-{
-  if(searchMode == 1)
-  {
-    std::cout << "Narrows down to " << a << " possibilities on average" << std::endl;
-  }
-  else if(searchMode == 2)
-  {
-    std::cout << "Splits up into " << a << " groups" << std::endl;
-  }
-  else if(searchMode == 3)
-  {
-    std::cout << "Will get it on the following guess for " << a << " words" << std::endl;
-  }
-  else if(searchMode == 4)
-  {
-    std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
-  }
-  else
-  {
-    std::cout << "Gives " << a << " bits of information on average" << std::endl;
-  }
-}
-
 void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
 {
   for(unsigned int j = 0; j < valids.size(); j++)

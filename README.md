@@ -213,7 +213,3 @@ scare
 Find best (f), list (l), guess (g), or exit (e)? e
 $
 ```
-
-## Acknowledgements
-
-- Steffen Schümann 03/20/2022 [filesystem](https://github.com/gulrak/filesystem/tree/e8a17c131952c86563ff0ba7e08896a4f2594216) ([filesystem.hpp](https://github.com/gwstaten/wordl/blob/main/include/filesystem.hpp)) v1.5.10

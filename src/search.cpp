@@ -107,9 +107,9 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   fout2 << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
   if(genFile == 'y')
   {
-    if(!ghc::filesystem::exists("ratelogs"))
+    if(!std::filesystem::exists("ratelogs"))
     {
-      ghc::filesystem::create_directory("ratelogs");
+      std::filesystem::create_directory("ratelogs");
     }
     std::string name = "ratelogs/" + wordlist;
     for(unsigned int i = 0; i < guess.size(); i++)

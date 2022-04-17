@@ -155,10 +155,10 @@ int main()
       filePath = "log/" + std::to_string(searchMode) + "/" + in;
     }
 
-    if(!ghc::filesystem::exists(filePath))
+    if(!std::filesystem::exists(filePath))
     {
       std::cout << "Creating log directory " << in << "..." << std::endl;
-      ghc::filesystem::create_directories(filePath);
+      std::filesystem::create_directories(filePath);
     }
 
     filePath += "/S";
@@ -224,9 +224,9 @@ int main()
             char genFile;
             std::cin >> genFile;
             genFile = std::tolower(genFile);
-            if(!ghc::filesystem::exists("log/rate/"))
+            if(!std::filesystem::exists("log/rate/"))
             {
-              ghc::filesystem::create_directory("log/rate/");
+              std::filesystem::create_directory("log/rate/");
             }
             std::string name = "log/rate/" + in;
             for(unsigned int i = 0; i < wordSet.size(); i++)

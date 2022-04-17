@@ -12,6 +12,7 @@
 #include <iterator>
 #include <filesystem>
 #include <thread>
+#include <algorithm>
 
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter);

@@ -11,21 +11,15 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
   {
     if(valids[j].size() > 2 || reversed)
     {
-      if(reversed)
-      {
-        std::cout << "Worst guess for " << valids[j].size() << " possibilities: ";
-      }
-      else
-      {
-        std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-      }
       std::ifstream fin;
       if(reversed)
       {
+        std::cout << "Worst guess for " << valids[j].size() << " possibilities: ";
         fin.open(fileLocation[j] + "-worst");
       }
       else
       {
+        std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
         fin.open(fileLocation[j]);
       }
       if(fin)
@@ -43,7 +37,15 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         fin.close();
         std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
         std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
-        std::ofstream fout(fileLocation[j] + "-worst");
+        std::ofstream fout;
+        if(reversed)
+        {
+          fout.open(fileLocation[j] + "-worst");
+        }
+        else
+        {
+          fout.open(fileLocation[j]);
+        }
         if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
         {
           fout << best.first << " " << best.second;

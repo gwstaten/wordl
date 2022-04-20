@@ -46,7 +46,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         {
           fout.open(fileLocation[j]);
         }
-        if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
+        if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed))
         {
           fout << best.first << " " << best.second;
           std::cout << best.first << std::endl;
@@ -139,7 +139,7 @@ int main()
   }
 
   int searchMode;
-  std::cout << "Search mode (1, 2, 3, 4, 5)? ";
+  std::cout << "Search mode (1 - 6)? ";
   std::cin >> searchMode;
   while(true)
   {

@@ -166,6 +166,7 @@ To add your own word list, add a file to the wordlists directory that contains t
 | 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
 | 4 | Finds the word that narrows down to the least number of remaining possibilities in the worst case scenario (aka max(n)) |
 | 5 | Finds the word that gets the most bits of information on average (aka logBASE(n/p,0.5) average) |
+| 6 | Finds the word that gets the most greens on average |
 
 ## Q&A
 

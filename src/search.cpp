@@ -26,7 +26,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
     std::string total = "";
     for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
     {
-      total += rating[i];
+      total += (rating[i] + '0');
     }
     if(ratingsMap.find(total) == ratingsMap.end())
     {
@@ -48,7 +48,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
     }
     ratingsMap[total]++;
   }
-  std::vector<double> total(5,0);
+  std::vector<double> total(6,0);
   std::map<std::string, double>::iterator it;
   total[1] = ratingsMap.size();
   for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
@@ -75,11 +75,20 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
         case 4:
           total[searchMode] += (it->second) * std::log((it->second) / words.size()) / std::log(0.5);
           break;
+        case 5:
+          for(unsigned int i = 0; i < (it->first).length(); i++)
+          {
+            if((it->first).at(i) == '2')
+            {
+              total[searchMode] += (it->second);
+            }
+          }
       }
     }
   }
   total[0] /= words.size();
   total[4] /= words.size();
+  total[5] /= words.size();
   std::ofstream fout2(logLocation);
   std::cout << "Average bits of info: " << total[4] << std::endl;
   fout2 << "Average bits of info: " << total[4] << std::endl;
@@ -89,6 +98,8 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   fout2 << "1/n score: " << total[1] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
   fout2 << "Largest ambiguous set: " << total[3] << std::endl;
+  std::cout << "Average greens: " << total[5] << std::endl;
+  fout2 << "Average greens: " << total[5] << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   fout2 << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   for(unsigned int i = 0; i < 4 && i < forSure.size(); i++)
@@ -166,7 +177,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
     std::string total = "";
     for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
     {
-      total += rating[i];
+      total += (rating[i] + '0');
     }
     if(ratingsMap.find(total) == ratingsMap.end())
     {
@@ -201,9 +212,17 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
       case 5:
         total += (it->second) * std::log((it->second) / words.size()) / std::log(0.5);
         break;
+      case 6:
+        for(unsigned int i = 0; i < (it->first).length(); i++)
+        {
+          if((it->first).at(i) == '2')
+          {
+            total += (it->second);
+          }
+        }
     }
   }
-  if(searchMode == 1 || searchMode == 5)
+  if(searchMode == 1 || searchMode == 5 || searchMode == 6)
   {
     total /= words.size();
   }
@@ -218,7 +237,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   {
     std::vector<std::string> guessVec = {validWords[guess]};
     double total = rate(guessVec, words, searchMode);
-    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed) || guess == 0)
+    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed) || guess == 0)
     {
       lowest = guess;
       lowestAve = total;

@@ -33,9 +33,13 @@ void printBest(double a, int searchMode)
   {
     std::cout << "Narrows down to " << a << " possibilities in the worst case scenario" << std::endl;
   }
-  else
+  else if(searchMode == 5)
   {
     std::cout << "Gives " << a << " bits of information on average" << std::endl;
+  }
+  else
+  {
+    std::cout << "Gets " << a << " greens on average" << std::endl;
   }
 }
 

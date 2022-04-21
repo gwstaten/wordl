@@ -36,7 +36,15 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       {
         fin.close();
         std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
-        std::pair<std::string, double> best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
+        std::pair<std::string, double> best2;
+        if(valids[j] != validGuesses[j])
+        {
+          best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
+        }
+        else
+        {
+          best2 = best;
+        }
         std::ofstream fout;
         if(reversed)
         {

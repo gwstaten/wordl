@@ -233,16 +233,31 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 {
   int lowest = 0;
   double lowestAve = 10000;
+  //std::vector<std::pair<double, std::string>> scores;
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
+    //std::cout << validWords[guess] << " ";
     std::vector<std::string> guessVec = {validWords[guess]};
     double total = rate(guessVec, words, searchMode);
+    //std::cout << total;
     if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed) || guess == 0)
     {
+      //std::cout << " new best!";
       lowest = guess;
       lowestAve = total;
     }
+    //scores.push_back(std::make_pair(total, validWords[guess]));
+    //std::cout << std::endl;
   }
+  /*std::sort(scores.begin(), scores.end());
+  for(unsigned int i = 0; i < 5; i++)
+  {
+    std::cout << scores[i].second << " " << scores[i].first << std::endl;
+  }
+  for(unsigned int i = scores.size() - 5; i < scores.size(); i++)
+  {
+    std::cout << scores[i].second << " " << scores[i].first << std::endl;
+  }*/
   out = std::make_pair(validWords[lowest],lowestAve);
 }
 

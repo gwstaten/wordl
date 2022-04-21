@@ -179,10 +179,6 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
     {
       total += (rating[i] + '0');
     }
-    if(ratingsMap.find(total) == ratingsMap.end())
-    {
-        ratingsMap[total] = 0;
-    }
     ratingsMap[total]++;
   }
   double total = 0;

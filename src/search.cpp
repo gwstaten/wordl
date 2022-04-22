@@ -136,6 +136,12 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
     {
       fin.close();
       fout.open(name);
+      fout << "Guaranteed:" << std::endl << "( ";
+      for(unsigned int i = 0; i < forSure.size(); i++)
+      {
+        fout << forSure[i] << " ";
+      }
+      fout << " )" << std::endl << "Ambiguous sets: " << std::endl;
       for(unsigned int j = 0; j < ambiguous.size(); j++)
       {
         fout << "( ";

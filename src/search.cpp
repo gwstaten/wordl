@@ -51,8 +51,10 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   std::vector<double> total(6,0);
   std::map<std::string, double>::iterator it;
   total[1] = ratingsMap.size();
+  unsigned int wordpos = 0;
   for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
   {
+    std::vector<bool> usedGreen(guess[0].length(),false);
     for(unsigned int searchMode = 0; searchMode < total.size(); searchMode++)
     {
       switch(searchMode)
@@ -78,8 +80,14 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
         case 5:
           for(unsigned int i = 0; i < (it->first).length(); i++)
           {
-            if((it->first).at(i) == '2')
+            wordpos++;
+            if(wordpos == guess[0].length())
             {
+              wordpos = 0;
+            }
+            if((it->first).at(i) == '2' && !usedGreen[wordpos])
+            {
+              usedGreen[wordpos] = true;
               total[searchMode] += (it->second);
             }
           }
@@ -189,8 +197,10 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   }
   double total = 0;
   std::map<std::string, double>::iterator it;
+  unsigned int wordpos = 0;
   for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
   {
+    std::vector<bool> usedGreen(guess[0].length(),false);
     switch(searchMode)
     {
       case 1:
@@ -217,8 +227,14 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
       case 6:
         for(unsigned int i = 0; i < (it->first).length(); i++)
         {
-          if((it->first).at(i) == '2')
+          wordpos++;
+          if(wordpos == guess[0].length())
           {
+            wordpos = 0;
+          }
+          if((it->first).at(i) == '2' && !usedGreen[wordpos])
+          {
+            usedGreen[wordpos] = true;
             total += (it->second);
           }
         }

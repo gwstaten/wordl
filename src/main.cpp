@@ -297,14 +297,9 @@ int main()
           fileLocation[i] = fileLocation[i] + guess;
           if(valids[i].size() > 1 || valids.size() == 1)
           {
-            std::string temp;
-            std::vector<int> rating;
-            std::cin >> temp;
-            fileLocation[i] = fileLocation[i] + temp;
-            for(unsigned int i = 0; i < guess.length(); i++)
-            {
-              rating.push_back(temp.at(i) - '0');
-            }
+            std::string rating;
+            std::cin >> rating;
+            fileLocation[i] = fileLocation[i] + rating;
             valids[i] = filter(valids[i],std::make_pair(guess, rating));
             std::cout << "There are now " << valids[i].size() << " answers";
             if(hardmode == 'u')

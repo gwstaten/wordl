@@ -11,21 +11,11 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   std::map<std::string, std::vector<std::string>> sets;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
-    std::vector<int> rating;
+    std::string total;
     std::vector<std::vector<int>> ratings;
     for(unsigned int i = 0; i < guess.size(); i++)
     {
-      std::vector<int> tempRating = grade(guess[i], words[answer]);
-      ratings.push_back(tempRating);
-      for(unsigned int j = 0; j < tempRating.size(); j++)
-      {
-        rating.push_back(tempRating[j]);
-      }
-    }
-    std::string total = "";
-    for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
-    {
-      total += (rating[i] + '0');
+      total += grade(guess[i], words[answer]);
     }
     sets[total].push_back(words[answer]);
     ratingsMap[total]++;
@@ -175,21 +165,10 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   std::map<std::string, double> ratingsMap;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
-    std::vector<int> rating;
-    std::vector<std::vector<int>> ratings;
+    std::string total = "";
     for(unsigned int i = 0; i < guess.size(); i++)
     {
-      std::vector<int> tempRating = grade(guess[i], words[answer]);
-      ratings.push_back(tempRating);
-      for(unsigned int j = 0; j < tempRating.size(); j++)
-      {
-        rating.push_back(tempRating[j]);
-      }
-    }
-    std::string total = "";
-    for(unsigned int i = 0; i < guess[0].length() * guess.size(); i++)
-    {
-      total += (rating[i] + '0');
+      total += grade(guess[i], words[answer]);
     }
     ratingsMap[total]++;
   }

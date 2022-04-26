@@ -43,28 +43,28 @@ void printBest(double a, int searchMode)
   }
 }
 
-std::vector<int> grade(std::string guess, std::string answer)
+std::string grade(std::string guess, std::string answer)
 {
-  std::vector<int> output(guess.length(),0);
+  std::string output(guess.length(),'0');
   std::vector<int> usedAnswer(guess.length(),0);
   for(unsigned int i = 0; i < guess.length(); i++)
   {
     if(guess.at(i) == answer.at(i))
     {
-      output[i] = 2;
+      output.at(i) = '2';
       usedAnswer[i] = 1;
     }
   }
   for(unsigned int guessSpot = 0; guessSpot < guess.length(); guessSpot++)
   {
-    if(output[guessSpot] == 0)
+    if(output.at(guessSpot) == '0')
     {
       bool stillSearching = true;
       for(unsigned int answerSpot = 0; answerSpot < guess.length() && stillSearching; answerSpot++)
       {
         if(usedAnswer[answerSpot] == 0 && guess.at(guessSpot) == answer.at(answerSpot))
         {
-          output[guessSpot] = 1;
+          output.at(guessSpot) = '1';
           usedAnswer[answerSpot] = 1;
           stillSearching = false;
         }
@@ -74,7 +74,7 @@ std::vector<int> grade(std::string guess, std::string answer)
   return output;
 }
 
-std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
+std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter)
 {
   std::vector<std::string> stillGood;
   for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
@@ -88,7 +88,7 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
   return stillGood;
 }
 
-std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::vector<int>> filter)
+std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter)
 {
   std::vector<std::string> stillGood;
   for(unsigned int wordn = 0; wordn < wordList.size(); wordn++)
@@ -97,7 +97,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
     bool notDone = true;
     for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
     {
-      if(filter.second[filterL] == 2)
+      if(filter.second.at(filterL) == '2')
       {
         if(word.at(filterL) != filter.first.at(filterL))
         {
@@ -107,7 +107,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
     }
     for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
     {
-      if(filter.second[filterL] == 0)
+      if(filter.second.at(filterL) == '0')
       {
         for(unsigned int i = 0; i < word.length() && notDone; i++)
         {
@@ -116,7 +116,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
             bool good = true;
             for(unsigned int j = 0; j < word.length() && good; j++)
             {
-              if((filter.second[j] == 2 || filter.second[j] == 1) && filter.first.at(j) == filter.first.at(filterL) && i != filterL)
+              if((filter.second.at(j) == '2' || filter.second.at(j) == '1') && filter.first.at(j) == filter.first.at(filterL) && i != filterL)
               {
                 good = false;
               }
@@ -131,7 +131,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
     }
     for(unsigned int filterL = 0; filterL < word.length() && notDone; filterL++)
     {
-      if(filter.second[filterL] == 1)
+      if(filter.second.at(filterL) == '1')
       {
         bool found = false;
         for(unsigned int i = 0; i < word.length() && !found; i++)

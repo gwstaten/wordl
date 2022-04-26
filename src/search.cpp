@@ -251,6 +251,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 {
   int lowest = 0;
   double lowestAve = 10000;
+  bool first = true;
   //std::vector<std::pair<double, std::string>> scores;
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
@@ -258,8 +259,9 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     std::vector<std::string> guessVec = {validWords[guess]};
     double total = rate(guessVec, words, searchMode);
     //std::cout << total;
-    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed) || guess == 0)
+    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed) || first)
     {
+      first = false;
       //std::cout << " new best!";
       lowest = guess;
       lowestAve = total;

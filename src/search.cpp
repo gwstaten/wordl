@@ -8,8 +8,7 @@
 void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist, std::string logLocation)
 {
   std::map<std::string, double> ratingsMap;
-  std::vector<std::string> forSure;
-  std::vector<std::vector<std::string>> ambiguous;
+  std::map<std::string, std::vector<std::string>> sets;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
     std::vector<int> rating;
@@ -28,24 +27,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
     {
       total += (rating[i] + '0');
     }
-    if(ratingsMap.find(total) == ratingsMap.end())
-    {
-      ratingsMap[total] = 0;
-
-      std::vector<std::string> remaining = words;
-      for(unsigned int i = 0; i < guess.size(); i++)
-      {
-        remaining = filter(remaining, std::make_pair(guess[i],ratings[i]));
-      }
-      if(remaining.size() == 1)
-      {
-        forSure.push_back(remaining[0]);
-      }
-      else
-      {
-        ambiguous.push_back(remaining);
-      }
-    }
+    sets[total].push_back(words[answer]);
     ratingsMap[total]++;
   }
   std::vector<double> total(6,0);
@@ -110,15 +92,24 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   fout2 << "Average greens: " << total[5] << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   fout2 << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
-  for(unsigned int i = 0; i < 4 && i < forSure.size(); i++)
+  std::map<std::string, std::vector<std::string>>::iterator it2;
+  int num = 0;
+  for(it2 = sets.begin(); it2 != sets.end(); ++it2)
   {
-    std::cout << forSure[i] << " ";
-    fout2 << forSure[i] << " ";
+    if((it2->second).size() == 1)
+    {
+      num++;
+      if(num < 5)
+      {
+        std::cout << (it2->second)[0] << " ";
+        fout2 << (it2->second)[0] << " ";
+      }
+    }
   }
-  if(forSure.size() > 4)
+  if(num > 4)
   {
-    std::cout << "... " << forSure.size() - 4 << " more ";
-    fout2 << "... " << forSure.size() - 4 << " more ";
+    std::cout << "... " << num - 4 << " more ";
+    fout2 << "... " << num - 4 << " more ";
   }
   std::cout << ")" << std::endl;
   fout2 << ")" << std::endl;
@@ -145,19 +136,26 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
       fin.close();
       fout.open(name);
       fout << "Guaranteed:" << std::endl << "( ";
-      for(unsigned int i = 0; i < forSure.size(); i++)
+      std::map<std::string, std::vector<std::string>>::iterator it3;
+      for(it2 = sets.begin(); it2 != sets.end(); ++it2)
       {
-        fout << forSure[i] << " ";
+        if((it2->second).size() == 1)
+        {
+          fout << (it2->second)[0] << " ";
+        }
       }
       fout << " )" << std::endl << "Ambiguous sets: " << std::endl;
-      for(unsigned int j = 0; j < ambiguous.size(); j++)
+      for(it3 = sets.begin(); it3 != sets.end(); ++it3)
       {
-        fout << "( ";
-        for(unsigned int i = 0; i < ambiguous[j].size(); i++)
+        if((it3->second).size() != 1)
         {
-          fout << ambiguous[j][i] << " ";
+          fout << "( ";
+          for(unsigned int i = 0; i < (it3->second).size(); i++)
+          {
+            fout << (it3->second)[i] << " ";
+          }
+          fout << ")" << std::endl;
         }
-        fout << ")" << std::endl;
       }
       fout.close();
     }

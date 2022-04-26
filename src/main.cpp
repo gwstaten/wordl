@@ -5,6 +5,8 @@
  */
 #include "search.hpp"
 
+std::vector<std::string> prefix = {};
+
 void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
@@ -12,16 +14,27 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
     if(valids[j].size() > 2 || reversed)
     {
       std::ifstream fin;
+      std::string specificFileLoc = fileLocation[j];
+
       if(reversed)
       {
         std::cout << "Worst guess for " << valids[j].size() << " possibilities: ";
-        fin.open(fileLocation[j] + "-worst");
+        specificFileLoc += "-worst";
       }
       else
       {
         std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-        fin.open(fileLocation[j]);
       }
+      if(prefix.size() != 0)
+      {
+        specificFileLoc += "-PREFIX";
+        for(unsigned int i = 0; i < prefix.size(); i++)
+        {
+          specificFileLoc += "-";
+          specificFileLoc += prefix[i];
+        }
+      }
+      fin.open(specificFileLoc);
       if(fin)
       {
         std::string g;
@@ -35,11 +48,11 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       else
       {
         fin.close();
-        std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed);
+        std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed, prefix);
         std::pair<std::string, double> best2;
         if(valids[j] != validGuesses[j])
         {
-          best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed);
+          best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed, prefix);
         }
         else
         {
@@ -48,11 +61,11 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         std::ofstream fout;
         if(reversed)
         {
-          fout.open(fileLocation[j] + "-worst");
+          fout.open(specificFileLoc);
         }
         else
         {
-          fout.open(fileLocation[j]);
+          fout.open(specificFileLoc);
         }
         if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed))
         {
@@ -267,6 +280,77 @@ int main()
             }
           }
         }
+      }
+      if(temp == 's')
+      {
+        std::cout << std::endl << "Welcome to the super secret settings!" << std::endl;
+        std::cout << "Search mode (1 - 6)? ";
+        std::cin >> searchMode;
+        for(unsigned int i = 0; i < fileLocation.size(); i++)
+        {
+          fileLocation[i].at(4) = std::to_string(searchMode).at(0);
+        }
+        if(hardmode == 'h')
+        {
+          filePath = "log/" + std::to_string(searchMode) + "/" + in + "-hard";
+        }
+        else if(hardmode == 'u')
+        {
+          filePath = "log/" + std::to_string(searchMode) + "/" + in + "-ultrahard";
+        }
+        else
+        {
+          filePath = "log/" + std::to_string(searchMode) + "/" + in;
+        }
+
+        if(!std::filesystem::exists(filePath))
+        {
+          std::cout << "Creating log directory " << in << "..." << std::endl;
+          std::filesystem::create_directories(filePath);
+        }
+        std::cout << "Add prefex (y / n)? ";
+        char tempIn;
+        std::cin >> tempIn;
+        tempIn = std::tolower(tempIn);
+        if(tempIn == 'y')
+        {
+          for(int j = 0; j < number; j++)
+          {
+            std::cout << "Prefix words (space separated)? ";
+            std::string wordliststring;
+            std::vector<std::string> wordSet;
+            bool exited = false;
+            while(true)
+            {
+              std::cin >> wordliststring;
+              std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+              if(wordliststring.length() != valids[j][0].length())
+              {
+                std::cout << "Invalid word lengths" << std::endl << std::endl;
+                exited = true;
+                while(true)
+                {
+                  if(std::cin.peek() == '\n')
+                  {
+                    break;
+                  }
+                  std::cin >> wordliststring;
+                }
+                break;
+              }
+              wordSet.push_back(wordliststring);
+              if(std::cin.peek() == '\n')
+              {
+                break;
+              }
+            }
+            if(!exited)
+            {
+              prefix = wordSet;
+            }
+          }
+        }
+        std::cout << std::endl;
       }
       if(temp == 'f')
       {

@@ -18,7 +18,7 @@
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::string grade(std::string guess, std::string answer);
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, bool reversed);
+std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, bool reversed, std::vector<std::string> prefix);
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode);
 void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist, std::string logLocation);
 

@@ -226,7 +226,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
 
 void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode, bool reversed, std::vector<std::string> prefix)
 {
-  int lowest = 0;
+  std::string lowest = "";
   double lowestAve = 10000;
   bool first = true;
   //std::vector<std::pair<double, std::string>> scores;
@@ -241,7 +241,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       first = false;
       //std::cout << " new best!";
-      lowest = guess;
+      lowest = validWords[guess];
       lowestAve = total;
     }
     //scores.push_back(std::make_pair(total, validWords[guess]));
@@ -256,7 +256,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   {
     std::cout << scores[i].second << " " << scores[i].first << std::endl;
   }*/
-  out = std::make_pair(validWords[lowest],lowestAve);
+  out = std::make_pair(lowest,lowestAve);
 }
 
 std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, bool reversed, std::vector<std::string> prefix)

@@ -162,7 +162,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
 {
-  std::map<std::string, double> ratingsMap;
+  std::unordered_map<std::string, double> ratingsMap;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
     std::string total = "";
@@ -173,7 +173,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
     ratingsMap[total]++;
   }
   double total = 0;
-  std::map<std::string, double>::iterator it;
+  std::unordered_map<std::string, double>::iterator it;
   unsigned int wordpos = 0;
   for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
   {

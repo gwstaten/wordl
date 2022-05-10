@@ -2,13 +2,13 @@
 
 ## Prerequisite
 
-To compile this code, you will need to install make and c++ 17 (for Windows you will need MinGW 11.2). It is recommended to also have [git](https://git-scm.com) installed. You will also need to clone this entire repository, using
+To compile this code, you will need to install make and c++ 17 (for Windows you will need MinGW 11.2, and for MacOS you will need Xcode Command Line Tools). You can install both of these on Windows using [Chocolatey](https://chocolatey.org). The Xcode Command Line Tools on MacOS will install both of them. It is recommended to also have [git](https://git-scm.com) (which is also included in the Xcode Command Line Tools) installed. You can get a copy of this reposity by cloning it using
 
 ```bash
 git clone https://github.com/gwstaten/wordl
 ```
 
-or just download it through the [homepage](https://github.com/gwstaten/wordl), click on Code -> Download Zip or through [here](https://github.com/gwstaten/wordl/archive/refs/heads/main.zip).
+or just download it through the [homepage](https://github.com/gwstaten/wordl), click on Code -> Download Zip, or download it through [this link](https://github.com/gwstaten/wordl/archive/refs/heads/main.zip).
 
 ### Compile
 
@@ -83,7 +83,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1, 2, 3, 4, 5)?
+Search mode (1 - 6)?
 ```
 
 Each search method uses a different algorithm and can be found [here](#search-modes). The recommended search method is 2, though the three have not been thoroughly tested and you can experiment with each one.
@@ -94,7 +94,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1, 2, 3, 4, 5)? 2
+Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -109,7 +109,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1, 2, 3, 4, 5)? 2
+Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -126,7 +126,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1, 2, 3, 4, 5)? 2
+Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -139,28 +139,29 @@ There are now 246 answers remaining
 Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
-At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. Look through [Q&A](#qa) if you encounter any issues running the code. You can also look at [Example Output](#example-output) to see what the code running would look like.
+At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code, look through [Q&A](#qa) or submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
 
-| WordList Name | Description | Website  |
-|---------------|-------------|----------|
+| WordList Name | Description | Website |
+|---------------|-------------|---------|
 | 4-11(2) | For words that are length 4-11 |  [https://hellowordl.net](https://hellowordl.net)|
 | 2-25 | For words that are length 2-25 | [https://gwstaten.github.io](https://gwstaten.github.io) |
 | nytimes(2) | Used for regular wordle | [https://www.nytimes.com/games/wordle/index.html](https://www.nytimes.com/games/wordle/index.html) |
-| nytimesold(2) | Used for wordle clones with the old nytimes list |     |
+| nytimesold(2) | Used for wordle clones with the old nytimes list | ... |
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
 | taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
 | obscordle | Used for obscordle | [https://wordreaper.github.io/wordle/](https://wordreaper.github.io/wordle/) |
+| dordle | Used for dordle | [https://zaratustra.itch.io/dordle](https://zaratustra.itch.io/dordle) |
 
-To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues)
+To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues/new/choose)
 
 ## Search Modes
 
 | Search mode | Description |
-|---------------|-------------|
+|-------------|-------------|
 | 1 | Finds the word that narrows down to the least number of remaining possibilities on average (aka n average) |
 | 2 | Finds the word that splits the word set up into the most separate groups (aka 1/n sum) |
 | 3 | Finds the word with the best chance of getting the word on the guess after the current guess (aka n=1 sum) |
@@ -198,7 +199,7 @@ Number of threads? 4
 Word list? nytimes
 Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1, 2, 3, 4, 5)? 2
+Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 

@@ -298,7 +298,7 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
       min = results[i].second;
       minWord = results[i].first;
     }
-    else if((((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && !reversed) || (((min <= results[i].second && (searchMode == 1 || searchMode == 4)) || (min >= results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5))) && reversed))
+    else if((((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((min <= results[i].second && (searchMode == 1 || searchMode == 4)) || (min >= results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed))
     {
       min = results[i].second;
       minWord = results[i].first;

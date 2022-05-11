@@ -172,6 +172,10 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
     }
     ratingsMap[total]++;
   }
+  if(searchMode == 2)
+  {
+    return ratingsMap.size();
+  }
   double total = 0;
   std::unordered_map<std::string, double>::iterator it;
   unsigned int wordpos = 0;
@@ -182,9 +186,6 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
     {
       case 1:
         total += ((it->second) * (it->second));
-        break;
-      case 2:
-        total++;
         break;
       case 3:
         if((it->second) == 1)

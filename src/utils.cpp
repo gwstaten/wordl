@@ -46,13 +46,13 @@ void printBest(double a, int searchMode)
 std::string grade(std::string guess, std::string answer)
 {
   std::string output(guess.length(),'0');
-  std::vector<int> usedAnswer(guess.length(),0);
+  std::vector<bool> usedAnswer(guess.length(),false);
   for(unsigned int i = 0; i < guess.length(); i++)
   {
     if(guess.at(i) == answer.at(i))
     {
       output.at(i) = '2';
-      usedAnswer[i] = 1;
+      usedAnswer[i] = true;
     }
   }
   for(unsigned int guessSpot = 0; guessSpot < guess.length(); guessSpot++)
@@ -62,10 +62,10 @@ std::string grade(std::string guess, std::string answer)
       bool stillSearching = true;
       for(unsigned int answerSpot = 0; answerSpot < guess.length() && stillSearching; answerSpot++)
       {
-        if(usedAnswer[answerSpot] == 0 && guess.at(guessSpot) == answer.at(answerSpot))
+        if(!usedAnswer[answerSpot] && guess.at(guessSpot) == answer.at(answerSpot))
         {
           output.at(guessSpot) = '1';
-          usedAnswer[answerSpot] = 1;
+          usedAnswer[answerSpot] = true;
           stillSearching = false;
         }
       }

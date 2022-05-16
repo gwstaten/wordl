@@ -225,12 +225,8 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::pair<std::string,double> &out, int searchMode, bool reversed, std::vector<std::string> prefix)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix)
 {
-  std::string lowest = "";
-  double lowestAve = 10000;
-  bool first = true;
-  //std::vector<std::pair<double, std::string>> scores;
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
     //std::cout << validWords[guess] << " ";
@@ -238,29 +234,18 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     guessVec.push_back(validWords[guess]);
     double total = rate(guessVec, words, searchMode);
     //std::cout << total;
-    if((((total < lowestAve && (searchMode == 1 || searchMode == 4)) || (total > lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((total >= lowestAve && (searchMode == 1 || searchMode == 4)) || (total <= lowestAve && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed) || first)
-    {
-      first = false;
-      //std::cout << " new best!";
-      lowest = validWords[guess];
-      lowestAve = total;
-    }
-    //scores.push_back(std::make_pair(total, validWords[guess]));
+    out.push_back(std::make_pair(total, validWords[guess]));
     //std::cout << std::endl;
   }
-  /*std::sort(scores.begin(), scores.end());
-  for(unsigned int i = 0; i < 5; i++)
-  {
-    std::cout << scores[i].second << " " << scores[i].first << std::endl;
-  }
-  for(unsigned int i = scores.size() - 5; i < scores.size(); i++)
-  {
-    std::cout << scores[i].second << " " << scores[i].first << std::endl;
-  }*/
-  out = std::make_pair(lowest,lowestAve);
 }
 
-std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, bool reversed, std::vector<std::string> prefix)
+struct greater
+{
+    template<class T>
+    bool operator()(T const &a, T const &b) const { return a > b; }
+};
+
+std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix)
 {
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
@@ -280,30 +265,34 @@ std::pair<std::string,double> fbThreads(std::vector<std::string> words, std::vec
   {
     validWordsChunks.push_back(validWords);
   }
-  std::vector<std::pair<std::string,double>> results(numThreads,std::make_pair("",0));
+  std::vector<std::vector<std::pair<double,std::string>>> results(numThreads,{std::make_pair(0,"")});
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, reversed, prefix));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix));
   }
-  double min;
-  std::string minWord;
   for(unsigned int i = 0; i < numThreads; i++)
   {
     if(threadVector[i].joinable())
     {
       threadVector[i].join();
     }
-    if(i == 0)
+  }
+  std::vector<std::pair<double,std::string>> compiledResults;
+  for(unsigned int i = 0; i < results.size(); i++)
+  {
+    for(unsigned int j = 1; j < results[i].size(); j++)
     {
-      min = results[i].second;
-      minWord = results[i].first;
-    }
-    else if((((min > results[i].second && (searchMode == 1 || searchMode == 4)) || (min < results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((min <= results[i].second && (searchMode == 1 || searchMode == 4)) || (min >= results[i].second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed))
-    {
-      min = results[i].second;
-      minWord = results[i].first;
+      compiledResults.push_back(results[i][j]);
     }
   }
-  return std::make_pair(minWord,min);
+  if(searchMode == 1 || searchMode == 4)
+  {
+    std::sort(compiledResults.begin(), compiledResults.end());
+  }
+  else
+  {
+    std::sort(compiledResults.begin(), compiledResults.end(), greater());
+  }
+  return compiledResults;
 }

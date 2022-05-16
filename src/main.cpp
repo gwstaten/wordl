@@ -7,24 +7,15 @@
 
 std::vector<std::string> prefix = {};
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation, bool reversed)
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> fileLocation)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
   {
-    if(valids[j].size() > 2 || reversed)
+    if(valids[j].size() > 2)
     {
       std::ifstream fin;
       std::string specificFileLoc = fileLocation[j];
-
-      if(reversed)
-      {
-        std::cout << "Worst guess for " << valids[j].size() << " possibilities: ";
-        specificFileLoc += "-worst";
-      }
-      else
-      {
-        std::cout << "Best guess for " << valids[j].size() << " possibilities: ";
-      }
+      std::cout << "Best guess: ";
       if(prefix.size() != 0)
       {
         specificFileLoc += "-PREFIX";
@@ -35,50 +26,99 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         }
       }
       fin.open(specificFileLoc);
-      if(fin)
+      if(false)//fin)
       {
         std::string g;
         fin >> g;
         double a;
         fin >> a;
         std::cout << g << std::endl;
-        printBest(a, searchMode);
+        //printBest(a, searchMode);
         fin.close();
       }
       else
       {
         fin.close();
-        std::pair<std::string, double> best = fbThreads(valids[j], valids[j], numThreads, searchMode, reversed, prefix);
-        std::pair<std::string, double> best2;
+        std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix);
+        std::vector<std::pair<double, std::string>> bestGuesses;
+        std::ofstream fout;
+        fout.open(specificFileLoc);
         if(valids[j] != validGuesses[j])
         {
-          best2 = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, reversed, prefix);
+          bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix);
+          bool still = true;
+          for(unsigned int i = 0; i < bestGuesses.size() && still; i++)
+          {
+            if(bestGuesses[i].first == bestGuesses[0].first)
+            {
+              if(i != 0)
+              {
+                std::cout << "\\ ";
+              }
+              std::cout << bestGuesses[i].second << " ";
+            }
+            else
+            {
+              still = false;
+            }
+          }
+          std::cout << "- score of " << bestGuesses[0].first << std::endl << "Best of answers: ";
         }
-        else
+        bool still = true;
+        for(unsigned int i = 0; i < bestAnswers.size() && still; i++)
         {
-          best2 = best;
+          if(bestAnswers[i].first == bestAnswers[0].first)
+          {
+            if(i != 0)
+            {
+              std::cout << "\\ ";
+            }
+            std::cout << bestAnswers[i].second << " ";
+          }
+          else
+          {
+            still = false;
+          }
         }
-        std::ofstream fout;
-        if(reversed)
+        std::cout << "- score of " << bestAnswers[0].first << std::endl;
+        std::cout << "Worst guess: ";
+        if(valids[j] != validGuesses[j])
         {
-          fout.open(specificFileLoc);
+          still = true;
+          for(unsigned int i = bestGuesses.size() - 1; i >= 0 && still; i--)
+          {
+            if(bestGuesses[i].first == bestGuesses[bestGuesses.size() - 1].first)
+            {
+              if(i != bestGuesses.size()-1)
+              {
+                std::cout << "\\ ";
+              }
+              std::cout << bestGuesses[i].second << " ";
+            }
+            else
+            {
+              still = false;
+            }
+          }
+          std::cout << "- score of " << bestGuesses[bestGuesses.size()-1].first << std::endl << "Worst of answers: ";
         }
-        else
+        still = true;
+        for(unsigned int i = bestAnswers.size() - 1; i > 0 && still; i--)
         {
-          fout.open(specificFileLoc);
+          if(bestAnswers[i].first == bestAnswers[bestAnswers.size() - 1].first)
+          {
+            if(i != bestAnswers.size()-1)
+            {
+              std::cout << "\\ ";
+            }
+            std::cout << bestAnswers[i].second << " ";
+          }
+          else
+          {
+            still = false;
+          }
         }
-        if((((best2.second >= best.second && (searchMode == 1 || searchMode == 4)) || (best2.second <= best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && !reversed) || (((best2.second < best.second && (searchMode == 1 || searchMode == 4)) || (best2.second > best.second && (searchMode == 2 || searchMode == 3 || searchMode == 5 || searchMode == 6))) && reversed))
-        {
-          fout << best.first << " " << best.second;
-          std::cout << best.first << std::endl;
-          printBest(best.second, searchMode);
-        }
-        else
-        {
-          fout << best2.first << " " << best2.second;
-          std::cout << best2.first << std::endl;
-          printBest(best2.second, searchMode);
-        }
+        std::cout << "- score of " << bestAnswers[bestAnswers.size() - 1].first << std::endl;
       }
       if(valids[j].size() < 10)
       {
@@ -211,7 +251,7 @@ int main()
     {
       loops++;
       temp = 'n';
-      std::cout << "Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
+      std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
       std::cin >> temp;
       temp = std::tolower(temp);
       std::string guess;
@@ -354,11 +394,7 @@ int main()
       }
       if(temp == 'f')
       {
-        findbest(valids, validGuesses, numThreads, searchMode, fileLocation, false);
-      }
-      if(temp == 'w')
-      {
-        findbest(valids, validGuesses, numThreads, searchMode, fileLocation, true);
+        findbest(valids, validGuesses, numThreads, searchMode, fileLocation);
       }
       if(temp == 'l')
       {

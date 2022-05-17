@@ -47,7 +47,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         {
           bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix);
           bool still = true;
-          for(unsigned int i = 0; i < bestGuesses.size() && still; i++)
+          for(unsigned int i = 0; i < 10 && still; i++)
           {
             if(bestGuesses[i].first == bestGuesses[0].first)
             {
@@ -61,6 +61,10 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
             {
               still = false;
             }
+          }
+          if(still)
+          {
+            std::cout << "... and more ";
           }
           std::cout << "- score of " << bestGuesses[0].first << std::endl << "Best of answers: ";
         }
@@ -85,7 +89,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         if(valids[j] != validGuesses[j])
         {
           still = true;
-          for(unsigned int i = bestGuesses.size() - 1; i >= 0 && still; i--)
+          for(unsigned int i = bestGuesses.size() - 1; i >= bestGuesses.size() - 5 && still; i--)
           {
             if(bestGuesses[i].first == bestGuesses[bestGuesses.size() - 1].first)
             {
@@ -100,10 +104,14 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
               still = false;
             }
           }
+          if(still)
+          {
+            std::cout << "... and more ";
+          }
           std::cout << "- score of " << bestGuesses[bestGuesses.size()-1].first << std::endl << "Worst of answers: ";
         }
         still = true;
-        for(unsigned int i = bestAnswers.size() - 1; i > 0 && still; i--)
+        for(unsigned int i = bestAnswers.size() - 1; i > bestAnswers.size() - 5 && still; i--)
         {
           if(bestAnswers[i].first == bestAnswers[bestAnswers.size() - 1].first)
           {

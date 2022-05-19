@@ -229,13 +229,11 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 {
   for(unsigned int guess = 0; guess < validWords.size(); guess++)
   {
-    //std::cout << validWords[guess] << " ";
     std::vector<std::string> guessVec = prefix;
     guessVec.push_back(validWords[guess]);
     double total = rate(guessVec, words, searchMode);
-    //std::cout << total;
     out.push_back(std::make_pair(total, validWords[guess]));
-    //std::cout << std::endl;
+    //std::cout << validWords[guess] << " " << total << std::endl;
   }
 }
 

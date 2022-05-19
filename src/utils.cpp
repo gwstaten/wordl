@@ -17,9 +17,10 @@ int countDistinct(std::string s)
 
 std::string grade(std::string guess, std::string answer)
 {
-  std::string output(guess.length(),'0');
-  std::vector<bool> usedAnswer(guess.length(),false);
-  for(unsigned int i = 0; i < guess.length(); i++)
+  const unsigned int size = guess.length();
+  std::string output(size,'0');
+  std::vector<bool> usedAnswer(size,false);
+  for(unsigned int i = 0; i < size; i++)
   {
     if(guess.at(i) == answer.at(i))
     {
@@ -27,12 +28,12 @@ std::string grade(std::string guess, std::string answer)
       usedAnswer[i] = true;
     }
   }
-  for(unsigned int guessSpot = 0; guessSpot < guess.length(); guessSpot++)
+  for(unsigned int guessSpot = 0; guessSpot < size; guessSpot++)
   {
     if(output.at(guessSpot) == '0')
     {
       bool stillSearching = true;
-      for(unsigned int answerSpot = 0; answerSpot < guess.length() && stillSearching; answerSpot++)
+      for(unsigned int answerSpot = 0; answerSpot < size && stillSearching; answerSpot++)
       {
         if(!usedAnswer[answerSpot] && guess.at(guessSpot) == answer.at(answerSpot))
         {

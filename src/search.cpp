@@ -279,10 +279,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   std::vector<std::pair<double,std::string>> compiledResults;
   for(unsigned int i = 0; i < results.size(); i++)
   {
-    for(unsigned int j = 1; j < results[i].size(); j++)
-    {
-      compiledResults.push_back(results[i][j]);
-    }
+    compiledResults.insert(compiledResults.end(),results[i].begin()+1,results[i].end());
   }
   if(searchMode == 1 || searchMode == 4)
   {

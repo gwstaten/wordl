@@ -397,7 +397,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     guessVec.push_back(validWords[guess]);
     double total = rate(guessVec, words, searchMode);
     out.push_back(std::make_pair(total, validWords[guess]));
-    std::cout << validWords[guess] << " " << total << std::endl;
+    //std::cout << validWords[guess] << " " << total << std::endl;
   }
 }
 
@@ -453,10 +453,10 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   {
     std::sort(compiledResults.begin(), compiledResults.end(), greater());
   }
-  std::ofstream fout("log.txt");
+  /*std::ofstream fout("log.txt");
   for(unsigned int i = 0; i < compiledResults.size(); i++)
   {
     fout << i+1 << " " << compiledResults[i].second << " " << compiledResults[i].first << std::endl;
-  }
+  }*/
   return compiledResults;
 }

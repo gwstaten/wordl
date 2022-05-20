@@ -159,40 +159,15 @@ int main()
       }
       if(temp == 'a')
       {
-        for(int j = 0; j < number; j++)
+        std::cout << std::endl << "Words to rate (list separated by spaces)? ";
+        std::vector<std::string> wordSet;
+        if(inputWordSet(std::ref(wordSet), valids[0][0].length()))
         {
-          std::cout << std::endl << "Words to rate (list separated by spaces)? ";
-          std::string wordliststring;
-          std::vector<std::string> wordSet;
-          bool exited = false;
-          while(true)
-          {
-            std::cin >> wordliststring;
-            std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
-            if(wordliststring.length() != valids[j][0].length())
-            {
-              std::cout << "Invalid word lengths" << std::endl << std::endl;
-              exited = true;
-              while(true)
-              {
-                if(std::cin.peek() == '\n')
-                {
-                  break;
-                }
-                std::cin >> wordliststring;
-              }
-              break;
-            }
-            wordSet.push_back(wordliststring);
-            if(std::cin.peek() == '\n')
-            {
-              break;
-            }
-          }
-          if(!exited)
-          {
-            rateAll(wordSet, valids[j], in);
-          }
+          rateAll(wordSet, valids[0], in);
+        }
+        else
+        {
+          std::cout << "invalid word lengths" << std::endl << std::endl;
         }
       }
       if(temp == 's')
@@ -209,36 +184,14 @@ int main()
           for(int j = 0; j < number; j++)
           {
             std::cout << "Prefix words (space separated)? ";
-            std::string wordliststring;
             std::vector<std::string> wordSet;
-            bool exited = false;
-            while(true)
-            {
-              std::cin >> wordliststring;
-              std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
-              if(wordliststring.length() != valids[j][0].length())
-              {
-                std::cout << "Invalid word lengths" << std::endl << std::endl;
-                exited = true;
-                while(true)
-                {
-                  if(std::cin.peek() == '\n')
-                  {
-                    break;
-                  }
-                  std::cin >> wordliststring;
-                }
-                break;
-              }
-              wordSet.push_back(wordliststring);
-              if(std::cin.peek() == '\n')
-              {
-                break;
-              }
-            }
-            if(!exited)
+            if(inputWordSet(std::ref(wordSet), valids[0][0].size()))
             {
               prefix = wordSet;
+            }
+            else
+            {
+              std::cout << "invalid word lengths" << std::endl << std::endl;
             }
           }
         }

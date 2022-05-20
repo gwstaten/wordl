@@ -5,6 +5,33 @@
  */
 #include "search.hpp"
 
+bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
+{
+  std::string wordliststring;
+  while(true)
+  {
+    std::cin >> wordliststring;
+    std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+    if(wordliststring.length() != correctSize)
+    {
+      while(true)
+      {
+        if(std::cin.peek() == '\n')
+        {
+          break;
+        }
+        std::cin >> wordliststring;
+      }
+      return false;
+    }
+    wordSet.push_back(wordliststring);
+    if(std::cin.peek() == '\n')
+    {
+      return true;
+    }
+  }
+}
+
 int countDistinct(std::string s)
 {
   std::unordered_map<char, int> m;

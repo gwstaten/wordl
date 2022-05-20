@@ -25,3 +25,4 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
 std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>& vec, size_t n);
 
 int countDistinct(std::string s);
+bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);

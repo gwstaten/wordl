@@ -20,7 +20,7 @@ std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<s
 std::string grade(std::string guess, std::string answer);
 std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix);
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode);
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist, std::string logLocation);
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist);
 
 std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>& vec, size_t n);
 

@@ -5,7 +5,7 @@
  */
 #include "search.hpp"
 
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, char genFile, std::string wordlist, std::string logLocation)
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist)
 {
   std::map<std::string, double> ratingsMap;
   std::map<std::string, std::vector<std::string>> sets;
@@ -69,19 +69,12 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   total[0] /= words.size();
   total[4] /= words.size();
   total[5] /= words.size();
-  std::ofstream fout2(logLocation);
   std::cout << "Average bits of info: " << total[4] << std::endl;
-  fout2 << "Average bits of info: " << total[4] << std::endl;
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
-  fout2 << "Average remaining possibilities: " << total[0] << std::endl;
   std::cout << "1/n score: " << total[1] << std::endl;
-  fout2 << "1/n score: " << total[1] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
-  fout2 << "Largest ambiguous set: " << total[3] << std::endl;
   std::cout << "Average greens: " << total[5] << std::endl;
-  fout2 << "Average greens: " << total[5] << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
-  fout2 << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   std::map<std::string, std::vector<std::string>>::iterator it2;
   int num = 0;
   for(it2 = sets.begin(); it2 != sets.end(); ++it2)
@@ -92,72 +85,53 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
       if(num < 5)
       {
         std::cout << (it2->second)[0] << " ";
-        fout2 << (it2->second)[0] << " ";
       }
     }
   }
   if(num > 4)
   {
     std::cout << "... " << num - 4 << " more ";
-    fout2 << "... " << num - 4 << " more ";
   }
   std::cout << ")" << std::endl;
-  fout2 << ")" << std::endl;
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
-  fout2 << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
-  if(genFile == 'y')
+  if(!std::filesystem::exists("ratelogs"))
   {
-    if(!std::filesystem::exists("ratelogs"))
-    {
-      std::filesystem::create_directory("ratelogs");
-    }
-    std::string name = "ratelogs/" + wordlist;
-    for(unsigned int i = 0; i < guess.size(); i++)
-    {
-      name += "-";
-      name += guess[i];
-    }
-    name += ".txt";
-    std::ofstream fout;
-    std::ifstream fin;
-    fin.open(name);
-    if(!fin)
-    {
-      fin.close();
-      fout.open(name);
-      fout << "Guaranteed:" << std::endl << "( ";
-      std::map<std::string, std::vector<std::string>>::iterator it3;
-      for(it2 = sets.begin(); it2 != sets.end(); ++it2)
-      {
-        if((it2->second).size() == 1)
-        {
-          fout << (it2->second)[0] << " ";
-        }
-      }
-      fout << " )" << std::endl << "Ambiguous sets: " << std::endl;
-      for(it3 = sets.begin(); it3 != sets.end(); ++it3)
-      {
-        if((it3->second).size() != 1)
-        {
-          fout << "( ";
-          for(unsigned int i = 0; i < (it3->second).size(); i++)
-          {
-            fout << (it3->second)[i] << " ";
-          }
-          fout << ")" << std::endl;
-        }
-      }
-      fout.close();
-    }
-    else
-    {
-      fin.close();
-    }
-    std::cout << "Output file name: " << name << std::endl;
-    fout2 << "Output file name: " << name << std::endl;
-    std::cout << std::endl;
-    fout2 << std::endl;
+    std::filesystem::create_directory("ratelogs");
   }
+  std::string name = "ratelogs/" + wordlist;
+  for(unsigned int i = 0; i < guess.size(); i++)
+  {
+    name += "-";
+    name += guess[i];
+  }
+  name += ".txt";
+  std::ofstream fout;
+  fout.open(name);
+  fout << "Guaranteed:" << std::endl << "( ";
+  std::map<std::string, std::vector<std::string>>::iterator it3;
+  for(it2 = sets.begin(); it2 != sets.end(); ++it2)
+  {
+    if((it2->second).size() == 1)
+    {
+      fout << (it2->second)[0] << " ";
+    }
+  }
+  fout << " )" << std::endl << "Ambiguous sets: " << std::endl;
+  for(it3 = sets.begin(); it3 != sets.end(); ++it3)
+  {
+    if((it3->second).size() != 1)
+    {
+      fout << "( ";
+      for(unsigned int i = 0; i < (it3->second).size(); i++)
+      {
+        fout << (it3->second)[i] << " ";
+      }
+      fout << ")" << std::endl;
+    }
+  }
+  fout.close();
+  std::cout << "Output file name: " << name << std::endl;
+  std::cout << std::endl;
 }
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)

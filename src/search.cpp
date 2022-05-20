@@ -160,121 +160,9 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, cha
   }
 }
 
-float probFinder( unsigned max, unsigned diff, unsigned length )
-{
-    float result = 1;
-    float cur1 = max;
-    float cur2 = max - diff;
-    for(unsigned int i = 0; i < length - 1; i++)
-    {
-      result *= cur2;
-      result /= cur1;
-      cur1--;
-      cur2--;
-    }
-    return result;
-}
-/*
-double rateFinal(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
-{
-  std::unordered_map<std::string, double> ratingsMap;
-  for(unsigned int answer = 0; answer < words.size(); answer++)
-  {
-    std::string total = "";
-    for(unsigned int i = 0; i < guess.size(); i++)
-    {
-      total += grade(guess[i], words[answer]);
-    }
-    ratingsMap[total]++;
-  }
-  if(searchMode == 2)
-  {
-    return ratingsMap.size();
-  }
-  double total = 0;
-  std::unordered_map<std::string, double>::iterator it;
-  unsigned int wordpos = 0;
-  for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-  {
-    std::vector<bool> usedGreen(guess[0].length(),false);
-    switch(searchMode)
-    {
-      case 1:
-        total += ((it->second) * (it->second));
-        break;
-      case 3:
-        if((it->second) == 1)
-        {
-          total++;
-        }
-        break;
-      case 4:
-        if(total < (it->second))
-        {
-          total = (it->second);
-        }
-        break;
-      case 5:
-        total += (it->second) * std::log((it->second) / words.size()) / std::log(0.5);
-        break;
-      case 6:
-        for(unsigned int i = 0; i < (it->first).length(); i++)
-        {
-          wordpos++;
-          if(wordpos == guess[0].length())
-          {
-            wordpos = 0;
-          }
-          if((it->first).at(i) == '2' && !usedGreen[wordpos])
-          {
-            usedGreen[wordpos] = true;
-            total += (it->second);
-          }
-        }
-        break;
-      case 7:
-        if(total < (it->second))
-        {
-          total = (it->second);
-        }
-        break;
-    }
-  }
-  if(searchMode == 7)
-  {
-    std::vector<int> frequencies(total + 1, 0);
-    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-    {
-      frequencies[it->second]+=it->second;
-    }
-    frequencies[1] -= guess.size();
-    int currentSum = 0;
-    float probSum = 0;
-    float odds = 0;
-    for(unsigned int i = 0; i < frequencies.size(); i++)
-    {
-      if(frequencies[i] != 0)
-      {
-        currentSum += frequencies[i];
-        float prob = ((1 - probFinder(words.size() - guess.size(), currentSum, 4)) - probSum);
-        probSum += prob;
-        prob /= i;
-        odds += prob;
-      }
-    }
-    total = odds;
-  }
-  if(searchMode == 1 || searchMode == 5 || searchMode == 6)
-  {
-    total /= words.size();
-  }
-  return total;
-}
-*/
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
 {
   std::unordered_map<std::string, double> ratingsMap;
-  std::unordered_map<std::string, std::vector<std::string>> ratingsMapWords;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
     std::string total = "";
@@ -283,14 +171,6 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
       total += grade(guess[i], words[answer]);
     }
     ratingsMap[total]++;
-    if(ratingsMap[total] == 1)
-    {
-      ratingsMapWords[total] = {words[answer]};
-    }
-    else
-    {
-      ratingsMapWords[total].push_back(words[answer]);
-    }
   }
   if(searchMode == 2)
   {
@@ -336,51 +216,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
             total += (it->second);
           }
         }
-        break;
-      case 7:
-        if(total < (it->second))
-        {
-          total = (it->second);
-        }
-        break;
     }
-  }
-  if(searchMode == 7)
-  {
-    std::vector<int> frequencies(total + 1, 0);
-    std::vector<std::vector<std::string>> options(total + 1, {"-"});
-    for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
-    {
-      frequencies[it->second]+=it->second;
-      options[it->second].insert(options[it->second].end(), ratingsMapWords[it->first].begin(), ratingsMapWords[it->first].end());
-    }
-    for(unsigned int i = 0; i < options.size(); i++)
-    {
-      options[i].erase(options[i].begin());
-    }
-    frequencies[1] -= guess.size();
-    int currentSum = 0;
-    float probSum = 0;
-    float odds = 0;
-    for(unsigned int i = 0; i < frequencies.size(); i++)
-    {
-      if(frequencies[i] != 0)
-      {
-        currentSum += frequencies[i];
-        float prob = ((1 - probFinder(words.size() - guess.size(), currentSum, 4)) - probSum);
-        probSum += prob;
-        prob /= i;
-        /*float intermediateProb = 0;
-        for(unsigned int j = 0; j < options[i].size(); j++)
-        {
-          intermediateProb += rateFinal({guess[0], options[i][j]}, words, 7);
-        }
-        intermediateProb /= options[i].size();
-        prob *= intermediateProb;*/
-        odds += prob;
-      }
-    }
-    total = odds;
   }
   if(searchMode == 1 || searchMode == 5 || searchMode == 6)
   {
@@ -397,7 +233,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     guessVec.push_back(validWords[guess]);
     double total = rate(guessVec, words, searchMode);
     out.push_back(std::make_pair(total, validWords[guess]));
-    std::cout << validWords[guess] << " " << total << std::endl;
+    //std::cout << validWords[guess] << " " << total << std::endl;
   }
 }
 
@@ -452,11 +288,6 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   else
   {
     std::sort(compiledResults.begin(), compiledResults.end(), greater());
-  }
-  std::ofstream fout("log.txt");
-  for(unsigned int i = 0; i < compiledResults.size(); i++)
-  {
-    fout << i+1 << " " << compiledResults[i].second << " " << compiledResults[i].first << std::endl;
   }
   return compiledResults;
 }

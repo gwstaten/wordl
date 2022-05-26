@@ -5,6 +5,7 @@
  */
 #include "util.hpp"
 #include "search.hpp"
+#include "commandline.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -14,11 +15,15 @@ int main(int argc, char* argv[])
 
   std::vector<std::string> prefix = {};
 
-  std::map<std::string, std::string> preArguments;
+  std::pair<std::string, std::string> commandGuesses;
+  std::vector<std::string> commandWordrates;
+
+  std::string command {};
 
   for(int pos = 1; pos < argc; ++pos)
   {
-    std::pair<std::string, std::string> parsearg = parseoption(argv[pos]);
+    std::string arg = std::string(argv[pos]);
+    std::pair<std::string, std::string> parsearg = parseoption(arg);
 
     if(parsearg.first != "")
     {
@@ -28,26 +33,37 @@ int main(int argc, char* argv[])
         {
           int setwWidth = 20;
 
-          std::cout << "Usage: ./wordl [ARGS]" << std::endl;
+          std::cout << "Usage: ./wordl [ARGUMENTS] <COMMAND>" << std::endl;
 
           std::cout << std::endl;
 
           std::cout << "Arguments:" << std::endl;
-          std::cout << std::left << std::setw(setwWidth) << "  -threads" << "Sets the number of threads" << std::endl;
-          std::cout << std::left << std::setw(setwWidth) << "  -wordlist" << "Sets the wordlist" << std::endl;
-          std::cout << std::left << std::setw(setwWidth) << "  -parallel" << "Sets the number of parallel wordles" << std::endl;
-          std::cout << std::left << std::setw(setwWidth) << "  -hardmode" << "Sets the hardmode" << std::endl;
-          std::cout << std::left << std::setw(setwWidth) << "  -searchmode" << "Sets the searchmode" << std::endl;
+          for(const auto& [name, def] : arguments)
+          {
+            std::cout << std::left << std::setw(setwWidth) << "  -" + name << def << std::endl;
+          }
 
           std::cout << std::endl;
 
+          std::cout << "Commands:" << std::endl;
+          for(const auto& [name, def] : commands)
+          {
+            std::cout << std::left << std::setw(setwWidth) << "  " + name << def << std::endl;
+          }
+
           std::cout << "Example:" << std::endl;
-          std::cout << "  ./wordl -threads=4 -wordlist=nytimes2 -parallel=1 -hardmode=n -searchmode=2" << std::endl;
+          for(const std::string& example : examples)
+          {
+            std::cout << "  " << example << std::endl;
+          }
 
           std::cout << std::endl;
 
           std::cout << "Note:" << std::endl;
-          std::cout << "  You do not need to use all of the arguments, and they do not need to be in the example's specific order" << std::endl;
+          for(const std::string& note : notes)
+          {
+            std::cout << "  " << note << std::endl;
+          }
 
           std::cout << std::endl;
 
@@ -75,7 +91,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-          preArguments.insert({parsearg.first, parsearg.second});
+          std::cout << "Unknown argument: '" << parsearg.first << "'" << std::endl;
         }
       }
       catch(std::exception& exception)

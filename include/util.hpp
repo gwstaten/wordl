@@ -25,6 +25,6 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
 std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>& vec, size_t n);
 
-std::pair<std::string, std::string> parseoption(char* arg);
+std::pair<std::string, std::string> parseoption(std::string arg);
 
 #endif

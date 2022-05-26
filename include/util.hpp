@@ -16,6 +16,7 @@
 #include <filesystem>
 #include <thread>
 #include <algorithm>
+#include <string>
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 int countDistinct(std::string s);

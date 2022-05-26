@@ -24,7 +24,36 @@ int main(int argc, char* argv[])
     {
       try
       {
-        if(parsearg.first == "threads")
+        if(parsearg.first == "help")
+        {
+          int setwWidth = 20;
+
+          std::cout << "Usage: ./wordl [ARGS]" << std::endl;
+
+          std::cout << std::endl;
+
+          std::cout << "Arguments:" << std::endl;
+          std::cout << std::left << std::setw(setwWidth) << "  -threads" << "Sets the number of threads" << std::endl;
+          std::cout << std::left << std::setw(setwWidth) << "  -wordlist" << "Sets the wordlist" << std::endl;
+          std::cout << std::left << std::setw(setwWidth) << "  -parallel" << "Sets the number of parallel wordles" << std::endl;
+          std::cout << std::left << std::setw(setwWidth) << "  -hardmode" << "Sets the hardmode" << std::endl;
+          std::cout << std::left << std::setw(setwWidth) << "  -searchmode" << "Sets the searchmode" << std::endl;
+
+          std::cout << std::endl;
+
+          std::cout << "Example:" << std::endl;
+          std::cout << "  ./wordl -threads=4 -wordlist=nytimes2 -parallel=1 -hardmode=n -searchmode=2" << std::endl;
+
+          std::cout << std::endl;
+
+          std::cout << "Note:" << std::endl;
+          std::cout << "  You do not need to use all of the arguments, and they do not need to be in the example's specific order" << std::endl;
+
+          std::cout << std::endl;
+
+          return 0;
+        }
+        else if(parsearg.first == "threads")
         {
           numThreads = std::stoi(parsearg.second);
         }

@@ -171,21 +171,20 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
   return outVec;
 }
 
-std::pair<std::string, std::string> parseoption(char* arg)
+std::pair<std::string, std::string> parseoption(std::string arg)
 {
-  std::string argstring = std::string(arg);
-  std::transform(argstring.begin(), argstring.end(), argstring.begin(), ::tolower);
+  std::transform(arg.begin(), arg.end(), arg.begin(), ::tolower);
 
-  if(argstring[0] == '-') 
+  if(arg[0] == '-')
   {
     std::pair<std::string, std::string> parts;
-    if(argstring.find('=') > 1)
+    if(arg.find('=') > 1)
     {
-      parts = {argstring.substr(1, argstring.find('=') - 1), argstring.substr(argstring.find('=') + 1)};
+      parts = {arg.substr(1, arg.find('=') - 1), arg.substr(arg.find('=') + 1)};
     }
     else
     {
-      parts = {argstring.substr(1), ""};
+      parts = {arg.substr(1), ""};
     }
 
     return parts;

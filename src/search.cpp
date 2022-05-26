@@ -265,3 +265,58 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   }
   return compiledResults;
 }
+
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix)
+{
+  for(unsigned int j = 0; j < valids.size(); j++)
+  {
+    if(valids[j].size() > 2)
+    {
+      std::cout << std::endl << "Best guess: ";
+      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix);
+      std::vector<std::pair<double, std::string>> bestGuesses;
+      if(valids[j] != validGuesses[j])
+      {
+        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix);
+        bool still = true;
+        for(unsigned int i = 0; i < 10 && still; i++)
+        {
+          if(bestGuesses[i].first == bestGuesses[0].first)
+          {
+            if(i != 0)
+            {
+              std::cout << "\\ ";
+            }
+            std::cout << bestGuesses[i].second << " ";
+          }
+          else
+          {
+            still = false;
+          }
+        }
+        if(still)
+        {
+          std::cout << "... and more ";
+        }
+        std::cout << "- score of " << bestGuesses[0].first << std::endl << "Best of answers: ";
+      }
+      bool still = true;
+      for(unsigned int i = 0; i < bestAnswers.size() && still; i++)
+      {
+        if(bestAnswers[i].first == bestAnswers[0].first)
+        {
+          if(i != 0)
+          {
+            std::cout << "\\ ";
+          }
+          std::cout << bestAnswers[i].second << " ";
+        }
+        else
+        {
+          still = false;
+        }
+      }
+      std::cout << "- score of " << bestAnswers[0].first << std::endl << std::endl;
+    }
+  }
+}

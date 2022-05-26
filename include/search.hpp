@@ -3,17 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-#include <iostream>
-#include <vector>
-#include <fstream>
-#include <cmath>
-#include <map>
-#include <unordered_map>
-#include <iterator>
-#include <filesystem>
-#include <thread>
-#include <algorithm>
+#ifndef _SEARCH_HPP_
+#define _SEARCH_HPP_
 
+#include "util.hpp"
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
@@ -26,3 +19,7 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
 
 int countDistinct(std::string s);
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
+
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix);
+
+#endif

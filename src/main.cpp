@@ -3,80 +3,76 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
+#include "util.hpp"
 #include "search.hpp"
 
-std::vector<std::string> prefix = {};
-
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode)
+int main(int argc, char* argv[])
 {
-  for(unsigned int j = 0; j < valids.size(); j++)
+  int numThreads {}, number {}, searchMode {};
+  char hardmode {};
+  std::string in {};
+
+  std::vector<std::string> prefix = {};
+
+  std::map<std::string, std::string> preArguments;
+
+  for(int pos = 1; pos < argc; ++pos)
   {
-    if(valids[j].size() > 2)
+    std::pair<std::string, std::string> parsearg = parseoption(argv[pos]);
+
+    if(parsearg.first != "")
     {
-      std::cout << std::endl << "Best guess: ";
-      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix);
-      std::vector<std::pair<double, std::string>> bestGuesses;
-      if(valids[j] != validGuesses[j])
+      try
       {
-        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix);
-        bool still = true;
-        for(unsigned int i = 0; i < 10 && still; i++)
+        if(parsearg.first == "threads")
         {
-          if(bestGuesses[i].first == bestGuesses[0].first)
-          {
-            if(i != 0)
-            {
-              std::cout << "\\ ";
-            }
-            std::cout << bestGuesses[i].second << " ";
-          }
-          else
-          {
-            still = false;
-          }
+          numThreads = std::stoi(parsearg.second);
         }
-        if(still)
+        else if(parsearg.first == "wordlist")
         {
-          std::cout << "... and more ";
+          in = parsearg.second;
         }
-        std::cout << "- score of " << bestGuesses[0].first << std::endl << "Best of answers: ";
-      }
-      bool still = true;
-      for(unsigned int i = 0; i < bestAnswers.size() && still; i++)
-      {
-        if(bestAnswers[i].first == bestAnswers[0].first)
+        else if(parsearg.first == "parallel")
         {
-          if(i != 0)
-          {
-            std::cout << "\\ ";
-          }
-          std::cout << bestAnswers[i].second << " ";
+          number = std::stoi(parsearg.second);
+        }
+        else if(parsearg.first == "hardmode")
+        {
+          hardmode = parsearg.second[0];
+        }
+        else if(parsearg.first == "searchmode")
+        {
+          searchMode = std::stoi(parsearg.second);
         }
         else
         {
-          still = false;
+          preArguments.insert({parsearg.first, parsearg.second});
         }
       }
-      std::cout << "- score of " << bestAnswers[0].first << std::endl << std::endl;
+      catch(std::exception& exception)
+      {
+        std::cout << "Argument for '" << parsearg.first << "' invalid: '" << parsearg.second << "'" << std::endl; 
+      }
     }
   }
-}
 
-int main()
-{
   std::srand((unsigned) std::time(NULL)); 
-  int numThreads;
-  std::cout << "Number of threads? ";
-  std::cin >> numThreads;
 
-  int number;
-  std::string in;
+  if(!numThreads)
+  {
+    std::cout << "Number of threads? ";
+    std::cin >> numThreads;
+  }
+
   std::vector<std::string> validWords;
   std::vector<std::string> validWordss;
 
-  std::cout << "Word list? ";
-  std::cin >> in;
-  std::transform(in.begin(), in.end(), in.begin(), [](unsigned char c){ return std::tolower(c); });
+  if(in == "")
+  {
+    std::cout << "Word list? ";
+    std::cin >> in;
+    std::transform(in.begin(), in.end(), in.begin(), [](unsigned char c){ return std::tolower(c); });
+  }
 
   std::ifstream fin("wordlists/" + in);
   if(!fin)
@@ -92,13 +88,18 @@ int main()
     fin >> temp;
   }
 
-  std::cout << "Number of parallel wordls? ";
-  std::cin >> number;
+  if(!number)
+  {
+    std::cout << "Number of parallel wordls? ";
+    std::cin >> number;
+  }
 
-  char hardmode;
-  std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
-  std::cin >> hardmode;
-  hardmode = std::tolower(hardmode);
+  if(!hardmode)
+  {
+    std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
+    std::cin >> hardmode;
+    hardmode = std::tolower(hardmode);
+  }
 
   validWords = validWordss;
   std::ifstream fin2("wordlists/&" + in);
@@ -120,9 +121,12 @@ int main()
     }
   }
 
-  int searchMode;
-  std::cout << "Search mode (1 - 6)? ";
-  std::cin >> searchMode;
+  if(!searchMode)
+  {
+    std::cout << "Search mode (1 - 6)? ";
+    std::cin >> searchMode;
+  }
+  
   while(true)
   {
     std::vector<std::vector<std::string>> valids;
@@ -199,7 +203,7 @@ int main()
       }
       if(temp == 'f')
       {
-        findbest(valids, validGuesses, numThreads, searchMode);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix);
       }
       if(temp == 'l')
       {

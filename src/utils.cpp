@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-#include "search.hpp"
+#include "util.hpp"
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
 {
@@ -169,4 +169,29 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
     begin = end;
   }
   return outVec;
+}
+
+std::pair<std::string, std::string> parseoption(char* arg)
+{
+  std::string argstring = std::string(arg);
+  std::transform(argstring.begin(), argstring.end(), argstring.begin(), ::tolower);
+
+  if(argstring[0] == '-') 
+  {
+    std::pair<std::string, std::string> parts;
+    if(argstring.find('=') > 1)
+    {
+      parts = {argstring.substr(1, argstring.find('=') - 1), argstring.substr(argstring.find('=') + 1)};
+    }
+    else
+    {
+      parts = {argstring.substr(1), ""};
+    }
+
+    return parts;
+  } 
+  else 
+  {
+    return {"", ""};
+  }
 }

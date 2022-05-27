@@ -305,7 +305,7 @@ int main(int argc, char* argv[])
         {
           for(unsigned int i = 0; i < valids[j].size(); i++)
           {
-            std::cout << valids[j][i] << std::endl;
+            std::cout << valids[j][i] << "  ";
           }
           std::cout << std::endl;
         }

@@ -335,6 +335,7 @@ int main(int argc, char* argv[])
             std::string rating;
             if(command == "")
             {
+              std::cout << "rating: ";
               std::cin >> rating;
             }
             else

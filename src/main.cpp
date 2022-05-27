@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
   std::vector<std::string> prefix = {};
 
-  std::pair<std::string, std::string> commandGuesses;
+  std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
 
   std::string command {};
@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
           std::cout << std::endl;
 
           std::cout << "Arguments:" << std::endl;
-          for(const auto& [name, def] : arguments)
+          for(const auto& [name, def] : cmdl::arguments)
           {
             std::cout << std::left << std::setw(setwWidth) << "  -" + name << def << std::endl;
           }
@@ -46,13 +46,13 @@ int main(int argc, char* argv[])
           std::cout << std::endl;
 
           std::cout << "Commands:" << std::endl;
-          for(const auto& [name, def] : commands)
+          for(const auto& [name, def] : cmdl::commands)
           {
             std::cout << std::left << std::setw(setwWidth) << "  " + name << def << std::endl;
           }
 
           std::cout << "Example:" << std::endl;
-          for(const std::string& example : examples)
+          for(const std::string& example : cmdl::examples)
           {
             std::cout << "  " << example << std::endl;
           }
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
           std::cout << std::endl;
 
           std::cout << "Note:" << std::endl;
-          for(const std::string& note : notes)
+          for(const std::string& note : cmdl::notes)
           {
             std::cout << "  " << note << std::endl;
           }
@@ -69,23 +69,23 @@ int main(int argc, char* argv[])
 
           return 0;
         }
-        else if(parsearg.first == "threads")
+        else if(parsearg.first == cmdl::NAMES::THREAD_ARG)
         {
           numThreads = std::stoi(parsearg.second);
         }
-        else if(parsearg.first == "wordlist")
+        else if(parsearg.first == cmdl::NAMES::WORDLIST_ARG)
         {
           in = parsearg.second;
         }
-        else if(parsearg.first == "parallel")
+        else if(parsearg.first == cmdl::NAMES::PARALLEL_ARG)
         {
           number = std::stoi(parsearg.second);
         }
-        else if(parsearg.first == "hardmode")
+        else if(parsearg.first == cmdl::NAMES::HARDMODE_ARG)
         {
           hardmode = parsearg.second[0];
         }
-        else if(parsearg.first == "searchmode")
+        else if(parsearg.first == cmdl::NAMES::SEARCHMODE_ARG)
         {
           searchMode = std::stoi(parsearg.second);
         }
@@ -99,9 +99,35 @@ int main(int argc, char* argv[])
         std::cout << "Argument for '" << parsearg.first << "' invalid: '" << parsearg.second << "'" << std::endl; 
       }
     }
+    else
+    {
+      if(command == "")
+      {
+        if(cmdl::commands.find(arg) == cmdl::commands.end())
+        {
+          std::cout << "Unknown command: '" << arg << "'" << std::endl;
+          break;
+        }
+        else
+        {
+          command = arg; 
+        }
+      }
+      else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
+      {
+        std::vector<std::string> guesses;
+        for(int i = 0; i < number; ++i) {
+          guesses.push_back(argv[pos + i + 1]);
+        }
+        commandGuesses.insert({arg, guesses});
+        pos += number;
+      }
+      else if(command == cmdl::NAMES::RATE_CMD)
+      {
+        commandWordrates.push_back(arg);
+      }
+    }
   }
-
-  std::srand((unsigned) std::time(NULL)); 
 
   if(!numThreads)
   {
@@ -192,25 +218,43 @@ int main(int argc, char* argv[])
     }
     std::cout << std::endl << std::endl;
 
-    int loops = 0;
     char temp = 'n';
     while(temp != 'r')
     {
-      loops++;
-      temp = 'n';
-      std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
-      std::cin >> temp;
-      temp = std::tolower(temp);
-      std::string guess;
+      if(command == "")
+      {
+        temp = 'n';
+        std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
+        std::cin >> temp;
+        temp = std::tolower(temp);
+      }
+
       if(temp == 'e')
       {
         return 1;
       }
-      if(temp == 'a')
+      if(temp == 'a' || command == cmdl::NAMES::RATE_CMD)
       {
-        std::cout << std::endl << "Words to rate (list separated by spaces)? ";
         std::vector<std::string> wordSet;
-        if(inputWordSet(std::ref(wordSet), valids[0][0].length()))
+        if(command == "")
+        {
+          std::cout << std::endl << "Words to rate (list separated by spaces)? ";
+        }
+        else
+        {
+          wordSet = commandWordrates;
+
+          for(const std::string& word : wordSet)
+          {
+            if(word.length() != valids[0][0].length())
+            {
+              std::cout << "Invalid word length of " << word.length() << ": '" << word << "'" << std::endl;
+              return 0;
+            }
+          }
+        }
+
+        if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0][0].length()))
         {
           rateAll(wordSet, valids[0], in);
         }
@@ -246,11 +290,16 @@ int main(int argc, char* argv[])
         }
         std::cout << std::endl;
       }
-      if(temp == 'f')
+      if(temp == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
         findbest(valids, validGuesses, numThreads, searchMode, prefix);
+
+        if(command != "")
+        {
+          return 0;
+        }
       }
-      if(temp == 'l')
+      if(temp == 'l' || (command == cmdl::NAMES::LIST_CMD && commandGuesses.size() == 0))
       {
         for(unsigned int j = 0; j <valids.size(); j++)
         {
@@ -260,18 +309,38 @@ int main(int argc, char* argv[])
           }
           std::cout << std::endl;
         }
+
+        if(command != "")
+        {
+          return 0;
+        }
       }
-      if(temp == 'g')
+      if(temp == 'g' || ((command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::FILTER_CMD || command == cmdl::NAMES::LIST_CMD) && commandGuesses.size() > 0))
       {
-        std::cout << std::endl << "guess: ";
-        std::cin >> guess;
-        std::transform(guess.begin(), guess.end(), guess.begin(), [](unsigned char c){ return std::tolower(c); });
+        std::string guess;
+        if(command == "")
+        {
+          std::cout << std::endl << "guess: ";
+          std::cin >> guess;
+          std::transform(guess.begin(), guess.end(), guess.begin(), [](unsigned char c){ return std::tolower(c); });
+        }
+        else
+        {
+          guess = commandGuesses.begin()->first;
+        }
         for(int i = 0; i < number; i++)
         {
           if(valids[i].size() > 1 || valids.size() == 1)
           {
             std::string rating;
-            std::cin >> rating;
+            if(command == "")
+            {
+              std::cin >> rating;
+            }
+            else
+            {
+              rating = commandGuesses.begin()->second[i];
+            }
             valids[i] = filter(valids[i],std::make_pair(guess, rating));
             std::cout << "There are now " << valids[i].size() << " answers";
             if(hardmode == 'u')
@@ -288,6 +357,15 @@ int main(int argc, char* argv[])
           }
         }
         std::cout << std::endl;
+        if(commandGuesses.size() > 0)
+        {
+          commandGuesses.erase(commandGuesses.begin());
+        }
+      }
+
+      if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0)
+      {
+        return 0;
       }
     }
   }

@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         {
           int setwWidth = 20;
 
-          std::cout << "Usage: ./wordl [ARGUMENTS] <COMMAND>" << std::endl;
+          std::cout << "Usage: ./wordl [ARGUMENTS] <COMMAND> (FILTERS)" << std::endl;
 
           std::cout << std::endl;
 

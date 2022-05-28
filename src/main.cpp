@@ -72,22 +72,53 @@ int main(int argc, char* argv[])
         else if(parsearg.first == cmdl::NAMES::THREAD_ARG)
         {
           numThreads = std::stoi(parsearg.second);
+
+          if(numThreads < 0)
+          {
+            std::cout << "Invalid thread count: '" << numThreads << "'" << std::endl;
+            numThreads = 0;
+          }
         }
         else if(parsearg.first == cmdl::NAMES::WORDLIST_ARG)
         {
           in = parsearg.second;
+
+          std::ifstream fin("wordlists/" + in);
+          if(!fin)
+          {
+            std::cout << "Invalid word list name: '" << in << "'" << std::endl;
+            in = "";
+          }
         }
         else if(parsearg.first == cmdl::NAMES::PARALLEL_ARG)
         {
           number = std::stoi(parsearg.second);
+
+          if(number < 0)
+          {
+            std::cout << "Invalid parallel count: '" << number << "'" << std::endl;
+            number = 0;
+          }
         }
         else if(parsearg.first == cmdl::NAMES::HARDMODE_ARG)
         {
           hardmode = parsearg.second[0];
+
+          if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
+          {
+            std::cout << "Unknown hardmode: '" << hardmode << "'" << std::endl;
+            hardmode = '\0';
+          }
         }
         else if(parsearg.first == cmdl::NAMES::SEARCHMODE_ARG)
         {
           searchMode = std::stoi(parsearg.second);
+
+          if(searchMode < 1 || searchMode > 6)
+          {
+            std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
+            searchMode = 0;
+          }
         }
         else
         {
@@ -133,6 +164,12 @@ int main(int argc, char* argv[])
   {
     std::cout << "Number of threads? ";
     std::cin >> numThreads;
+
+    if(numThreads < 0)
+    {
+      std::cout << "Invalid thread count: '" << numThreads << "'" << std::endl;
+      return 0;
+    }
   }
 
   std::vector<std::string> validWords;
@@ -148,7 +185,7 @@ int main(int argc, char* argv[])
   std::ifstream fin("wordlists/" + in);
   if(!fin)
   {
-    std::cout << "Invalid word list name" << std::endl;
+    std::cout << "Invalid word list name: '" << in << "'" << std::endl;
     return 0;
   }
   std::string temp;
@@ -163,6 +200,13 @@ int main(int argc, char* argv[])
   {
     std::cout << "Number of parallel wordls? ";
     std::cin >> number;
+
+
+    if(number < 0)
+    {
+      std::cout << "Invalid parallel count: '" << number << "'" << std::endl;
+      return 0;
+    }
   }
 
   if(!hardmode)
@@ -170,6 +214,12 @@ int main(int argc, char* argv[])
     std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
     std::cin >> hardmode;
     hardmode = std::tolower(hardmode);
+
+    if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
+    {
+      std::cout << "Unknown hardmode: '" << hardmode << "'" << std::endl;
+      return 0;
+    }
   }
 
   validWords = validWordss;
@@ -196,6 +246,13 @@ int main(int argc, char* argv[])
   {
     std::cout << "Search mode (1 - 6)? ";
     std::cin >> searchMode;
+
+
+    if(searchMode < 1 || searchMode > 6)
+    {
+      std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
+      return 0;
+    }
   }
   
   while(true)

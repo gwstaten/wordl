@@ -9,9 +9,9 @@
 
 int main(int argc, char* argv[])
 {
-  int numThreads {}, number {}, searchMode {};
+  int numThreads {}, parallel {}, searchMode {};
   char hardmode {};
-  std::string in {};
+  std::string wordlist {};
 
   std::vector<std::string> prefix = {};
 
@@ -81,23 +81,23 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::WORDLIST_ARG)
         {
-          in = parsearg.second;
+          wordlist = parsearg.second;
 
-          std::ifstream fin("wordlists/" + in);
+          std::ifstream fin("wordlists/" + wordlist);
           if(!fin)
           {
-            std::cout << "Invalid word list name: '" << in << "'" << std::endl;
-            in = "";
+            std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
+            wordlist = "";
           }
         }
         else if(parsearg.first == cmdl::NAMES::PARALLEL_ARG)
         {
-          number = std::stoi(parsearg.second);
+          parallel = std::stoi(parsearg.second);
 
-          if(number < 0)
+          if(parallel < 0)
           {
-            std::cout << "Invalid parallel count: '" << number << "'" << std::endl;
-            number = 0;
+            std::cout << "Invalid parallel count: '" << parallel << "'" << std::endl;
+            parallel = 0;
           }
         }
         else if(parsearg.first == cmdl::NAMES::HARDMODE_ARG)
@@ -147,11 +147,11 @@ int main(int argc, char* argv[])
       else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
       {
         std::vector<std::string> guesses;
-        for(int i = 0; i < number; ++i) {
+        for(int i = 0; i < parallel; ++i) {
           guesses.push_back(argv[pos + i + 1]);
         }
         commandGuesses.insert({arg, guesses});
-        pos += number;
+        pos += parallel;
       }
       else if(command == cmdl::NAMES::RATE_CMD)
       {
@@ -175,17 +175,17 @@ int main(int argc, char* argv[])
   std::vector<std::string> validWords;
   std::vector<std::string> validWordss;
 
-  if(in == "")
+  if(wordlist == "")
   {
     std::cout << "Word list? ";
-    std::cin >> in;
-    std::transform(in.begin(), in.end(), in.begin(), [](unsigned char c){ return std::tolower(c); });
+    std::cin >> wordlist;
+    std::transform(wordlist.begin(), wordlist.end(), wordlist.begin(), [](unsigned char c){ return std::tolower(c); });
   }
 
-  std::ifstream fin("wordlists/" + in);
+  std::ifstream fin("wordlists/" + wordlist);
   if(!fin)
   {
-    std::cout << "Invalid word list name: '" << in << "'" << std::endl;
+    std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
     return 0;
   }
   std::string temp;
@@ -196,15 +196,15 @@ int main(int argc, char* argv[])
     fin >> temp;
   }
 
-  if(!number)
+  if(!parallel)
   {
     std::cout << "Number of parallel wordls? ";
-    std::cin >> number;
+    std::cin >> parallel;
 
 
-    if(number < 0)
+    if(parallel < 0)
     {
-      std::cout << "Invalid parallel count: '" << number << "'" << std::endl;
+      std::cout << "Invalid parallel count: '" << parallel << "'" << std::endl;
       return 0;
     }
   }
@@ -223,7 +223,7 @@ int main(int argc, char* argv[])
   }
 
   validWords = validWordss;
-  std::ifstream fin2("wordlists/&" + in);
+  std::ifstream fin2("wordlists/&" + wordlist);
   if(fin2.is_open())
   {
     fin2 >> temp;
@@ -254,16 +254,18 @@ int main(int argc, char* argv[])
       return 0;
     }
   }
+
+  std::cout << numThreads << " : " << wordlist << " : " << parallel << " : " << hardmode << " : " << searchMode << std::endl;
   
   while(true)
   {
     std::vector<std::vector<std::string>> valids;
     std::vector<std::vector<std::string>> validGuesses;
-    for(int i = 0; i < number; i++)
+    for(int i = 0; i < parallel; i++)
     {
       valids.push_back(validWordss);
     }
-    for(int i = 0; i < number; i++)
+    for(int i = 0; i < parallel; i++)
     {
       validGuesses.push_back(validWords);
     }
@@ -313,7 +315,7 @@ int main(int argc, char* argv[])
 
         if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0][0].length()))
         {
-          rateAll(wordSet, valids[0], in);
+          rateAll(wordSet, valids[0], wordlist);
         }
         else
         {
@@ -331,7 +333,7 @@ int main(int argc, char* argv[])
         tempIn = std::tolower(tempIn);
         if(tempIn == 'y')
         {
-          for(int j = 0; j < number; j++)
+          for(int j = 0; j < parallel; j++)
           {
             std::cout << "Prefix words (space separated)? ";
             std::vector<std::string> wordSet;
@@ -385,7 +387,7 @@ int main(int argc, char* argv[])
         {
           guess = commandGuesses.begin()->first;
         }
-        for(int i = 0; i < number; i++)
+        for(int i = 0; i < parallel; i++)
         {
           if(valids[i].size() > 1 || valids.size() == 1)
           {

@@ -11,7 +11,7 @@ bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
   while(true)
   {
     std::cin >> wordliststring;
-    std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+    std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), ::tolower);
     if(wordliststring.length() != correctSize)
     {
       while(true)

@@ -186,13 +186,13 @@ int main(int argc, char* argv[])
   std::vector<std::string> validWords;
   std::vector<std::string> validWordss;
 
-  wordlistStream = std::ifstream("wordlists/" + wordlist);
-
   if(wordlist == "")
   {
     std::cout << "Word list? ";
     getline(std::cin, wordlist);
     std::transform(wordlist.begin(), wordlist.end(), wordlist.begin(), ::tolower);
+
+    wordlistStream = std::ifstream("wordlists/" + wordlist);
 
     if(!wordlistStream)
     {

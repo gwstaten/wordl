@@ -11,7 +11,8 @@ int main(int argc, char* argv[])
 {
   int numThreads {}, parallel {}, searchMode {};
   char hardmode {};
-  std::string wordlist {};
+  std::string wordlist {}, temp {};
+  std::ifstream wordlistStream;
 
   std::vector<std::string> prefix = {};
 
@@ -83,8 +84,8 @@ int main(int argc, char* argv[])
         {
           wordlist = parsearg.second;
 
-          std::ifstream fin("wordlists/" + wordlist);
-          if(!fin)
+          wordlistStream = std::ifstream("wordlists/" + wordlist);
+          if(!wordlistStream)
           {
             std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
             wordlist = "";
@@ -163,7 +164,17 @@ int main(int argc, char* argv[])
   if(!numThreads)
   {
     std::cout << "Number of threads? ";
-    std::cin >> numThreads;
+    getline(std::cin, temp);
+  
+    try
+    {
+      numThreads = stoi(temp);
+    }
+    catch(std::exception& e)
+    {
+      std::cout << "Thread count must be an integer: '" << temp << "'" << std::endl;
+      return 0;
+    }
 
     if(numThreads < 0)
     {
@@ -175,32 +186,41 @@ int main(int argc, char* argv[])
   std::vector<std::string> validWords;
   std::vector<std::string> validWordss;
 
+  wordlistStream = std::ifstream("wordlists/" + wordlist);
+
   if(wordlist == "")
   {
     std::cout << "Word list? ";
-    std::cin >> wordlist;
-    std::transform(wordlist.begin(), wordlist.end(), wordlist.begin(), [](unsigned char c){ return std::tolower(c); });
+    getline(std::cin, wordlist);
+    std::transform(wordlist.begin(), wordlist.end(), wordlist.begin(), ::tolower);
+
+    if(!wordlistStream)
+    {
+      std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
+      return 0;
+    }
   }
 
-  std::ifstream fin("wordlists/" + wordlist);
-  if(!fin)
-  {
-    std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
-    return 0;
-  }
-  std::string temp;
-  fin >> temp;
-  while(!fin.eof())
+  wordlistStream >> temp;
+  while(!wordlistStream.eof())
   {
     validWordss.push_back(temp);
-    fin >> temp;
+    wordlistStream >> temp;
   }
 
   if(!parallel)
   {
     std::cout << "Number of parallel wordls? ";
-    std::cin >> parallel;
+    getline(std::cin, temp);
 
+    try
+    {
+      parallel = stoi(temp);
+    }
+    catch(const std::exception& e)
+    {
+      std::cout << "Parallels must be an integer: '" << temp << "'" << std::endl;
+    }
 
     if(parallel < 0)
     {
@@ -212,8 +232,9 @@ int main(int argc, char* argv[])
   if(!hardmode)
   {
     std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
-    std::cin >> hardmode;
-    hardmode = std::tolower(hardmode);
+    getline(std::cin, temp);
+    
+    hardmode = std::tolower(temp[0]);
 
     if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
     {
@@ -223,11 +244,11 @@ int main(int argc, char* argv[])
   }
 
   validWords = validWordss;
-  std::ifstream fin2("wordlists/&" + wordlist);
-  if(fin2.is_open())
+  std::ifstream alternateWordlist("wordlists/&" + wordlist);
+  if(alternateWordlist.is_open())
   {
-    fin2 >> temp;
-    while(!fin2.eof())
+    alternateWordlist >> temp;
+    while(!alternateWordlist.eof())
     {
       bool found = false;
       for(unsigned int i = 0; i < validWordss.size() && !found; i++)
@@ -238,15 +259,23 @@ int main(int argc, char* argv[])
       {
         validWords.push_back(temp);
       }
-      fin2 >> temp;
+      alternateWordlist >> temp;
     }
   }
 
   if(!searchMode)
   {
     std::cout << "Search mode (1 - 6)? ";
-    std::cin >> searchMode;
+    getline(std::cin, temp);
 
+    try
+    {
+      searchMode = stoi(temp);
+    }
+    catch(const std::exception& e)
+    {
+      std::cout << "Searchmode must be an integer between 1 and 6: '" << temp << "'" << std::endl;
+    }
 
     if(searchMode < 1 || searchMode > 6)
     {
@@ -254,8 +283,6 @@ int main(int argc, char* argv[])
       return 0;
     }
   }
-
-  std::cout << numThreads << " : " << wordlist << " : " << parallel << " : " << hardmode << " : " << searchMode << std::endl;
   
   while(true)
   {
@@ -271,28 +298,28 @@ int main(int argc, char* argv[])
     }
 
     std::cout << std::endl << "Wordlist initialized with " << valids[0].size() << " answers";
-    if(fin2.is_open())
+    if(alternateWordlist.is_open())
     {
       std::cout << " and an additional " << validGuesses[0].size() << " guesses";
     }
     std::cout << std::endl << std::endl;
 
-    char temp = 'n';
-    while(temp != 'r')
+    char userInput {};
+    while(true)
     {
       if(command == "")
       {
-        temp = 'n';
+        userInput = 'n';
         std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
-        std::cin >> temp;
-        temp = std::tolower(temp);
+        getline(std::cin, temp);
+        userInput = std::tolower(temp[0]);
       }
 
-      if(temp == 'e')
+      if(userInput == 'e')
       {
         return 1;
       }
-      if(temp == 'a' || command == cmdl::NAMES::RATE_CMD)
+      else if(userInput == 'a' || command == cmdl::NAMES::RATE_CMD)
       {
         std::vector<std::string> wordSet;
         if(command == "")
@@ -322,16 +349,31 @@ int main(int argc, char* argv[])
           std::cout << "invalid word lengths" << std::endl << std::endl;
         }
       }
-      if(temp == 's')
+      else if(userInput == 's')
       {
-        std::cout << std::endl << "Search mode (1 - 6)? ";
-        std::cin >> searchMode;
+        char usePrefix {};
+        std::cout << "Search mode (1 - 6)? ";
+        getline(std::cin, temp);
+
+        try
+        {
+          searchMode = stoi(temp);
+        }
+        catch(const std::exception& e)
+        {
+          std::cout << "Searchmode must be an integer between 1 and 6: '" << temp << "'" << std::endl;
+        }
+
+        if(searchMode < 1 || searchMode > 6)
+        {
+          std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
+          return 0;
+        }
 
         std::cout << "Add prefex (y / n)? ";
-        char tempIn;
-        std::cin >> tempIn;
-        tempIn = std::tolower(tempIn);
-        if(tempIn == 'y')
+        getline(std::cin, temp);
+        usePrefix = std::tolower(temp[0]);
+        if(usePrefix == 'y')
         {
           for(int j = 0; j < parallel; j++)
           {
@@ -343,13 +385,13 @@ int main(int argc, char* argv[])
             }
             else
             {
-              std::cout << "invalid word lengths" << std::endl << std::endl;
+              std::cout << "Invalid word lengths" << std::endl << std::endl;
             }
           }
         }
         std::cout << std::endl;
       }
-      if(temp == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
+      else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
         findbest(valids, validGuesses, numThreads, searchMode, prefix);
 
@@ -358,7 +400,7 @@ int main(int argc, char* argv[])
           return 0;
         }
       }
-      if(temp == 'l' || (command == cmdl::NAMES::LIST_CMD && commandGuesses.size() == 0))
+      else if(userInput == 'l' || (command == cmdl::NAMES::LIST_CMD && commandGuesses.size() == 0))
       {
         for(unsigned int j = 0; j <valids.size(); j++)
         {
@@ -374,14 +416,14 @@ int main(int argc, char* argv[])
           return 0;
         }
       }
-      if(temp == 'g' || ((command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::FILTER_CMD || command == cmdl::NAMES::LIST_CMD) && commandGuesses.size() > 0))
+      else if(userInput == 'g' || ((command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::FILTER_CMD || command == cmdl::NAMES::LIST_CMD) && commandGuesses.size() > 0))
       {
         std::string guess;
         if(command == "")
         {
           std::cout << std::endl << "guess: ";
-          std::cin >> guess;
-          std::transform(guess.begin(), guess.end(), guess.begin(), [](unsigned char c){ return std::tolower(c); });
+          getline(std::cin, guess);
+          std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
         }
         else
         {
@@ -395,7 +437,7 @@ int main(int argc, char* argv[])
             if(command == "")
             {
               std::cout << "rating: ";
-              std::cin >> rating;
+              getline(std::cin, rating);
             }
             else
             {
@@ -421,6 +463,14 @@ int main(int argc, char* argv[])
         {
           commandGuesses.erase(commandGuesses.begin());
         }
+      }
+      else if(userInput == 'r')
+      {
+        break;
+      }
+      else
+      {
+        std::cout << "Unknown command: '" << userInput << "'" << std::endl;
       }
 
       if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0)

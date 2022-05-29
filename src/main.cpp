@@ -404,13 +404,14 @@ int main(int argc, char* argv[])
       {
         for(unsigned int j = 0; j <valids.size(); j++)
         {
+          std::cout << std::endl;
           for(unsigned int i = 0; i < valids[j].size(); i++)
           {
-            std::cout << valids[j][i] << "  ";
+            std::cout << valids[j][i] << " ";
           }
           std::cout << std::endl;
         }
-
+        std::cout << std::endl;
         if(command != "")
         {
           return 0;
@@ -470,7 +471,7 @@ int main(int argc, char* argv[])
       }
       else
       {
-        std::cout << "Unknown command: '" << userInput << "'" << std::endl;
+        std::cout << std::endl << "Unknown command: '" << userInput << "'" << std::endl << std::endl;
       }
 
       if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0)

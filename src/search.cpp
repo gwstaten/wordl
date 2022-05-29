@@ -318,5 +318,14 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       }
       std::cout << "- score of " << bestAnswers[0].first << std::endl << std::endl;
     }
+    else
+    {
+      std::cout << std::endl << "Best Guess: " << valids[j][0];
+      if(valids[j].size() == 2)
+      {
+        std::cout << " / " << valids[j][1];
+      }
+      std::cout << std::endl << std::endl;
+    }
   }
 }

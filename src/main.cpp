@@ -465,6 +465,26 @@ int main(int argc, char* argv[])
           commandGuesses.erase(commandGuesses.begin());
         }
       }
+      else if(userInput == 'u')
+      {
+        std::cout << std::endl << "Number of unique letters: ";
+        std::string uniqueString;
+        getline(std::cin, uniqueString);
+        int unique = std::stoi(uniqueString);
+        for(int i = 0; i < parallel; i++)
+        {
+          for(unsigned int j = 0; j < valids[i].size(); j++)
+          {
+            if(countDistinct(valids[i][j]) != unique)
+            {
+              valids[i].erase(valids[i].begin() + j);
+              j--;
+            }
+          }
+          std::cout << "There are now " << valids[i].size() << " remaining possibilities" << std::endl;
+        }
+        std::cout << std::endl;
+      }
       else if(userInput == 'r')
       {
         break;

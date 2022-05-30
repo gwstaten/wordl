@@ -27,6 +27,7 @@ bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
     wordSet.push_back(wordliststring);
     if(std::cin.peek() == '\n')
     {
+      getline(std::cin, wordliststring);
       return true;
     }
   }

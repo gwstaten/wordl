@@ -152,7 +152,6 @@ At this point, typing `f` would result in the program finding the best guess. Th
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
-| taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
 | obscordle | Used for obscordle | [https://wordreaper.github.io/wordle/](https://wordreaper.github.io/wordle/) |
 | dordle | Used for dordle | [https://zaratustra.itch.io/dordle](https://zaratustra.itch.io/dordle) |
 | quordle | Used for quordle | [https://www.quordle.com](https://www.quordle.com) |

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
     {
       try
       {
-        if(parsearg.first == "help")
+        if(parsearg.first == cmdl::NAMES::HELP_ARG)
         {
           int setwWidth = 20;
 
@@ -121,6 +121,14 @@ int main(int argc, char* argv[])
             searchMode = 0;
           }
         }
+        else if(parsearg.first == cmdl::NAMES::PREFIX_ARG)
+        {
+          std::istringstream prefixStream(parsearg.second);
+          while(prefixStream >> temp)
+          {
+            prefix.push_back(temp);
+          }
+        }
         else
         {
           std::cout << "Unknown argument: '" << parsearg.first << "'" << std::endl;
@@ -148,7 +156,8 @@ int main(int argc, char* argv[])
       else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
       {
         std::vector<std::string> guesses;
-        for(int i = 0; i < parallel; ++i) {
+        for(int i = 0; i < parallel; ++i)
+        {
           guesses.push_back(argv[pos + i + 1]);
         }
         commandGuesses.insert({arg, guesses});

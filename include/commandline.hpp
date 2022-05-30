@@ -6,18 +6,20 @@
 namespace cmdl {
   class NAMES {
     public:
+      const inline static std::string HELP_ARG = "help";
       const inline static std::string THREAD_ARG = "threads";
       const inline static std::string WORDLIST_ARG = "wordlist";
       const inline static std::string PARALLEL_ARG = "parallel";
       const inline static std::string HARDMODE_ARG = "hardmode";
       const inline static std::string SEARCHMODE_ARG = "searchmode";
+      const inline static std::string PREFIX_ARG = "prefix";
       const inline static std::string FINDBEST_CMD = "findbest";
       const inline static std::string LIST_CMD = "list";
       const inline static std::string RATE_CMD = "rate";
       const inline static std::string FILTER_CMD = "filter";
   };
 
-  const std::map<std::string, std::string> arguments {{NAMES::THREAD_ARG, "Sets the number of threads"}, {NAMES::WORDLIST_ARG, "Sets the wordlist"}, {NAMES::PARALLEL_ARG, "Sets the number of parallel wordles"}, {NAMES::HARDMODE_ARG, "Sets the hardmode"}, {NAMES::SEARCHMODE_ARG, "Sets the searchmode"}};
+  const std::map<std::string, std::string> arguments {{NAMES::THREAD_ARG, "Sets the number of threads"}, {NAMES::WORDLIST_ARG, "Sets the wordlist"}, {NAMES::PARALLEL_ARG, "Sets the number of parallel wordles"}, {NAMES::HARDMODE_ARG, "Sets the hardmode"}, {NAMES::SEARCHMODE_ARG, "Sets the searchmode"}, {NAMES::PREFIX_ARG, "Sets prefix words. Only for " + NAMES::FINDBEST_CMD}};
 
   const std::map<std::string, std::string> commands {{NAMES::FINDBEST_CMD, "Finds best words based on inputted guesses and ratings. Seperate guesses with spaces"}, {NAMES::LIST_CMD, "Lists remaining possible words based on inputted guesses and ratings. Seperate guesses with spaces"}, {NAMES::RATE_CMD, "Rates the inputted words. Seperate words with spaces"}, {NAMES::FILTER_CMD, "Shows amount of remaining words based on inputted guesses and ratings. Seperate guesses and ratings with spaces"}};
 

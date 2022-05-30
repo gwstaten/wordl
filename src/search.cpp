@@ -266,7 +266,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   return compiledResults;
 }
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix)
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
   {
@@ -275,9 +275,26 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       std::cout << std::endl << "Best guess: ";
       std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix);
       std::vector<std::pair<double, std::string>> bestGuesses;
+      if(fullRankingOut)
+      {
+        std::remove("answersRating.txt");
+        std::remove("guessesRating.txt");
+        std::ofstream fout("answersRating.txt");
+        for(unsigned int i = 0; i < bestAnswers.size(); i++)
+        {
+          fout << bestAnswers[i].second << " " << bestAnswers[i].first << std::endl;
+        }
+        fout.close();
+      }
       if(valids[j] != validGuesses[j])
       {
         bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix);
+        std::ofstream fout("guessesRating.txt");
+        for(unsigned int i = 0; i < bestGuesses.size(); i++)
+        {
+          fout << bestGuesses[i].second << " " << bestGuesses[i].first << std::endl;
+        }
+        fout.close();
         bool still = true;
         for(unsigned int i = 0; i < 10 && still; i++)
         {

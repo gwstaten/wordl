@@ -16,6 +16,8 @@ int main(int argc, char* argv[])
 
   std::vector<std::string> prefix = {};
 
+  bool fullRankingOutput = false;
+
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
 
@@ -361,7 +363,7 @@ int main(int argc, char* argv[])
       else if(userInput == 's')
       {
         char usePrefix {};
-        std::cout << "Search mode (1 - 6)? ";
+        std::cout << std::endl << "Search mode (1 - 6)? ";
         getline(std::cin, temp);
 
         try
@@ -398,11 +400,16 @@ int main(int argc, char* argv[])
             }
           }
         }
+
+        std::cout << "Print full rankings to file (y / n)? ";
+        getline(std::cin, temp);
+        fullRankingOutput = std::tolower(temp.at(0)) == 'y';
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput);
 
         if(command != "")
         {

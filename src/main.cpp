@@ -383,7 +383,7 @@ int main(int argc, char* argv[])
           return 0;
         }
 
-        std::cout << "Add prefex (y / n)? ";
+        std::cout << "Use prefex (y / n)? ";
         getline(std::cin, temp);
         usePrefix = std::tolower(temp[0]);
         if(usePrefix == 'y')
@@ -401,6 +401,10 @@ int main(int argc, char* argv[])
               std::cout << "Invalid word lengths" << std::endl << std::endl;
             }
           }
+        }
+        else
+        {
+          prefix = {};
         }
 
         std::cout << "Print full rankings to file (y / n)? ";

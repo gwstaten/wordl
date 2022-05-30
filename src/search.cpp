@@ -220,7 +220,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       prior = allguess[positions[i]];
     }
-    if(alpha && (countDistinct(comb) == unique + 1 || !unique))
+    if(alpha && (countDistinct(comb) >= unique + 1 || !unique))
     {
       double total = rate(guessVec, words, searchMode);
       out.push_back(std::make_pair(total, comb));
@@ -341,12 +341,15 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       if(valids[j] != validGuesses[j])
       {
         bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique);
-        std::ofstream fout("guessesRating.txt");
-        for(unsigned int i = 0; i < bestGuesses.size(); i++)
+        if(fullRankingOut)
         {
-          fout << bestGuesses[i].second << " " << bestGuesses[i].first << std::endl;
+          std::ofstream fout("guessesRating.txt");
+          for(unsigned int i = 0; i < bestGuesses.size(); i++)
+          {
+            fout << bestGuesses[i].second << " " << bestGuesses[i].first << std::endl;
+          }
+          fout.close();
         }
-        fout.close();
         bool still = true;
         for(unsigned int i = 0; i < 10 && still; i++)
         {

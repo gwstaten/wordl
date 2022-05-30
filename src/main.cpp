@@ -17,6 +17,8 @@ int main(int argc, char* argv[])
   std::vector<std::string> prefix = {};
 
   bool fullRankingOutput = false;
+  int setSize = 1;
+  int unique = 0;
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
@@ -405,11 +407,19 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         fullRankingOutput = std::tolower(temp.at(0)) == 'y';
 
+        std::cout << "Set size? ";
+        getline(std::cin, temp);
+        setSize = std::stoi(temp);
+
+        std::cout << "Number of required unique (put 0 for no requirement)? ";
+        getline(std::cin, temp);
+        unique = std::stoi(temp);
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique);
 
         if(command != "")
         {

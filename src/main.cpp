@@ -368,6 +368,11 @@ int main(int argc, char* argv[])
           }
         }
 
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+          std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+          return word;
+        });
+
         if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0][0].length()))
         {
           rateAll(wordSet, valids[0], wordlist);
@@ -469,12 +474,14 @@ int main(int argc, char* argv[])
         {
           std::cout << std::endl << "guess: ";
           getline(std::cin, guess);
-          std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
         }
         else
         {
           guess = commandGuesses.begin()->first;
         }
+
+        std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
+
         for(int i = 0; i < parallel; i++)
         {
           if(valids[i].size() > 1 || valids.size() == 1)
@@ -489,6 +496,7 @@ int main(int argc, char* argv[])
             {
               rating = commandGuesses.begin()->second[i];
             }
+
             valids[i] = filter(valids[i],std::make_pair(guess, rating));
             std::cout << "There are now " << valids[i].size() << " answers";
             if(hardmode == 'u')

@@ -31,6 +31,8 @@ namespace cmdl {
   const std::vector<std::string> notes {"You do not need to use all of the arguments, and they do not need to be in the example's specific order", "You can only use one command"};
 
   const std::vector<std::string> moreLoops {NAMES::FINDBEST_CMD, NAMES::LIST_CMD};
+
+  const std::map<std::string, std::string> defaults {{NAMES::THREAD_ARG, "4"}, {NAMES::WORDLIST_ARG, "nytimes2"}, {NAMES::PARALLEL_ARG, "1"}, {NAMES::HARDMODE_ARG, "n"}, {NAMES::SEARCHMODE_ARG, "2"}};
 }
 
 #endif

@@ -76,7 +76,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::THREAD_ARG)
         {
-          numThreads = std::stoi(parsearg.second);
+          numThreads = parsearg.second == "" ? std::stoi(cmdl::defaults.at(parsearg.first)), std::stoi("12") : std::stoi(parsearg.second);
 
           if(numThreads < 0)
           {
@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::WORDLIST_ARG)
         {
-          wordlist = parsearg.second;
+          wordlist = parsearg.second == "" ? cmdl::defaults.at(parsearg.first) : parsearg.second;
 
           wordlistStream = std::ifstream("wordlists/" + wordlist);
           if(!wordlistStream)
@@ -97,7 +97,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::PARALLEL_ARG)
         {
-          parallel = std::stoi(parsearg.second);
+          parallel = parsearg.second == "" ? std::stoi(cmdl::defaults.at(parsearg.first)) : std::stoi(parsearg.second);
 
           if(parallel < 0)
           {
@@ -107,7 +107,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::HARDMODE_ARG)
         {
-          hardmode = parsearg.second[0];
+          hardmode = parsearg.second == "" ? cmdl::defaults.at(parsearg.first)[0] : parsearg.second[0];
 
           if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
           {
@@ -117,7 +117,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::SEARCHMODE_ARG)
         {
-          searchMode = std::stoi(parsearg.second);
+          searchMode = parsearg.second == "" ? std::stoi(cmdl::defaults.at(parsearg.first)) : std::stoi(parsearg.second);
 
           if(searchMode < 1 || searchMode > 6)
           {

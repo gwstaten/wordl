@@ -178,13 +178,14 @@ std::pair<std::string, std::string> parseoption(std::string arg)
 
   if(arg[0] == '-')
   {
-    std::pair<std::string, std::string> parts;
     if(arg.find('=') != std::string::npos)
     {
-      parts = {arg.substr(1, arg.find('=') - 1), arg.substr(arg.find('=') + 1)};
-
-      return parts;
+      return {arg.substr(1, arg.find('=') - 1), arg.substr(arg.find('=') + 1)};
+    }
+    else
+    {
+      return {arg.substr(1), ""};
     }
   }
-  return {arg.substr(1), ""};
+  return {"", ""};
 }

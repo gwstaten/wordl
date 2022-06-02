@@ -9,9 +9,9 @@
 
 int main(int argc, char* argv[])
 {
-  int numThreads {}, parallel {}, searchMode {};
+  int numThreads {}, parallel {}, searchMode {}, uletter {};
   char hardmode {};
-  std::string wordlist {}, temp {};
+  std::string wordlist {}, temp {}, GorA {};
   std::ifstream wordlistStream;
 
   std::vector<std::string> prefix = {};
@@ -112,7 +112,7 @@ int main(int argc, char* argv[])
           if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
           {
             std::cout << "Unknown hardmode: '" << hardmode << "'" << std::endl;
-            hardmode = '\0';
+            hardmode = {};
           }
         }
         else if(parsearg.first == cmdl::NAMES::SEARCHMODE_ARG)
@@ -131,6 +131,21 @@ int main(int argc, char* argv[])
           while(prefixStream >> temp)
           {
             prefix.push_back(temp);
+          }
+        }
+        else if(parsearg.first == cmdl::NAMES::ULETTER_ARG)
+        {
+          unique = stoi(parsearg.second);
+          uletter = stoi(parsearg.second);
+        }
+        else if(parsearg.first == cmdl::NAMES::UFILTERBY_ARG)
+        {
+          GorA = parsearg.second;
+          if(GorA != "g" && GorA != "a")
+          {
+            std::cout << "Unknown ufilterby mode: '" << GorA << "'" << std::endl;
+
+            GorA = {};
           }
         }
         else
@@ -497,21 +512,27 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'u')
       {
-        std::cout << std::endl << "Number of unique letters? ";
-        std::string uniqueString;
-        getline(std::cin, uniqueString);
-        int unique = std::stoi(uniqueString);
-        std::cout << "Filter answers or guesses (g / a)? ";
-        std::string GorA;
-        getline(std::cin, GorA);
-        GorA = std::tolower(GorA.at(0));
+        if(!uletter)
+        {
+          std::cout << std::endl << "Number of unique letters? ";
+          getline(std::cin, temp);
+          uletter = std::stoi(temp);
+        }
+
+        if(GorA == "")
+        {
+          std::cout << "Filter answers or guesses (g / a)? ";
+          
+          getline(std::cin, GorA);
+          GorA = std::tolower(GorA.at(0));
+        }
         for(int i = 0; i < parallel; i++)
         {
           if(GorA == "a")
           {
             for(unsigned int j = 0; j < valids[i].size(); j++)
             {
-              if(countDistinct(valids[i][j]) != unique)
+              if(countDistinct(valids[i][j]) != uletter)
               {
                 valids[i].erase(valids[i].begin() + j);
                 j--;
@@ -523,7 +544,7 @@ int main(int argc, char* argv[])
           {
             for(unsigned int j = 0; j < validGuesses[i].size(); j++)
             {
-              if(countDistinct(validGuesses[i][j]) != unique)
+              if(countDistinct(validGuesses[i][j]) != uletter)
               {
                 validGuesses[i].erase(validGuesses[i].begin() + j);
                 j--;

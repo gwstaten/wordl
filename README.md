@@ -98,7 +98,7 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
 Here, most of you would want to type `g` or `a`, so you can get to having the bot solve the wordl or rate words. `Find best` will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed. If your interested, you can also type `l` to see all the words the code will search through and count as valid words.
@@ -113,7 +113,7 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess:
 ```
@@ -130,13 +130,13 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: trace
 rating: 00000
 There are now 246 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
 At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
@@ -181,41 +181,44 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: trace
 rating: 00000
 There are now 246 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
 Best guess: spiny \ slimy - score of 69
 Best of answers: spiny \ slimy - score of 69
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: slimy
 rating: 10200
 There are now 2 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
-Only 2 possibility remaining: using
-whisk
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Best Guess: using / whisk
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g  
 
 guess: whisk
-00210
+rating: 00210
 There are now 1 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
-Only 1 possibility remaining: using
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? e
+Best Guess: using
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? e
 $
 ```
 
 ## For Advanced Users
+
+Note: Most of the features below are not recommended for regular users as the way to use CMDL is not explicitly stated. CMDL requires some level of understanding of the current state of the `wordl` code.
 
 ### CMDL
 
@@ -238,6 +241,9 @@ Instead of going through the interface, you can use the one-line version. The on
 | -searchmode | Sets the searchmode |
 | -threads | Sets the number of threads |
 | -wordlist | Sets the wordlist |
+| -prefix | Sets prefix words. Only for findbest |
+| -uletter | Sets the number of unique letters |
+| -ufilterby | Sets filter mode. Only for ufilter |
 
 ```bash
 -<ARGUMENT>=(VALUE)
@@ -251,6 +257,7 @@ Instead of going through the interface, you can use the one-line version. The on
 | findbest | Finds best words based on inputted guesses and ratings. Seperate guesses with spaces |
 | list | Lists remaining possible words based on inputted guesses and ratings. Seperate guesses with spaces |
 | rate | Rates the inputted words. Seperate words with spaces |
+| ufilter | Filters the answer list based on the number of unique letters. Requires uletter and ufilterby arguments |
 
 ### CMDL Example Run
 

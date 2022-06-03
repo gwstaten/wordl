@@ -219,7 +219,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       bool alpha = true;
       if(setsize > 1)
       {
-        if(countDistinct(comb) < uniqueSteps[0])
+        if(countDistinct(comb) < uniqueSteps[0] && !uniqueSteps[0])
         {
           alpha = false;
           toIncrement = 0;
@@ -235,7 +235,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         }
         if(i < positions.size() - 1)
         {
-          if(countDistinct(comb) - 1 < uniqueSteps[i])
+          if(countDistinct(comb) - 1 < uniqueSteps[i] && !uniqueSteps[i])
           {
             alpha = false;
             toIncrement = i;

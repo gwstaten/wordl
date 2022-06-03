@@ -222,7 +222,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       prior = allguess[positions[i]];
     }
-    if(alpha && (countDistinct(comb) >= unique + 1 || !unique))
+    if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
     {
       double total = rate(guessVec, words, searchMode);
       out.push_back(std::make_pair(total, comb));

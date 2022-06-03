@@ -217,10 +217,13 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       guessVec.push_back(validWords[positions[0]]);
       std::string prior = comb;
       bool alpha = true;
-      if(countDistinct(comb) < uniqueSteps[0])
+      if(setsize > 1)
       {
-        alpha = false;
-        toIncrement = 0;
+        if(countDistinct(comb) < uniqueSteps[0])
+        {
+          alpha = false;
+          toIncrement = 0;
+        }
       }
       for(unsigned int i = 1; i < positions.size() && alpha; i++)
       {

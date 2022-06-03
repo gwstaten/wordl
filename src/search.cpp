@@ -199,10 +199,12 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum)
 {
   std::vector<unsigned int> positions(setsize,0);
   bool notdone = true;
+  bool first = true;
+  double best = 0;
   for(unsigned int guess = 0; notdone; guess++)
   {
     std::vector<std::string> guessVec = prefix;
@@ -224,7 +226,12 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       double total = rate(guessVec, words, searchMode);
       out.push_back(std::make_pair(total, comb));
-      //std::cout << comb << " " << total << std::endl;
+      if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
+      {
+        first = false;
+        best = total;
+        std::cout << "(Thread " << threadNum << ") " << comb << " " << total << std::endl;
+      }
     }
 
     positions[0]++;
@@ -269,7 +276,7 @@ struct greater
     bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
-std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique)
+std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints)
 {
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
@@ -293,7 +300,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWords, setSize, unique));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWords, setSize, unique, newBestPrints, i + 1));
   }
   for(unsigned int i = 0; i < numThreads; i++)
   {
@@ -318,14 +325,14 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   return compiledResults;
 }
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique)
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints)
 {
   for(unsigned int j = 0; j < valids.size(); j++)
   {
     if(valids[j].size() > 2)
     {
       std::cout << std::endl << "Best guess: ";
-      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix, setSize, unique);
+      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints);
       std::vector<std::pair<double, std::string>> bestGuesses;
       if(fullRankingOut)
       {
@@ -340,7 +347,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       }
       if(valids[j] != validGuesses[j])
       {
-        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique);
+        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints);
         if(fullRankingOut)
         {
           std::ofstream fout("guessesRating.txt");

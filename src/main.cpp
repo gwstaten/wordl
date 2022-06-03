@@ -19,6 +19,7 @@ int main(int argc, char* argv[])
   bool fullRankingOutput = false;
   int setSize = 1;
   int unique = 0;
+  bool newBestPrints = false;
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
@@ -439,11 +440,15 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         unique = std::stoi(temp);
 
+        std::cout << "New best prints (y / n)? ";
+        getline(std::cin, temp);
+        newBestPrints = std::tolower(temp.at(0)) == 'y';
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints);
 
         if(command != "")
         {

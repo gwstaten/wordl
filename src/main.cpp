@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
   int setSize = 1;
   int unique = 0;
   bool newBestPrints = false;
+  std::string forceInclude = "";
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
@@ -444,11 +445,25 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         newBestPrints = std::tolower(temp.at(0)) == 'y';
 
+        std::cout << "Forced include letters (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::cout << "What letters? ";
+          getline(std::cin, temp);
+          std::transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+          forceInclude = temp;
+        }
+        else
+        {
+          forceInclude = "";
+        }
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude);
 
         if(command != "")
         {

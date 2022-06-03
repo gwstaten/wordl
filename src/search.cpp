@@ -226,7 +226,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       double total = rate(guessVec, words, searchMode);
       out.push_back(std::make_pair(total, comb));
-      if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
+      if(newBestPrints && (first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4))))
       {
         first = false;
         best = total;
@@ -239,7 +239,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       positions[0] = 0;
       if(positions.size() > 1)
-      { 
+      {
         positions[1]++;
         bool stillCarrying = true;
         for(unsigned int i = 1; i < positions.size() && stillCarrying; i++)

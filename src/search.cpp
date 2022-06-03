@@ -242,38 +242,23 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
     }
 
-    positions[0]++;
-    if(positions[0] == validWords.size())
+    positions[setsize - 1]++;
+    bool stillCarrying = true;
+    for(unsigned int i = setsize - 1; i > 0 && stillCarrying; i--)
     {
-      positions[0] = 0;
-      if(positions.size() > 1)
+      if(positions[i] == allguess.size())
       {
-        positions[1]++;
-        bool stillCarrying = true;
-        for(unsigned int i = 1; i < positions.size() && stillCarrying; i++)
-        {
-          if(positions[i] == allguess.size())
-          {
-            positions[i] = 0;
-            if(i == positions.size() - 1)
-            {
-              notdone = false;
-            }
-            else
-            {
-              positions[i + 1]++;
-            }
-          }
-          else
-          {
-            stillCarrying = false;
-          }
-        }
+        positions[i] = 0;
+        positions[i - 1]++;
       }
       else
       {
-        notdone = false;
+        stillCarrying = false;
       }
+    }
+    if(positions[0] == validWords.size())
+    {
+      notdone = false;
     }
   }
 }

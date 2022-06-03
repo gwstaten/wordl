@@ -98,7 +98,7 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
 Here, most of you would want to type `g` or `a`, so you can get to having the bot solve the wordl or rate words. `Find best` will try to find the best word out of the entire list. This can take anywhere from 1 minute to several hours. The speed of this can be greatly increased with more threads, though more than 8 threads typically will not increase the speed. If your interested, you can also type `l` to see all the words the code will search through and count as valid words.
@@ -113,7 +113,7 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess:
 ```
@@ -130,16 +130,16 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: trace
-00000
+rating: 00000
 There are now 246 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
-At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code, look through [Q&A](#qa) or submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
+At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
 
@@ -152,9 +152,9 @@ At this point, typing `f` would result in the program finding the best guess. Th
 | food | Used only for foodle | [https://food-le.co](https://food-le.co) |
 | shard | Used only for shardle | [https://shardle.17thshard.com/](https://shardle.17thshard.com/) |
 | german | Used only for Wördl | [https://wordle.at/](https://wordle.at/) |
-| taylor5-8 | Used for Taylordle | [https://www.taylordle.com](https://www.taylordle.com) |
 | obscordle | Used for obscordle | [https://wordreaper.github.io/wordle/](https://wordreaper.github.io/wordle/) |
 | dordle | Used for dordle | [https://zaratustra.itch.io/dordle](https://zaratustra.itch.io/dordle) |
+| quordle | Used for quordle | [https://www.quordle.com](https://www.quordle.com) |
 
 To add your own word list, add a file to the wordlists directory that contains the possible answers for the particular wordle game the wordlist is for. (separated by single spaces or line breaks) If you would like to, you can also add another file whose name is & before the name of the first file that contains the allowed guesses for that particular wordle game (this will only produce noticeably better results if the answer list is significantly more limited than the guess list). If you want to officially add a wordlist from a specific wordle website, create a new issue with template feature request at the [wordl github issue page](https://github.com/gwstaten/wordl/issues/new/choose)
 
@@ -169,28 +169,6 @@ To add your own word list, add a file to the wordlists directory that contains t
 | 5 | Finds the word that gets the most bits of information on average (aka logBASE(n/p,0.5) average) |
 | 6 | Finds the word that gets the most greens on average |
 
-## Q&A
-
-### Q1: I entered a wordlist when prompted, but nothing happened
-
-A1: Make sure you have spelled the wordlist correctly, and chosen one from [wordlist](#word-lists). Note that 4-11 represents an integer between 4-11 (inclusive).
-
-### Q2: The code exited when I entered `Number of parallel words`
-
-A2: Ensure you have not inputted anything other than numbers.
-
-### Q3: I received `libc++abi: terminating with uncaught exception of type std::out_of_range: basic_string` when I inputted my guess
-
-A3: When entering your guess, make sure the guess is the correct word length. Also ensure that the result you inputted is also the correct length (it should be the same as the word).
-
-### Q4: When I input my second (or x) guess, I get `segmentation fault` or `core dump`
-
-A4: This will happen if you enter a guess that contradicts any of your previous guesses. Make sure you entered it correctly!
-
-### Q5: What does it mean when the code says `Creating log directory x...`
-
-A5: This code creates log files in order to optimize performance of the code, and making this code run faster. These log files are located entirely on your computer, in the directory `log` inside the directory in which you cloned this repository.
-
 ## Example Program Run
 
 ```bash
@@ -203,35 +181,98 @@ Search mode (1 - 6)? 2
 
 Wordlist initialized with 2309 answers
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: trace
-00000
+rating: 00000
 There are now 246 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
-Best guess for 246 possibilities: slimy
-Splits up into 69 groups
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Best guess: spiny \ slimy - score of 69
+Best of answers: spiny \ slimy - score of 69
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
 
 guess: slimy
-10200
+rating: 10200
 There are now 2 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
-Only 2 possibility remaining: using
-whisk
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g
+Best Guess: using / whisk
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? g  
 
 guess: whisk
-00210
+rating: 00210
 There are now 1 answers remaining
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
-Only 1 possibility remaining: using
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 
-Find best (f), find worst (w), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? e
+Best Guess: using
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? e
+$
+```
+
+## For Advanced Users
+
+Note: Most of the features below are not recommended for regular users as the way to use CMDL is not explicitly stated. CMDL requires some level of understanding of the current state of the `wordl` code.
+
+### CMDL
+
+Instead of going through the interface, you can use the one-line version. The one-line version consists of arguments, commands, and filters and always exists on completetion. The arguments always begin with a hyphen (`-`) and is assigned a value using the equal sign. If the argument requires a space, you will need to wrap it in quotation marks. Arguments are the ones you go through first in the interface version. If the inputted argument is invalid, you will need to go through the interface version for that specific argument. Commands are similar to the ones in the interface. Instead of a single character, they are the entire word of the command. Commands do not begin with anything in particular. Filters are guesses and ratings for the findbest, filter, and list commands, and are words for the filter command.
+
+### CMDL Info
+
+#### CMDL Usage
+
+```bash
+./wordl [ARGUMENTS] <COMMAND> (FILTERS)
+```
+
+#### CMDL Arguments
+
+| Name | Description |
+| ---- | ----------- |
+| -hardmode | Sets the hardmode |
+| -parallel | Sets the number of parallel wordles |
+| -searchmode | Sets the searchmode |
+| -threads | Sets the number of threads |
+| -wordlist | Sets the wordlist |
+| -prefix | Sets prefix words. Only for findbest |
+| -uletter | Sets the number of unique letters |
+| -ufilterby | Sets filter mode. Only for ufilter |
+
+```bash
+-<ARGUMENT>=(VALUE)
+```
+
+#### CMDL Commands
+
+| Name | Description |
+| ---- | ----------- |
+| filter | Shows amount of remaining words based on inputted guesses and ratings. Seperate guesses and ratings with spaces |
+| findbest | Finds best words based on inputted guesses and ratings. Seperate guesses with spaces |
+| list | Lists remaining possible words based on inputted guesses and ratings. Seperate guesses with spaces |
+| rate | Rates the inputted words. Seperate words with spaces |
+| ufilter | Filters the answer list based on the number of unique letters. Requires uletter and ufilterby arguments |
+
+### CMDL Example Run
+
+```bash
+$ ./wordl -threads=4 -wordlist=nytimes2 -parallel=1 -hardmode=n -searchmode=2 findbest trace 00000 jazzy 00001
+
+Wordlist initialized with 2309 answers and an additional 12972 guesses
+
+There are now 34 answers remaining
+
+There are now 12 answers remaining
+
+
+Best guess: plied \ lownd \ lovie \ lound \ loped \ loids \ lodge \ livor \ lidos \ blond ... and more - score of 12
+Best of answers: vinyl \ synod \ nylon \ lying \ dying - score of 10
+
 $
 ```

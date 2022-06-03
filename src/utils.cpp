@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-#include "search.hpp"
+#include "util.hpp"
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
 {
@@ -11,7 +11,7 @@ bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
   while(true)
   {
     std::cin >> wordliststring;
-    std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), [](unsigned char c){ return std::tolower(c); });
+    std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), ::tolower);
     if(wordliststring.length() != correctSize)
     {
       while(true)
@@ -27,6 +27,8 @@ bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize)
     wordSet.push_back(wordliststring);
     if(std::cin.peek() == '\n')
     {
+      getline(std::cin, wordliststring);
+      std::transform(wordliststring.begin(), wordliststring.end(), wordliststring.begin(), ::tolower);
       return true;
     }
   }
@@ -169,4 +171,22 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
     begin = end;
   }
   return outVec;
+}
+
+std::pair<std::string, std::string> parseoption(std::string arg)
+{
+  std::transform(arg.begin(), arg.end(), arg.begin(), ::tolower);
+
+  if(arg[0] == '-')
+  {
+    if(arg.find('=') != std::string::npos)
+    {
+      return {arg.substr(1, arg.find('=') - 1), arg.substr(arg.find('=') + 1)};
+    }
+    else
+    {
+      return {arg.substr(1), ""};
+    }
+  }
+  return {"", ""};
 }

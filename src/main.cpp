@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
   int unique = 0;
   bool newBestPrints = false;
   std::string forceInclude = "";
+  std::vector<int> uniqueSteps = {};
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
@@ -437,9 +438,20 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         setSize = std::stoi(temp);
 
-        std::cout << "Number of required unique (put 0 for no requirement)? ";
+        std::cout << "Number of required unique for whole set (put 0 for no requirement)? ";
         getline(std::cin, temp);
         unique = std::stoi(temp);
+
+        uniqueSteps = {};
+        if(setSize > 1)
+        {
+          std::cout << "Num of required unique for each step (0 for no requirement)?" << std::endl;
+          for(int i = 0; i < setSize - 1; i++)
+          {
+            getline(std::cin, temp);
+            uniqueSteps.push_back(std::stoi(temp));
+          }
+        }
 
         std::cout << "New best prints (y / n)? ";
         getline(std::cin, temp);
@@ -463,7 +475,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps);
 
         if(command != "")
         {

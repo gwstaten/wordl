@@ -518,7 +518,7 @@ int main(int argc, char* argv[])
           commandGuesses.erase(commandGuesses.begin());
         }
       }
-      else if(userInput == 'u')
+      else if(userInput == 'u' || command == cmdl::NAMES::UFILTER_CMD)
       {
         if(!uletter)
         {

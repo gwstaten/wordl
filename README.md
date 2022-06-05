@@ -139,7 +139,7 @@ There are now 246 answers remaining
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
-At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. Typing `w` will find the worst guess for the current scenario (it is only recommended to use the feature while in hard mode). This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
+At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
 
 ## Word Lists
 
@@ -276,3 +276,214 @@ Best of answers: vinyl \ synod \ nylon \ lying \ dying - score of 10
 
 $
 ```
+
+## Set finding and advanced searches
+
+To search for sets using Wordl (this example will be set up for finding the best 2 word set for nytimes that only uses answers by the 1/n metric), first enter in the basic settings as described in [#usage](#usage)
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+```
+
+(note that wordlist nytimes was used to make the search answers only) Then type `s` to access a settings editor. You first re-enter the search mode. The options for this can be found [here](#search-modes).
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)?
+```
+
+You now tell the program whether you want to add a prefix or not. Prefix is used to find the best followups to a word or wordset, so in this case we will type `n`.
+
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)?
+```
+
+You now tell the program if you would like the code to generate a file with a ranked list of all of the words or wordsets it checked, in this case I will type `y` to generate the file.
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size?
+```
+
+Next you enter the size of the set you will be searching for. In this case, 2.
+
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 
+```
+
+Next you will enter a few things that will filter down what sets the code actually checks. These aren't required, but they will make the search a lot faster. The first filter is the number of required unique letters for the entire set. In this case, we know that the best 2 word set will have 10 unique letters, so we will enter 10.
+
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)?
+
+```
+
+The next prompt only appears if you entered 2 or greater for the Set size option. It will have you enter (set size - 1) numbers. In this case, only one number, which is the number of required unique letters for the first word of the set. For this we will enter 5, because only sets where the first word has 5 unique letters will it be possible to have 10 unique letters across the whole set, so there is no point in checking other first words. (In the case of a 3 word set, you would enter one number for the number of required unique letters in the first word, and then a number for the number of required unique letters between the first two words).
+
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)?
+5
+New best prints (y / n)? 
+```
+
+You are then prompted with whether or not you want the code to print new best statements. This is recommended for long searches so you get updates along the way, but is not required.
+
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)?
+5
+New best prints (y / n)? y
+Forced include letters (y / n)?
+```
+
+The final setting is whether or not we want to force include letters in the set. In some cases you may want to force include letters such as S, A, E, T, R, etc if you know that they are for sure going to be a part of the best set for the particular search. I won't do this in this case because it is a fairly small search. 
+
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)?
+5
+New best prints (y / n)? y
+Forced include letters (y / n)? n
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+```
+
+You now have all of the settings in place, and can now enter `f` to run the search.

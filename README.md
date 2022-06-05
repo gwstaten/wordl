@@ -458,7 +458,7 @@ New best prints (y / n)? y
 Forced include letters (y / n)?
 ```
 
-The final setting is whether or not we want to force include letters in the set. In some cases you may want to force include letters such as S, A, E, T, R, etc if you know that they are for sure going to be a part of the best set for the particular search. I won't do this in this case because it is a fairly small search. 
+The final setting is whether or not we want to force include letters in the set. In some cases you may want to force include letters such as S, A, E, T, R, etc if you know that they are for sure going to be a part of the best set for the particular search. I won't do this in this case because it is a fairly small search. (If you did want to include this as a filter, you would enter `y` for this option and then enter all letters you want to be included as a single string such as `aestr`)
 
 
 ```bash
@@ -486,4 +486,64 @@ Forced include letters (y / n)? n
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
-You now have all of the settings in place, and can now enter `f` to run the search.
+You now have all of the settings in place, and can now enter `f` to run the search. As the search runs, you will see prints such as the ones shown below if you enabled the new best prints option. (the number shown has been reduced to not clog up this page) It is expected to see a large burst of these messages when the search begins and then fewer and farther apart updates as the search continues. This is because each thread that is running will print one of these messages when it finds a new best for that thread. When the search completes it will print the best result(s) and then return to the main options prompt.
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)?
+5
+New best prints (y / n)? y
+Forced include letters (y / n)? n
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?f
+(Thread 4) slain truce 1038
+(Thread 3) lunar spite 945
+(Thread 2) droit lance 1024
+(Thread 1) adult siren 951
+(Thread 3) maple shirt 958
+(Thread 1) agile snort 953
+price slant \ crane spilt - score of 1070
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+```
+
+If the print full rankings to file option was enabled, a file will have been generated in the same directory as the executable file. These file(s) will contain every set that the code checked. In this case, a file name answersRating.txt was formed with 195,105 lines. The first and last 10 are shown below.
+
+```bash
+price slant 1070
+crane spilt 1070
+salon trice 1065
+close train 1056
+crane split 1051
+cairn stole 1051
+coast liner 1050
+cried slant 1049
+print scale 1040
+slain truce 1038
+...
+jumpy vodka 323
+epoxy quack 323
+jumpy vixen 321
+inbox quack 321
+jumbo wacky 318
+epoxy quick 315
+buxom gawky 311
+gawky squib 305
+inbox jumpy 303
+gawky jumbo 302
+```

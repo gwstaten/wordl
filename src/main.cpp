@@ -383,6 +383,7 @@ int main(int argc, char* argv[])
         else
         {
           std::cout << "invalid word lengths" << std::endl << std::endl;
+          std::cin.ignore();
         }
       }
       else if(userInput == 's')

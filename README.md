@@ -222,7 +222,7 @@ Note: Most of the features below are not recommended for regular users as the wa
 
 ### CMDL
 
-Instead of going through the interface, you can use the one-line version. The one-line version consists of arguments, commands, and filters and always exists on completetion. The arguments always begin with a hyphen (`-`) and is assigned a value using the equal sign. If the argument requires a space, you will need to wrap it in quotation marks. Arguments are the ones you go through first in the interface version. If the inputted argument is invalid, you will need to go through the interface version for that specific argument. Commands are similar to the ones in the interface. Instead of a single character, they are the entire word of the command. Commands do not begin with anything in particular. Filters are guesses and ratings for the findbest, filter, and list commands, and are words for the filter command.
+Instead of going through the interface, you can use the one-line version. The one-line version consists of arguments, commands, and filters and always exists on completetion. The arguments always begin with a hyphen (`-`) and is assigned a value using the equal sign. If the argument requires a space or a special character, you will need to wrap it in quotation marks. Arguments are the ones you go through first in the interface version. If the inputted argument is invalid, you will need to go through the interface version for that specific argument. You can also leave the end of the equal sign blank or not include the equal sign to leave the argument to the default values. `Prefix`, `uletter`, and `ufilterby` are the only argument that does not have a default value. Commands are similar to the ones in the interface. Instead of a single character, they are the entire word of the command. Commands do not begin with anything in particular. Filters are guesses and ratings for the findbest, filter, and list commands, and are words for the filter command.
 
 ### CMDL Info
 
@@ -248,6 +248,16 @@ Instead of going through the interface, you can use the one-line version. The on
 ```bash
 -<ARGUMENT>=(VALUE)
 ```
+
+##### Default CMDL Arguments
+
+| Name | Default |
+| ---- | ------- |
+| -hardmode | n |
+| -parallel | 1 |
+| -searchmode | 2 |
+| -threads | 4 |
+| -wordlist | nytimes2 |
 
 #### CMDL Commands
 
@@ -314,7 +324,6 @@ Use prefex (y / n)?
 
 You now tell the program whether you want to add a prefix or not. Prefix is used to find the best followups to a word or wordset, so in this case we will type `n`.
 
-
 ```bash
 $ ./wordl
 Number of threads? 4
@@ -354,16 +363,6 @@ Set size?
 
 Next you enter the size of the set you will be searching for. In this case, 2.
 
-Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
-Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
-
-Wordlist initialized with 2309 answers
-
-Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
-
 ```bash
 $ ./wordl
 Number of threads? 4
@@ -384,7 +383,6 @@ Number of required unique for whole set (put 0 for no requirement)?
 ```
 
 Next you will enter a few things that will filter down what sets the code actually checks. These aren't required, but they will make the search a lot faster. The first filter is the number of required unique letters for the entire set. In this case, we know that the best 2 word set will have 10 unique letters, so we will enter 10.
-
 
 ```bash
 $ ./wordl
@@ -408,7 +406,6 @@ Num of required unique for each step (0 for no requirement)?
 ```
 
 The next prompt only appears if you entered 2 or greater for the Set size option. It will have you enter (set size - 1) numbers. In this case, only one number, which is the number of required unique letters for the first word of the set. For this we will enter 5, because only sets where the first word has 5 unique letters will it be possible to have 10 unique letters across the whole set, so there is no point in checking other first words. (In the case of a 3 word set, you would enter one number for the number of required unique letters in the first word, and then a number for the number of required unique letters between the first two words).
-
 
 ```bash
 $ ./wordl
@@ -434,7 +431,6 @@ New best prints (y / n)?
 
 You are then prompted with whether or not you want the code to print new best statements. This is recommended for long searches so you get updates along the way, but is not required.
 
-
 ```bash
 $ ./wordl
 Number of threads? 4
@@ -459,7 +455,6 @@ Forced include letters (y / n)?
 ```
 
 The final setting is whether or not we want to force include letters in the set. In some cases you may want to force include letters such as S, A, E, T, R, etc if you know that they are for sure going to be a part of the best set for the particular search. I won't do this in this case because it is a fairly small search. (If you did want to include this as a filter, you would enter `y` for this option and then enter all letters you want to be included as a single string such as `aestr`)
-
 
 ```bash
 $ ./wordl

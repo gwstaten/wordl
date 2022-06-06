@@ -424,8 +424,7 @@ Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
-Num of required unique for each step (0 for no requirement)?
-5
+Num of required unique for each step (0 for no requirement)? 5
 New best prints (y / n)? 
 ```
 
@@ -448,8 +447,7 @@ Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
-Num of required unique for each step (0 for no requirement)?
-5
+Num of required unique for each step (0 for no requirement)? 5
 New best prints (y / n)? y
 Forced include letters (y / n)?
 ```
@@ -473,8 +471,7 @@ Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
-Num of required unique for each step (0 for no requirement)?
-5
+Num of required unique for each step (0 for no requirement)? 5
 New best prints (y / n)? y
 Forced include letters (y / n)? n
 
@@ -500,12 +497,11 @@ Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
-Num of required unique for each step (0 for no requirement)?
-5
+Num of required unique for each step (0 for no requirement)? 5
 New best prints (y / n)? y
 Forced include letters (y / n)? n
 
-Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?f
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f
 (Thread 4) slain truce 1038
 (Thread 3) lunar spite 945
 (Thread 2) droit lance 1024

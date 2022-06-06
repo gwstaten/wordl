@@ -446,7 +446,7 @@ int main(int argc, char* argv[])
         uniqueSteps = {};
         if(setSize > 1)
         {
-          std::cout << "Num of required unique for each step (0 for no requirement)?" << std::endl;
+          std::cout << "Num of required unique for each step (0 for no requirement)? ";
           for(int i = 0; i < setSize - 1; i++)
           {
             getline(std::cin, temp);

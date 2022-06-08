@@ -217,7 +217,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
       {
         last = (int)diff.count() + threadNum;
-        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - on word " << validWords[positions[0]] << std::endl;
+        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - currently on word " << validWords[positions[0]] << std::endl;
       }
     }
     int toIncrement = setsize - 1;
@@ -321,6 +321,10 @@ struct greater
 
 std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
 {
+  auto rd = std::random_device{}; 
+  auto rng = std::default_random_engine{rd()};
+  std::shuffle(std::begin(validWords), std::end(validWords), rng);
+
   unsigned int numThreads = threads;
   if(numThreads > validWords.size() / 10)
   {
@@ -339,6 +343,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   {
     validWordsChunks.push_back(validWords);
   }
+
   std::vector<std::vector<std::pair<double,std::string>>> results(numThreads,{std::make_pair(0,"")});
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
@@ -352,6 +357,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
       threadVector[i].join();
     }
   }
+
   std::vector<std::pair<double,std::string>> compiledResults;
   for(unsigned int i = 0; i < results.size(); i++)
   {

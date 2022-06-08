@@ -20,6 +20,7 @@
 #include <sstream>
 #include <chrono>
 #include <ctime> 
+#include <random>
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 int countDistinct(std::string s);

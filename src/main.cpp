@@ -294,6 +294,9 @@ int main(int argc, char* argv[])
       alternateWordlist >> temp;
     }
   }
+  
+  std::sort(validWords.begin(), validWords.end());
+  std::sort(validWordss.begin(), validWordss.end());
 
   if(!searchMode)
   {

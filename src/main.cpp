@@ -484,7 +484,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps, updatePrintFrequency);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps, updatePrintFrequency, wordlist);
 
         if(command != "")
         {

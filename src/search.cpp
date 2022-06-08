@@ -374,8 +374,9 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   return compiledResults;
 }
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::vector<int> uniqueSteps,  int updatePrintFrequency)
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist)
 {
+  std::string searchKey = "-wordlist-" + wordlist + "-searchmode-" + std::to_string(searchMode) + "-setsize-" + std::to_string(setSize);
   for(unsigned int j = 0; j < valids.size(); j++)
   {
     if(valids[j].size() > 2)
@@ -385,9 +386,11 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       std::vector<std::pair<double, std::string>> bestGuesses;
       if(fullRankingOut)
       {
-        std::remove("answersRating.txt");
-        std::remove("guessesRating.txt");
-        std::ofstream fout("answersRating.txt");
+        if(!std::filesystem::exists("rankings"))
+        {
+          std::filesystem::create_directory("rankings");
+        }
+        std::ofstream fout("rankings/answersRating" + searchKey + ".txt");
         for(unsigned int i = 0; i < bestAnswers.size(); i++)
         {
           fout << bestAnswers[i].second << " " << bestAnswers[i].first << std::endl;
@@ -399,7 +402,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
         bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, uniqueSteps, updatePrintFrequency);
         if(fullRankingOut)
         {
-          std::ofstream fout("guessesRating.txt");
+          std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");
           for(unsigned int i = 0; i < bestGuesses.size(); i++)
           {
             fout << bestGuesses[i].second << " " << bestGuesses[i].first << std::endl;

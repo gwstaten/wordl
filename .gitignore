@@ -8,8 +8,7 @@
 wordl
 
 # Run Logs
-answersRating.txt
-guessesRating.txt
+rankings/
 ratelogs/
 
 # Other

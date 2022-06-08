@@ -451,7 +451,34 @@ Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
 5
 New best prints (y / n)? y
-Forced include letters (y / n)?
+Update print frequency (0 for no update prints)? 
+```
+Now you enter the how frequently during the search the code should print an update. This number is given in seconds. If you don't want it to output these prints you should put `0`. I will do this for this search because it won't take a super long time.
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Number of parallel wordls? 1
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)? 
+5
+New best prints (y / n)? y
+Update print frequency (0 for no update prints)? 0
+Forced include letters (y / n)? 
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
 The final setting is whether or not we want to force include letters in the set. In some cases you may want to force include letters such as S, A, E, T, R, etc if you know that they are for sure going to be a part of the best set for the particular search. I won't do this in this case because it is a fairly small search. (If you did want to include this as a filter, you would enter `y` for this option and then enter all letters you want to be included as a single string such as `aestr`)
@@ -476,6 +503,7 @@ Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
 5
 New best prints (y / n)? y
+Update print frequency (0 for no update prints)? 0
 Forced include letters (y / n)? n
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
@@ -503,6 +531,7 @@ Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
 5
 New best prints (y / n)? y
+Update print frequency (0 for no update prints)? 0
 Forced include letters (y / n)? n
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? f

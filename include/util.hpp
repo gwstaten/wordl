@@ -18,6 +18,8 @@
 #include <algorithm>
 #include <string>
 #include <sstream>
+#include <chrono>
+#include <ctime> 
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 int countDistinct(std::string s);

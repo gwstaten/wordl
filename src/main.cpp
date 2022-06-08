@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
   int setSize = 1;
   int unique = 0;
   bool newBestPrints = false;
+  int updatePrintFrequency = 0;
   std::string forceInclude = "";
   std::vector<int> uniqueSteps = {};
 
@@ -458,6 +459,10 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         newBestPrints = std::tolower(temp.at(0)) == 'y';
 
+        std::cout << "Update print frequency (0 for no update prints)? ";
+        getline(std::cin, temp);
+        updatePrintFrequency = std::stoi(temp);
+
         std::cout << "Forced include letters (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -476,7 +481,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps, updatePrintFrequency);
 
         if(command != "")
         {

@@ -199,7 +199,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
 {
   auto startTime = std::chrono::system_clock::now();
   std::vector<unsigned int> positions(setsize, allguess.size() - 1);
@@ -262,10 +262,6 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         {
           stillGood = comb.find(forceInclude.at(i)) != std::string::npos;
         }
-        for(unsigned int i = 0; i < forceExclude.length() && stillGood; i++)
-        {
-          stillGood = comb.find(forceExclude.at(i)) == std::string::npos;
-        }
         if(stillGood)
         {
           double total = rate(guessVec, words, searchMode);
@@ -323,8 +319,22 @@ struct greater
     bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
-std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWords, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
+std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
 {
+  std::vector<std::string> validWords;
+  for(unsigned int i = 0; i < validWordList.size(); i++)
+  {
+    bool stillGood = true;
+    for(unsigned int j = 0; j < forceExclude.length() && stillGood; j++)
+    {
+      stillGood = validWordList[i].find(forceExclude.at(j)) == std::string::npos;
+    }
+    if(stillGood)
+    {
+      validWords.push_back(validWordList[i]);
+    }
+  }
+
   auto rd = std::random_device{}; 
   auto rng = std::default_random_engine{rd()};
   std::shuffle(std::begin(validWords), std::end(validWords), rng);
@@ -352,7 +362,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWords, setSize, unique, newBestPrints, i + 1, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWords, setSize, unique, newBestPrints, i + 1, forceInclude, uniqueSteps, updatePrintFrequency));
   }
   for(unsigned int i = 0; i < numThreads; i++)
   {

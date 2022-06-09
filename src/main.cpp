@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
   bool newBestPrints = false;
   int updatePrintFrequency = 0;
   std::string forceInclude = "";
+  std::string forceExclude = "";
   std::vector<int> uniqueSteps = {};
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
@@ -480,11 +481,25 @@ int main(int argc, char* argv[])
           forceInclude = "";
         }
 
+        std::cout << "Forced exclude letters (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::cout << "What letters? ";
+          getline(std::cin, temp);
+          std::transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+          forceExclude = temp;
+        }
+        else
+        {
+          forceExclude = "";
+        }
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, uniqueSteps, updatePrintFrequency, wordlist);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist);
 
         if(command != "")
         {

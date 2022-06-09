@@ -19,5 +19,5 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
 int countDistinct(std::string s);
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string wordlist);
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string wordlist);
 #endif

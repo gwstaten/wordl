@@ -232,7 +232,7 @@ int main(int argc, char* argv[])
       std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
       return 0;
     }
-  }
+  } 
 
   wordlistStream >> temp;
   while(!wordlistStream.eof())
@@ -240,6 +240,8 @@ int main(int argc, char* argv[])
     validWordss.push_back(temp);
     wordlistStream >> temp;
   }
+  
+  std::vector<std::string> forceExcludePos(validWordss[0].length(), "");
 
   if(!parallel)
   {
@@ -495,11 +497,28 @@ int main(int argc, char* argv[])
           forceExclude = "";
         }
 
+        std::cout << "Forced exclude letter positions (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          for(unsigned int i = 0; i < forceExcludePos.size(); i++)
+          {
+            std::cout << "Pos " << i + 1 << ": ";
+            getline(std::cin, temp);
+            std::transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+            forceExcludePos[i] = temp;
+          }
+        }
+        else
+        {
+          std::fill(forceExcludePos.begin(), forceExcludePos.end(), "");
+        }
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos);
 
         if(command != "")
         {

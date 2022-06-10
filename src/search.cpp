@@ -319,7 +319,7 @@ struct greater
     bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
-std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency)
+std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, std::vector<std::string> forceExcludePos, int updatePrintFrequency)
 {
   std::vector<std::string> validWords;
   for(unsigned int i = 0; i < validWordList.size(); i++)
@@ -328,6 +328,10 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     for(unsigned int j = 0; j < forceExclude.length() && stillGood; j++)
     {
       stillGood = validWordList[i].find(forceExclude.at(j)) == std::string::npos;
+    }
+    for(unsigned int j = 0; j < forceExcludePos.size() && stillGood; j++)
+    {
+      stillGood = forceExcludePos[j].find(validWordList[i].at(j)) == std::string::npos;
     }
     if(stillGood)
     {
@@ -388,7 +392,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   return compiledResults;
 }
 
-void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist)
+void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vector<std::string>> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist, std::vector<std::string> forceExcludePos)
 {
   std::string searchKey = "-wordlist-" + wordlist + "-searchmode-" + std::to_string(searchMode) + "-setsize-" + std::to_string(setSize);
   for(unsigned int j = 0; j < valids.size(); j++)
@@ -396,7 +400,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
     if(valids[j].size() > 2)
     {
       std::cout << std::endl << "Best guess: ";
-      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency);
+      std::vector<std::pair<double, std::string>> bestAnswers = fbThreads(valids[j], valids[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, updatePrintFrequency);
       std::vector<std::pair<double, std::string>> bestGuesses;
       if(fullRankingOut)
       {
@@ -413,7 +417,7 @@ void findbest(std::vector<std::vector<std::string>> valids, std::vector<std::vec
       }
       if(valids[j] != validGuesses[j])
       {
-        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency);
+        bestGuesses = fbThreads(valids[j], validGuesses[j], numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, updatePrintFrequency);
         if(fullRankingOut)
         {
           std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");

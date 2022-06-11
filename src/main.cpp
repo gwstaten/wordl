@@ -427,6 +427,26 @@ int main(int argc, char* argv[])
         getline(std::cin, temp);
         updatePrintFrequency = std::stoi(temp);
 
+        if(updatePrintFrequency)
+        {
+          std::cout << "Store updates for later continuation (y / n)? ";
+          getline(std::cin, temp);
+          if(std::tolower(temp.at(0)) == 'y')
+          {
+            std::cout << "Keyword? ";
+            getline(std::cin, temp);
+            keyword = temp;
+          }
+          else
+          {
+            keyword = "";
+          }
+        }
+        else
+        {
+          keyword = "";
+        }
+
         std::cout << "Forced include letters (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -470,19 +490,6 @@ int main(int argc, char* argv[])
         else
         {
           std::fill(forceExcludePos.begin(), forceExcludePos.end(), "");
-        }
-
-        std::cout << "Store updates for later continuation (y / n)? ";
-        getline(std::cin, temp);
-        if(std::tolower(temp.at(0)) == 'y')
-        {
-          std::cout << "Keyword? ";
-          getline(std::cin, temp);
-          keyword = temp;
-        }
-        else
-        {
-          keyword = "";
         }
 
         std::cout << std::endl;

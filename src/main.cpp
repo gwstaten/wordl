@@ -9,7 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-  int numThreads {}, parallel {}, searchMode {}, uletter {};
+  int numThreads {}, searchMode {}, uletter {};
   char hardmode {};
   std::string wordlist {}, temp {}, GorA {};
   std::ifstream wordlistStream;
@@ -24,6 +24,7 @@ int main(int argc, char* argv[])
   std::string forceInclude = "";
   std::string forceExclude = "";
   std::vector<int> uniqueSteps = {};
+  std::string keyword = "";
 
   std::map<std::string, std::vector<std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
@@ -100,16 +101,6 @@ int main(int argc, char* argv[])
             wordlist = "";
           }
         }
-        else if(parsearg.first == cmdl::NAMES::PARALLEL_ARG)
-        {
-          parallel = parsearg.second == "" ? std::stoi(cmdl::defaults.at(parsearg.first)) : std::stoi(parsearg.second);
-
-          if(parallel < 0)
-          {
-            std::cout << "Invalid parallel count: '" << parallel << "'" << std::endl;
-            parallel = 0;
-          }
-        }
         else if(parsearg.first == cmdl::NAMES::HARDMODE_ARG)
         {
           hardmode = parsearg.second == "" ? cmdl::defaults.at(parsearg.first)[0] : parsearg.second[0];
@@ -180,12 +171,9 @@ int main(int argc, char* argv[])
       else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
       {
         std::vector<std::string> guesses;
-        for(int i = 0; i < parallel; ++i)
-        {
-          guesses.push_back(argv[pos + i + 1]);
-        }
+        guesses.push_back(argv[1]);
         commandGuesses.insert({arg, guesses});
-        pos += parallel;
+        pos ++;
       }
       else if(command == cmdl::NAMES::RATE_CMD)
       {
@@ -242,27 +230,6 @@ int main(int argc, char* argv[])
   }
   
   std::vector<std::string> forceExcludePos(validWordss[0].length(), "");
-
-  if(!parallel)
-  {
-    std::cout << "Number of parallel wordls? ";
-    getline(std::cin, temp);
-
-    try
-    {
-      parallel = stoi(temp);
-    }
-    catch(const std::exception& e)
-    {
-      std::cout << "Parallels must be an integer: '" << temp << "'" << std::endl;
-    }
-
-    if(parallel < 0)
-    {
-      std::cout << "Invalid parallel count: '" << parallel << "'" << std::endl;
-      return 0;
-    }
-  }
 
   if(!hardmode)
   {
@@ -324,21 +291,15 @@ int main(int argc, char* argv[])
   
   while(true)
   {
-    std::vector<std::vector<std::string>> valids;
-    std::vector<std::vector<std::string>> validGuesses;
-    for(int i = 0; i < parallel; i++)
-    {
-      valids.push_back(validWordss);
-    }
-    for(int i = 0; i < parallel; i++)
-    {
-      validGuesses.push_back(validWords);
-    }
+    std::vector<std::string> valids;
+    std::vector<std::string> validGuesses;
+    valids = validWordss;
+    validGuesses = validWords;
 
-    std::cout << std::endl << "Wordlist initialized with " << valids[0].size() << " answers";
+    std::cout << std::endl << "Wordlist initialized with " << valids.size() << " answers";
     if(alternateWordlist.is_open())
     {
-      std::cout << " and an additional " << validGuesses[0].size() << " guesses";
+      std::cout << " and an additional " << validGuesses.size() << " guesses";
     }
     std::cout << std::endl << std::endl;
 
@@ -370,7 +331,7 @@ int main(int argc, char* argv[])
 
           for(const std::string& word : wordSet)
           {
-            if(word.length() != valids[0][0].length())
+            if(word.length() != valids[0].length())
             {
               std::cout << "Invalid word length of " << word.length() << ": '" << word << "'" << std::endl;
               return 0;
@@ -383,9 +344,9 @@ int main(int argc, char* argv[])
           return word;
         });
 
-        if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0][0].length()))
+        if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0].length()))
         {
-          rateAll(wordSet, valids[0], wordlist);
+          rateAll(wordSet, valids, wordlist);
         }
         else
         {
@@ -419,18 +380,15 @@ int main(int argc, char* argv[])
         usePrefix = std::tolower(temp[0]);
         if(usePrefix == 'y')
         {
-          for(int j = 0; j < parallel; j++)
+          std::cout << "Prefix words (space separated)? ";
+          std::vector<std::string> wordSet;
+          if(inputWordSet(std::ref(wordSet), valids[0].size()))
           {
-            std::cout << "Prefix words (space separated)? ";
-            std::vector<std::string> wordSet;
-            if(inputWordSet(std::ref(wordSet), valids[0][0].size()))
-            {
-              prefix = wordSet;
-            }
-            else
-            {
-              std::cout << "Invalid word lengths" << std::endl << std::endl;
-            }
+            prefix = wordSet;
+          }
+          else
+          {
+            std::cout << "Invalid word lengths" << std::endl << std::endl;
           }
         }
         else
@@ -514,14 +472,24 @@ int main(int argc, char* argv[])
           std::fill(forceExcludePos.begin(), forceExcludePos.end(), "");
         }
 
-        //std::cout << "Store updates for later continuation (y / n)? ";
-        //getline(std::cin, temp);
+        std::cout << "Store updates for later continuation (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::cout << "Keyword? ";
+          getline(std::cin, temp);
+          keyword = temp;
+        }
+        else
+        {
+          keyword = "";
+        }
 
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, keyword);
 
         if(command != "")
         {
@@ -530,14 +498,10 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'l' || (command == cmdl::NAMES::LIST_CMD && commandGuesses.size() == 0))
       {
-        for(unsigned int j = 0; j <valids.size(); j++)
+        std::cout << std::endl;
+        for(unsigned int i = 0; i < valids.size(); i++)
         {
-          std::cout << std::endl;
-          for(unsigned int i = 0; i < valids[j].size(); i++)
-          {
-            std::cout << valids[j][i] << " ";
-          }
-          std::cout << std::endl;
+          std::cout << valids[i] << " ";
         }
         std::cout << std::endl;
         if(command != "")
@@ -560,36 +524,34 @@ int main(int argc, char* argv[])
 
         std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
 
-        for(int i = 0; i < parallel; i++)
+        if(valids.size() > 1 || valids.size() == 1)
         {
-          if(valids[i].size() > 1 || valids.size() == 1)
+          std::string rating;
+          if(command == "")
           {
-            std::string rating;
-            if(command == "")
-            {
-              std::cout << "rating: ";
-              getline(std::cin, rating);
-            }
-            else
-            {
-              rating = commandGuesses.begin()->second[i];
-            }
-
-            valids[i] = filter(valids[i],std::make_pair(guess, rating));
-            std::cout << "There are now " << valids[i].size() << " answers";
-            if(hardmode == 'u')
-            {
-              validGuesses[i] = filter(validGuesses[i],std::make_pair(guess, rating));
-              std::cout << " and " << validGuesses[i].size() << " guesses";
-            }
-            else if(hardmode == 'h')
-            {
-              validGuesses[i] = filterHM(validGuesses[i],std::make_pair(guess, rating));
-              std::cout << " and " << validGuesses[i].size() << " guesses";
-            }
-            std::cout << " remaining" << std::endl;
+            std::cout << "rating: ";
+            getline(std::cin, rating);
           }
+          else
+          {
+            rating = commandGuesses.begin()->second[0];
+          }
+
+          valids = filter(valids,std::make_pair(guess, rating));
+          std::cout << "There are now " << valids.size() << " answers";
+          if(hardmode == 'u')
+          {
+            validGuesses = filter(validGuesses,std::make_pair(guess, rating));
+            std::cout << " and " << validGuesses.size() << " guesses";
+          }
+          else if(hardmode == 'h')
+          {
+            validGuesses = filterHM(validGuesses,std::make_pair(guess, rating));
+            std::cout << " and " << validGuesses.size() << " guesses";
+          }
+          std::cout << " remaining" << std::endl;
         }
+
         std::cout << std::endl;
         if(commandGuesses.size() > 0)
         {
@@ -612,32 +574,29 @@ int main(int argc, char* argv[])
           getline(std::cin, GorA);
           GorA = std::tolower(GorA.at(0));
         }
-        for(int i = 0; i < parallel; i++)
+        if(GorA == "a")
         {
-          if(GorA == "a")
+          for(unsigned int j = 0; j < valids.size(); j++)
           {
-            for(unsigned int j = 0; j < valids[i].size(); j++)
+            if(countDistinct(valids[j]) != uletter)
             {
-              if(countDistinct(valids[i][j]) != uletter)
-              {
-                valids[i].erase(valids[i].begin() + j);
-                j--;
-              }
+              valids.erase(valids.begin() + j);
+              j--;
             }
-            std::cout << "There are now " << valids[i].size() << " remaining possibilities" << std::endl;
           }
-          else if(GorA == "g")
+          std::cout << "There are now " << valids.size() << " remaining possibilities" << std::endl;
+        }
+        else if(GorA == "g")
+        {
+          for(unsigned int j = 0; j < validGuesses.size(); j++)
           {
-            for(unsigned int j = 0; j < validGuesses[i].size(); j++)
+            if(countDistinct(validGuesses[j]) != uletter)
             {
-              if(countDistinct(validGuesses[i][j]) != uletter)
-              {
-                validGuesses[i].erase(validGuesses[i].begin() + j);
-                j--;
-              }
+              validGuesses.erase(validGuesses.begin() + j);
+              j--;
             }
-            std::cout << "There are now " << validGuesses[i].size() << " remaining guesses" << std::endl;
           }
+          std::cout << "There are now " << validGuesses.size() << " remaining guesses" << std::endl;
         }
         std::cout << std::endl;
       }

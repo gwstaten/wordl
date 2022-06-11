@@ -10,6 +10,7 @@ wordl
 # Run Logs
 rankings/
 ratelogs/
+saves/
 
 # Other
 bin/

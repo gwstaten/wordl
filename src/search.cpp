@@ -209,6 +209,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   bool firstLoop = true;
   double best = 0;
   int last = 0;
+  unsigned int lastChanged = 0;
   for(unsigned int guess = 0; notdone; guess++)
   {
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
@@ -240,17 +241,37 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       {
         guessVec.push_back(allguess[positions[i]]);
         comb = comb + " " + allguess[positions[i]];
-        if(prior >= allguess[positions[i]])
+        if(i >= lastChanged)
         {
-          alpha = false;
-          toIncrement = i;
-        }
-        if(i < positions.size() - 1)
-        {
-          if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
+          if(prior >= allguess[positions[i]])
           {
             alpha = false;
             toIncrement = i;
+          }
+          if(i < positions.size() - 1)
+          {
+            if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
+            {
+              alpha = false;
+              toIncrement = i;
+            }
+          }
+          if(i < positions.size() - 1)
+          {
+            bool stillPossible = true;
+            int numOccured = 0;
+            for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
+            {
+              if(comb.find(forceInclude.at(i)) != std::string::npos)
+              {
+                numOccured++;
+              }
+            }
+            if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
+            {
+              alpha = false;
+              toIncrement = i;
+            }
           }
         }
         prior = allguess[positions[i]];
@@ -288,6 +309,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       {
         positions[i] = 0;
         positions[i - 1]++;
+        lastChanged = i - 1;
       }
       else
       {

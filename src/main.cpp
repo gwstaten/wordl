@@ -514,6 +514,9 @@ int main(int argc, char* argv[])
           std::fill(forceExcludePos.begin(), forceExcludePos.end(), "");
         }
 
+        //std::cout << "Store updates for later continuation (y / n)? ";
+        //getline(std::cin, temp);
+
         std::cout << std::endl;
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))

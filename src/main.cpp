@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
           std::cout << std::endl;
 
-          std::cout << "Note:" << std::endl;
+          std::cout << "Notes:" << std::endl;
           for(const std::string& note : cmdl::notes)
           {
             std::cout << "  " << note << std::endl;
@@ -143,6 +143,15 @@ int main(int argc, char* argv[])
 
             GorA = {};
           }
+        }
+        else if(parsearg.first == cmdl::NAMES::DEFAULT_ARG)
+        {
+          numThreads = stoi(cmdl::defaults.at(cmdl::NAMES::THREAD_ARG));
+          wordlist = cmdl::defaults.at(cmdl::NAMES::WORDLIST_ARG);
+          hardmode = cmdl::defaults.at(cmdl::NAMES::HARDMODE_ARG)[0];
+          searchMode = stoi(cmdl::defaults.at(cmdl::NAMES::SEARCHMODE_ARG));
+
+          wordlistStream = std::ifstream("wordlists/" + wordlist);
         }
         else
         {

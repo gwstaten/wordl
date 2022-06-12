@@ -189,6 +189,49 @@ int main(int argc, char* argv[])
     }
   }
 
+  if(std::filesystem::exists("saves"))
+  {
+    std::vector<std::string> keys = {};
+    for (const auto & entry : std::filesystem::directory_iterator("saves/"))
+    {
+      std::string path = entry.path().u8string();
+      if(path.find('-') == std::string::npos)
+      {
+        keys.push_back(path.substr(path.find('/') + 1));
+      }
+    }
+    if(keys.size())
+    {
+      std::cout << "Unfinished searches found with key(s) ";
+      for(unsigned int i = 0; i < keys.size(); i++)
+      {
+        std::cout << keys[i];
+        if(i != keys.size() - 1)
+        {
+          std::cout << ", ";
+        }
+      }
+      std::cout << std::endl << "Would you like to continue one of these searches (y / n)? ";
+      getline(std::cin, temp);
+      if(std::tolower(temp.at(0)) == 'y')
+      {
+        temp = "";
+        bool first = true;
+        while(!std::count(keys.begin(), keys.end(), temp))
+        {
+          if(!first)
+          {
+            std::cout << "Invalid key" << std::endl;
+          }
+          first = false;
+          std::cout << "What key? ";
+          getline(std::cin, temp);
+        }
+        findbest(temp);
+      }
+    }
+  }
+
   if(!numThreads)
   {
     std::cout << "Number of threads? ";

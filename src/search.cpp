@@ -436,7 +436,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     }
     for(unsigned int i = 0; i < forceExcludePos.size(); i++)
     {
-      fout << "-" + forceExclude[i] << std::endl;
+      fout << "-" << forceExclude[i] << std::endl;
     }
     fout.close();
     fout.open("saves/" + keyword + "-valids");

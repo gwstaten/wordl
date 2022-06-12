@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
   std::vector<int> uniqueSteps = {};
   std::string keyword = "";
 
-  std::map<std::string, std::vector<std::string>> commandGuesses;
+  std::vector<std::pair<std::string, std::string>> commandGuesses;
   std::vector<std::string> commandWordrates;
 
   std::string command {};
@@ -179,10 +179,8 @@ int main(int argc, char* argv[])
       }
       else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
       {
-        std::vector<std::string> guesses;
-        guesses.push_back(argv[1]);
-        commandGuesses.insert({arg, guesses});
-        pos ++;
+        commandGuesses.push_back({arg, argv[pos + 1]});
+        pos++;
       }
       else if(command == cmdl::NAMES::RATE_CMD)
       {
@@ -550,7 +548,7 @@ int main(int argc, char* argv[])
           }
           else
           {
-            rating = commandGuesses.begin()->second[0];
+            rating = commandGuesses.begin()->second;
           }
 
           valids = filter(valids,std::make_pair(guess, rating));

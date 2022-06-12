@@ -65,13 +65,12 @@ Number of threads? 4
 Word List?
 ```
 
-When prompted with this, enter one of the [wordlist](#word-lists). For the next prompt, enter 1 if you are trying to solve for only one wordle, or the number of wordles you are solving at the same time (like [dordle](https://zaratustra.itch.io/dordle), [quordle](https://www.quordle.com), [octordle](https://octordle.com), etc). After you have finished that, you should have something similar to
+When prompted with this, enter one of the [wordlist](#word-lists).
 
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)?
 ```
 
@@ -80,8 +79,7 @@ Wordl at this point gives you three types of hardmode. Normal is what most peopl
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)?
 ```
@@ -91,8 +89,7 @@ Each search method uses a different algorithm and can be found [here](#search-mo
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -106,8 +103,7 @@ Here, most of you would want to type `g` or `a`, so you can get to having the bo
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -118,13 +114,12 @@ Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or
 guess:
 ```
 
-At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and the correct position. 0 for grey, 1 for yellow, and 2 for green. **Parallel Wordle Note: In parallel wordle, you would enter the result of each wordle board one after another.** At this point, you should have something similar to
+At this point, you can start inputting the results you get from entering words into your wordle website. You can start with any word you would like to enter. To enter the word you guessed, type the word you guessed and press enter when it prompts with `guess:`. After that, nothing will happen as it is waiting for the result of the guess. The result of the guess is formatted in 0s, 1s, and 2s. 0 represents that the letter is not in the word, 1 represents that the letter is in the word, just not in the correct position, and 2 represents that the letter is in the word and the correct position. 0 for grey, 1 for yellow, and 2 for green. At this point, you should have something similar to
 
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -174,8 +169,7 @@ To add your own word list, add a file to the wordlists directory that contains t
 ```bash
 $ ./wordle
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -237,7 +231,6 @@ Instead of going through the interface, you can use the one-line version. The on
 | Name | Description |
 | ---- | ----------- |
 | -hardmode | Sets the hardmode |
-| -parallel | Sets the number of parallel wordles |
 | -searchmode | Sets the searchmode |
 | -threads | Sets the number of threads |
 | -wordlist | Sets the wordlist |
@@ -254,7 +247,6 @@ Instead of going through the interface, you can use the one-line version. The on
 | Name | Default |
 | ---- | ------- |
 | -hardmode | n |
-| -parallel | 1 |
 | -searchmode | 2 |
 | -threads | 4 |
 | -wordlist | nytimes2 |
@@ -272,7 +264,7 @@ Instead of going through the interface, you can use the one-line version. The on
 ### CMDL Example Run
 
 ```bash
-$ ./wordl -threads=4 -wordlist=nytimes2 -parallel=1 -hardmode=n -searchmode=2 findbest trace 00000 jazzy 00001
+$ ./wordl -threads=4 -wordlist=nytimes2 -hardmode=n -searchmode=2 findbest trace 00000 jazzy 00001
 
 Wordlist initialized with 2309 answers and an additional 12972 guesses
 
@@ -294,8 +286,7 @@ To search for sets using Wordl (this example will be set up for finding the best
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -309,8 +300,7 @@ Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -327,8 +317,7 @@ You now tell the program whether you want to add a prefix or not. Prefix is used
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -346,8 +335,7 @@ You now tell the program if you would like the code to generate a file with a ra
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -366,8 +354,7 @@ Next you enter the size of the set you will be searching for. In this case, 2.
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -387,8 +374,7 @@ Next you will enter a few things that will filter down what sets the code actual
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -410,8 +396,7 @@ The next prompt only appears if you entered 2 or greater for the Set size option
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -434,8 +419,7 @@ You are then prompted with whether or not you want the code to print new best st
 ```bash
 $ ./wordl
 Number of threads? 4
-Word list? nytimes
-Number of parallel wordls? 1
+Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -453,13 +437,13 @@ Num of required unique for each step (0 for no requirement)?
 New best prints (y / n)? y
 Update print frequency (0 for no update prints)? 
 ```
+
 Now you enter the how frequently during the search the code should print an update. This number is given in seconds. If you don't want it to output these prints you should put `0`. I will do this for this search because it won't take a super long time.
 
 ```bash
 $ ./wordl
 Number of threads? 4
 Word list? nytimes
-Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -487,7 +471,6 @@ The final setting is whether or not we want to force include letters in the set.
 $ ./wordl
 Number of threads? 4
 Word list? nytimes
-Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 
@@ -515,7 +498,6 @@ You now have all of the settings in place, and can now enter `f` to run the sear
 $ ./wordl
 Number of threads? 4
 Word list? nytimes
-Number of parallel wordls? 1
 Ultra hard mode, hard mode, or normal (u, h, n)? n
 Search mode (1 - 6)? 2
 

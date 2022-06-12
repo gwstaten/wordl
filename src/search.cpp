@@ -201,14 +201,32 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
 
 void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string keyword)
 {
+  std::ofstream fout;
+  if(keyword.length())
+  {
+    fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-wordsToCheck");
+    for(unsigned int i = 0; i < validWords.size(); i++)
+    {
+      fout << validWords[i] << std::endl;
+    }
+    fout.close();
+    fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results");
+    fout.close();
+    fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
+    fout << "0";
+    for(int i = 1; i < setsize; i++)
+    {
+      fout << " 0";
+    }
+    fout.close();
+  }
   auto startTime = std::chrono::system_clock::now();
-  std::vector<unsigned int> positions(setsize, allguess.size() - 1);
-  positions[0] = validWords.size() - 1;
+  std::vector<unsigned int> positions(setsize, 0);
   bool notdone = true;
   bool first = true;
-  bool firstLoop = true;
   double best = 0;
   int last = 0;
+  int lastWroteToFile = 0;
   unsigned int lastChanged = 0;
   for(unsigned int guess = 0; notdone; guess++)
   {
@@ -219,84 +237,99 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       {
         last = (int)diff.count() + threadNum;
         std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - currently on word " << validWords[positions[0]] << std::endl;
+        if(keyword.length())
+        {
+          fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
+          for(unsigned int i = lastWroteToFile; i < out.size(); i++)
+          {
+            fout << out[i].second << " " << out[i].first << std::endl;
+          }
+          lastWroteToFile = out.size();
+          fout.close();
+          fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
+          fout << positions[0];
+          for(int i = 1; i < setsize; i++)
+          {
+            fout << " " << positions[i];
+          }
+          fout.close();
+        }
       }
     }
     int toIncrement = setsize - 1;
-    if(!firstLoop)
+    
+    std::vector<std::string> guessVec = prefix;
+    std::string comb = validWords[positions[0]];
+    guessVec.push_back(validWords[positions[0]]);
+    std::string prior = comb;
+    bool alpha = true;
+    if(setsize > 1)
     {
-      std::vector<std::string> guessVec = prefix;
-      std::string comb = validWords[positions[0]];
-      guessVec.push_back(validWords[positions[0]]);
-      std::string prior = comb;
-      bool alpha = true;
-      if(setsize > 1)
+      if(countDistinct(comb) < uniqueSteps[0] && uniqueSteps[0])
       {
-        if(countDistinct(comb) < uniqueSteps[0] && uniqueSteps[0])
+        alpha = false;
+        toIncrement = 0;
+      }
+    }
+    for(unsigned int i = 1; i < positions.size() && alpha; i++)
+    {
+      guessVec.push_back(allguess[positions[i]]);
+      comb = comb + " " + allguess[positions[i]];
+      if(i >= lastChanged)
+      {
+        if(prior >= allguess[positions[i]])
         {
           alpha = false;
-          toIncrement = 0;
+          toIncrement = i;
         }
-      }
-      for(unsigned int i = 1; i < positions.size() && alpha; i++)
-      {
-        guessVec.push_back(allguess[positions[i]]);
-        comb = comb + " " + allguess[positions[i]];
-        if(i >= lastChanged)
+        if(i < positions.size() - 1)
         {
-          if(prior >= allguess[positions[i]])
+          if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
           {
             alpha = false;
             toIncrement = i;
           }
-          if(i < positions.size() - 1)
+        }
+        if(i < positions.size() - 1)
+        {
+          bool stillPossible = true;
+          int numOccured = 0;
+          for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
           {
-            if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
+            if(comb.find(forceInclude.at(i)) != std::string::npos)
             {
-              alpha = false;
-              toIncrement = i;
+              numOccured++;
             }
           }
-          if(i < positions.size() - 1)
+          if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
           {
-            bool stillPossible = true;
-            int numOccured = 0;
-            for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
-            {
-              if(comb.find(forceInclude.at(i)) != std::string::npos)
-              {
-                numOccured++;
-              }
-            }
-            if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
-            {
-              alpha = false;
-              toIncrement = i;
-            }
+            alpha = false;
+            toIncrement = i;
           }
         }
-        prior = allguess[positions[i]];
       }
-      if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
+      prior = allguess[positions[i]];
+    }
+    if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
+    {
+      bool stillGood = true;
+      for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
       {
-        bool stillGood = true;
-        for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
+        stillGood = comb.find(forceInclude.at(i)) != std::string::npos;
+      }
+      if(stillGood)
+      {
+        double total = rate(guessVec, words, searchMode);
+        out.push_back(std::make_pair(total, comb));
+        if(newBestPrints && (first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4))))
         {
-          stillGood = comb.find(forceInclude.at(i)) != std::string::npos;
+          first = false;
+          best = total;
+          std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
         }
-        if(stillGood)
+        else if(newBestPrints && (first || best == total))
         {
-          double total = rate(guessVec, words, searchMode);
-          out.push_back(std::make_pair(total, comb));
-          if(newBestPrints && (first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4))))
-          {
-            first = false;
-            best = total;
-            std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
-          }
-          else if(newBestPrints && (first || best == total))
-          {
-            std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
-          }
+          std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
         }
       }
     }
@@ -318,16 +351,8 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     }
     if(positions[0] == validWords.size())
     {
-      if(firstLoop)
-      {
-        positions[0] = 0;
-      }
-      else
-      {
-        notdone = false;
-      }
+      notdone = false;
     }
-    firstLoop = false;
   }
   if(updatePrintFrequency)
   {
@@ -414,6 +439,78 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   return compiledResults;
 }
 
+void findbest(std::string keyword)
+{
+  std::ifstream fin;
+  std::vector<std::string> valids = {};
+  std::vector<std::string> validGuesses = {}; 
+
+  fin.open("saves/" + keyword + "-valids");
+  std::string tempIn;
+  fin >> tempIn;
+  while(!fin.eof())
+  {
+    valids.push_back(tempIn);
+    fin >> tempIn;
+  }
+  fin.close();
+
+  fin.open("saves/" + keyword + "-validGuesses");
+  fin >> tempIn;
+  while(!fin.eof())
+  {
+    validGuesses.push_back(tempIn);
+    fin >> tempIn;
+  }
+  fin.close();
+
+  int numThreads, searchMode, setSize, unique, updatePrintFrequency;
+  std::vector<std::string> prefix = {}; 
+  bool fullRankingOut, newBestPrints;
+  std::string forceInclude, forceExclude, wordlist;
+  std::vector<int> uniqueSteps;
+  std::vector<std::string> forceExcludePos = {};
+
+  fin.open("saves/" + keyword);
+  fin >> numThreads;
+  fin >> searchMode;
+  char temp;
+  fin >> temp;
+  fullRankingOut = (temp == 'y');
+  fin >> setSize;
+  fin >> unique;
+  fin >> temp;
+  newBestPrints = (temp == 'y');
+  fin >> forceInclude;
+  forceInclude = forceInclude.substr(1);
+  fin >> updatePrintFrequency;
+  fin >> forceExclude;
+  forceExclude = forceExclude.substr(1);
+  unsigned int prefixSize;
+  fin >> prefixSize;
+  for(unsigned int i = 0; i < prefixSize; i++)
+  {
+    fin >> tempIn;
+    prefix.push_back(tempIn);
+  }
+  for(int i = 0; i < setSize - 1; i++)
+  {
+    int tempInt;
+    fin >> tempInt;
+    uniqueSteps.push_back(tempInt);
+  }
+  for(unsigned int i = 0; i < valids[0].length(); i++)
+  {
+    fin >> tempIn;
+    forceExcludePos.push_back(tempIn.substr(1));
+  }
+  fin.close();
+  if(fullRankingOut == newBestPrints)
+  {
+    
+  }
+}
+
 void findbest(std::vector<std::string> valids, std::vector<std::string> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist, std::vector<std::string> forceExcludePos, std::string keyword)
 {
   if(keyword.length())
@@ -424,7 +521,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     }
     std::ofstream fout;
     fout.open("saves/" + keyword);
-    fout << numThreads << " " << searchMode << " " << (fullRankingOut ? "y" : "n") << " " << setSize << " " << unique << " " << (newBestPrints ? "y" : "n") << " " << forceInclude << " " << updatePrintFrequency << " " << forceExclude << std::endl;
+    fout << numThreads << " " << searchMode << " " << (fullRankingOut ? "y" : "n") << " " << setSize << " " << unique << " " << (newBestPrints ? "y" : "n") << " -" << forceInclude << " " << updatePrintFrequency << " -" << forceExclude << std::endl;
     fout << prefix.size();
     for(unsigned int i = 0; i < prefix.size(); i++)
     {
@@ -436,7 +533,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     }
     for(unsigned int i = 0; i < forceExcludePos.size(); i++)
     {
-      fout << "-" << forceExclude[i] << std::endl;
+      fout << "-" << forceExcludePos[i] << std::endl;
     }
     fout.close();
     fout.open("saves/" + keyword + "-valids");

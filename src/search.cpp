@@ -627,15 +627,6 @@ void findbest(std::string keyword)
   }
   if(bestGuesses.size())
   {
-    if(fullRankingOut)
-    {
-      std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");
-      for(unsigned int i = 0; i < bestGuesses.size(); i++)
-      {
-        fout << bestGuesses[i].second << " " << bestGuesses[i].first << std::endl;
-      }
-      fout.close();
-    }
     bool still = true;
     for(unsigned int i = 0; i < 10 && still; i++)
     {
@@ -718,7 +709,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     }
     fout.close();
     fout.open("saves/" + keyword + "-validGuesses");
-    for(unsigned int i = 0; i < valids.size(); i++)
+    for(unsigned int i = 0; i < validGuesses.size(); i++)
     {
       fout << validGuesses[i] << std::endl;
     }

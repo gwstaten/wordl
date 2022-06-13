@@ -222,6 +222,10 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     {
       out.push_back(std::make_pair(temp2, temp1));
       fin >> temp1;
+      if(temp1.size() == 1)
+      {
+        fin >> temp1;
+      }
       fin >> temp2;
     }
     fin.close();

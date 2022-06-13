@@ -216,7 +216,10 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     std::string temp1;
     double temp2;
     fin >> temp1;
-    fin >> temp1;
+    if(temp1.size() == 1)
+    {
+      fin >> temp1;
+    }
     fin >> temp2;
     while(!fin.eof())
     {

@@ -228,6 +228,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       fin >> temp2;
     }
+    lastWroteToFile = out.size();
     fin.close();
     fin.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
     for(unsigned int i = 0; i < positions.size(); i++)

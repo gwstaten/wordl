@@ -340,11 +340,13 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         {
           bool stillPossible = true;
           int numOccured = 0;
+          std::string combNotUsed = comb;
           for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
           {
-            if(comb.find(forceInclude.at(i)) != std::string::npos)
+            if(combNotUsed.find(forceInclude.at(i)) != std::string::npos)
             {
               numOccured++;
+              combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
             }
           }
           if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
@@ -359,9 +361,14 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
     {
       bool stillGood = true;
+      std::string combNotUsed = comb;
       for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
       {
-        stillGood = comb.find(forceInclude.at(i)) != std::string::npos;
+        stillGood = combNotUsed.find(forceInclude.at(i)) != std::string::npos;
+        if(stillGood)
+        {
+          combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
+        }
       }
       if(stillGood)
       {

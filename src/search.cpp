@@ -422,6 +422,7 @@ struct greater
 std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, std::vector<std::string> forceExcludePos, int updatePrintFrequency, std::string keyword, bool cont)
 {
   std::vector<std::string> validWords;
+  unsigned int uniqueUn = unique;
   for(unsigned int i = 0; i < validWordList.size(); i++)
   {
     bool stillGood = true;
@@ -432,6 +433,24 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     for(unsigned int j = 0; j < forceExcludePos.size() && stillGood; j++)
     {
       stillGood = forceExcludePos[j].find(validWordList[i].at(j)) == std::string::npos;
+    }
+    if(stillGood)
+    {
+      std::string combNotUsed = validWordList[i];
+      int numOccured = 0;
+      for(unsigned int i = 0; i < forceInclude.length(); i++)
+      {
+        if(combNotUsed.find(forceInclude.at(i)) != std::string::npos)
+        {
+          numOccured++;
+          combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
+        }
+      }
+      stillGood = numOccured + ((setSize - 1) * words[0].length()) >= forceInclude.length();
+    }
+    if(stillGood)
+    {
+      stillGood = countDistinct(validWordList[i]) + ((setSize - 1) * words[0].length()) >= uniqueUn;
     }
     if(stillGood)
     {

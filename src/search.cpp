@@ -458,6 +458,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     }
   }
 
+  std::vector<std::string> validWordsOrder = validWords;
   auto rd = std::random_device{}; 
   auto rng = std::default_random_engine{rd()};
   std::shuffle(std::begin(validWords), std::end(validWords), rng);
@@ -485,7 +486,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWordList, setSize, unique, newBestPrints, i + 1, forceInclude, uniqueSteps, updatePrintFrequency, keyword, cont));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWordsOrder, setSize, unique, newBestPrints, i + 1, forceInclude, uniqueSteps, updatePrintFrequency, keyword, cont));
   }
   for(unsigned int i = 0; i < numThreads; i++)
   {

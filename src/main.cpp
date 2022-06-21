@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
   std::vector<std::string> prefix = {};
 
   bool fullRankingOutput = false;
+  int fullRankingRequiredScore = -1;
   int setSize = 1;
   int unique = 0;
   bool newBestPrints = false;
@@ -449,6 +450,19 @@ int main(int argc, char* argv[])
         std::cout << "Print full rankings to file (y / n)? ";
         getline(std::cin, temp);
         fullRankingOutput = std::tolower(temp.at(0)) == 'y';
+        
+        std::cout << "Require score cutoff for considered sets (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::cout << "Cutoff score? ";
+          getline(std::cin, temp);
+          fullRankingRequiredScore = std::stoi(temp);
+        }
+        else
+        {
+          fullRankingRequiredScore = -1;
+        }
 
         std::cout << "Set size? ";
         getline(std::cin, temp);
@@ -546,7 +560,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, keyword);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, keyword);
 
         if(command != "")
         {

@@ -206,6 +206,8 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   bool notdone = true;
   bool first = true;
   double best = 0;
+  std::string bestStr = "no valid sets found yet";
+  bool bestTied = false;
   int last = 0;
   int lastWroteToFile = 0;
   unsigned int lastChanged = 0;
@@ -282,7 +284,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
       {
         last = (int)diff.count() + threadNum;
-        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - currently on word " << validWords[positions[0]] << std::endl;
+        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
         if(keyword.length())
         {
           fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
@@ -377,12 +379,15 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         {
           first = false;
           best = total;
+          bestStr = comb;
+          bestTied = false;
           std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
           out.push_back(std::make_pair(total, comb));
         }
         else if(newBestPrints && (first || best == total))
         {
           std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
+          bestTied = true;
           out.push_back(std::make_pair(total, comb));
         }
         else if(fullRankingRequiredScore == -1 || ((total <= fullRankingRequiredScore && (searchMode == 1 || searchMode == 4)) || (total >= fullRankingRequiredScore && !(searchMode == 1 || searchMode == 4))))

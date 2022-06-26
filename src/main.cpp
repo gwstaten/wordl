@@ -525,6 +525,32 @@ int main(int argc, char* argv[])
           forceInclude = "";
         }
 
+        /*std::cout << "Extra conditions for duplicate letters (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::unordered_map<char, int> m;
+          for(unsigned int i = 0; i < forceInclude.length(); i++)
+          {
+            m[forceInclude[i]]++;
+          }
+          std::unordered_map<char, int>::iterator it;
+          for(it = m.begin(); it != m.end(); ++it)
+          {
+            if(it->second > 1)
+            {
+              std::cout << it->first << " - how many of the " << it->second << " need to be in the same word? ";
+              getline(std::cin, temp);
+            }
+            std::cout << it->first << " - allow more than " << it->second << " to be included (y / n)? ";
+            getline(std::cin, temp);
+          }
+        }
+        else
+        {
+          // set to some default
+        }*/
+
         std::cout << "Forced exclude letters (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')

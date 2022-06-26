@@ -211,6 +211,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   int last = 0;
   int lastWroteToFile = 0;
   unsigned int lastChanged = 0;
+  unsigned long long int numberChecked = 0;
   if(cont)
   {
     std::ifstream fin;
@@ -284,7 +285,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
       {
         last = (int)diff.count() + threadNum;
-        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
+        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - has checked " << numberChecked << " sets that meet all filters - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
         if(keyword.length())
         {
           fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
@@ -375,6 +376,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       if(stillGood)
       {
         double total = rate(guessVec, words, searchMode);
+        numberChecked++;
         if(newBestPrints && (first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4))))
         {
           first = false;

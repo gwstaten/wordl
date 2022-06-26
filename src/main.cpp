@@ -21,6 +21,7 @@ int main(int argc, char* argv[])
   int setSize = 1;
   int unique = 0;
   bool newBestPrints = false;
+  bool answersOnlyFirst = true;
   int updatePrintFrequency = 0;
   std::string forceInclude = "";
   std::string forceExclude = "";
@@ -426,6 +427,10 @@ int main(int argc, char* argv[])
           return 0;
         }
 
+        std::cout << "Do answers only search first (y / n)? ";
+        getline(std::cin, temp);
+        answersOnlyFirst = std::tolower(temp[0]) == 'y';
+
         std::cout << "Use prefex (y / n)? ";
         getline(std::cin, temp);
         usePrefix = std::tolower(temp[0]);
@@ -586,7 +591,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, keyword);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, answersOnlyFirst, keyword);
 
         if(command != "")
         {

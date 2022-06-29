@@ -377,18 +377,24 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       {
         double total = rate(guessVec, words, searchMode);
         numberChecked++;
-        if(newBestPrints && (first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4))))
+        if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
         {
           first = false;
           best = total;
           bestStr = comb;
           bestTied = false;
-          std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
+          if(newBestPrints)
+          {
+            std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
+          }
           out.push_back(std::make_pair(total, comb));
         }
         else if(newBestPrints && (first || best == total))
         {
-          std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
+          if(newBestPrints)
+          {
+            std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
+          }
           bestTied = true;
           out.push_back(std::make_pair(total, comb));
         }

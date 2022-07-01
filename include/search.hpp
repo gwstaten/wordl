@@ -19,6 +19,7 @@ std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>
 int countDistinct(std::string s);
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 
+double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode);
 void findbest(std::vector<std::string> valids, std::vector<std::string> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int fullRankingRequiredScore, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string wordlist,  std::vector<std::string> forceExcludePos, bool answersOnlyFirst, std::string keyword);
 void findbest(std::string keyword);
 #endif

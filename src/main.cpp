@@ -361,7 +361,7 @@ int main(int argc, char* argv[])
       if(command == "")
       {
         userInput = 'n';
-        std::cout << "Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? ";
+        std::cout << "Find best (f), list (l), guess (g), rate (a), find order (o), restart with same settings (r), or exit (e)? ";
         getline(std::cin, temp);
         userInput = std::tolower(temp[0]);
       }
@@ -369,6 +369,83 @@ int main(int argc, char* argv[])
       if(userInput == 'e')
       {
         return 1;
+      }
+      else if(userInput == 'o')
+      {
+        std::vector<std::string> wordSet;
+        if(command == "")
+        {
+          std::cout << std::endl << "Set to order (list separated by spaces)? ";
+        }
+        else
+        {
+          wordSet = commandWordrates;
+
+          for(const std::string& word : wordSet)
+          {
+            if(word.length() != valids[0].length())
+            {
+              std::cout << "Invalid word length of " << word.length() << ": '" << word << "'" << std::endl;
+              return 0;
+            }
+          }
+        }
+
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+          std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+          return word;
+        });
+
+        if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0].length()))
+        {
+          for(unsigned int u = 1; u <= 6; u++)
+          {
+            bool tied = false;
+            for(unsigned int i = wordSet.size() - 1; i > 0; i--)
+            {
+              double bestScore;
+              unsigned int bestToExclude;
+              for(unsigned int j = 0; j <= i; j++)
+              {
+                std::vector<std::string> tempWordSet;
+                for(unsigned int k = 0; k <= i; k++)
+                {
+                  if(k != j)
+                  {
+                    tempWordSet.push_back(wordSet[k]);
+                  }
+                }
+                double score = rate(tempWordSet, valids, u);
+                if(!j || (score < bestScore && (u == 1 || u == 4)) || (score > bestScore && !(u == 1 || u == 4)))
+                {
+                  bestScore = score;
+                  bestToExclude = j;
+                }
+                else if(score == bestScore)
+                {
+                  tied = true;
+                }
+              }
+              std::swap(wordSet[bestToExclude],wordSet[i]);
+            }
+            std::cout << "Optimal ordering by search mode " << u << ": ";
+            for(unsigned int i = 0; i < wordSet.size(); i++)
+            {
+              std::cout << wordSet[i] << " ";
+            }
+            if(tied)
+            {
+              std::cout << "(with a tie)" << std::endl;
+            }
+            std::cout << std::endl;
+          }
+          std::cout << std::endl;
+        }
+        else
+        {
+          std::cout << "invalid word lengths" << std::endl << std::endl;
+          std::cin.ignore();
+        }
       }
       else if(userInput == 'a' || command == cmdl::NAMES::RATE_CMD)
       {

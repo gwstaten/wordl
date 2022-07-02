@@ -435,7 +435,7 @@ int main(int argc, char* argv[])
             }
             if(tied)
             {
-              std::cout << "(with a tie)" << std::endl;
+              std::cout << "(with a tie)";
             }
             std::cout << std::endl;
           }

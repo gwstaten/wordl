@@ -400,7 +400,6 @@ int main(int argc, char* argv[])
         {
           for(unsigned int u = 1; u <= 6; u++)
           {
-            bool tied = false;
             for(unsigned int i = wordSet.size() - 1; i > 0; i--)
             {
               double bestScore;
@@ -421,10 +420,6 @@ int main(int argc, char* argv[])
                   bestScore = score;
                   bestToExclude = j;
                 }
-                else if(score == bestScore)
-                {
-                  tied = true;
-                }
               }
               std::swap(wordSet[bestToExclude],wordSet[i]);
             }
@@ -432,10 +427,6 @@ int main(int argc, char* argv[])
             for(unsigned int i = 0; i < wordSet.size(); i++)
             {
               std::cout << wordSet[i] << " ";
-            }
-            if(tied)
-            {
-              std::cout << "(with a tie)";
             }
             std::cout << std::endl;
           }

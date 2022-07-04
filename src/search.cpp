@@ -308,7 +308,23 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     int toIncrement = setsize - 1;
     
     std::vector<std::string> guessVec = prefix;
-    std::string comb = validWords[positions[0]];
+    std::string comb;
+    if(prefix.size())
+    {
+      for(unsigned int i = 0; i < prefix.size(); i++)
+      {
+        if(i)
+        {
+          comb += "-";
+        }
+        comb += prefix[i];
+      }
+      comb += "+" + validWords[positions[0]];
+    }
+    else
+    {
+      comb = validWords[positions[0]];
+    }
     guessVec.push_back(validWords[positions[0]]);
     std::string prior = comb;
     bool alpha = true;
@@ -464,11 +480,11 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
           combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
         }
       }
-      stillGood = numOccured + ((setSize - 1) * words[0].length()) >= forceInclude.length();
+      stillGood = numOccured + ((setSize + prefix.size() - 1) * words[0].length()) >= forceInclude.length();
     }
     if(stillGood)
     {
-      stillGood = countDistinct(validWordList[i]) + ((setSize - 1) * words[0].length()) >= uniqueUn;
+      stillGood = countDistinct(validWordList[i]) + ((setSize + prefix.size() - 1) * words[0].length()) >= uniqueUn;
     }
     if(stillGood)
     {

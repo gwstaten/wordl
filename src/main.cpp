@@ -282,6 +282,7 @@ int main(int argc, char* argv[])
   }
   
   std::vector<std::string> forceExcludePos(validWordss[0].length(), "");
+  std::vector<std::string> forceIncludePos(validWordss[0].length(), "");
 
   if(!hardmode)
   {
@@ -638,6 +639,23 @@ int main(int argc, char* argv[])
           forceExclude = "";
         }
 
+        std::cout << "Forced include letter positions (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          for(unsigned int i = 0; i < forceIncludePos.size(); i++)
+          {
+            std::cout << "Pos " << i + 1 << ": ";
+            getline(std::cin, temp);
+            std::transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+            forceIncludePos[i] = temp;
+          }
+        }
+        else
+        {
+          std::fill(forceIncludePos.begin(), forceIncludePos.end(), "");
+        }
+
         std::cout << "Forced exclude letter positions (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -659,7 +677,7 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, answersOnlyFirst, keyword);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, forceIncludePos, answersOnlyFirst, keyword);
 
         if(command != "")
         {

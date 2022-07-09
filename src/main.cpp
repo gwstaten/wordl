@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
   std::string keyword = "";
 
   std::vector<std::pair<std::string, std::string>> commandGuesses;
-  std::vector<std::string> commandWordrates;
+  std::vector<std::string> commandWords;
 
   std::string command {};
 
@@ -184,9 +184,9 @@ int main(int argc, char* argv[])
         commandGuesses.push_back({arg, argv[pos + 1]});
         pos++;
       }
-      else if(command == cmdl::NAMES::RATE_CMD)
+      else if(command == cmdl::NAMES::RATE_CMD || command == cmdl::NAMES::ORDER_CMD)
       {
-        commandWordrates.push_back(arg);
+        commandWords.push_back(arg);
       }
     }
   }
@@ -371,16 +371,16 @@ int main(int argc, char* argv[])
       {
         return 1;
       }
-      else if(userInput == 'o')
+      else if(userInput == 'o' || command == cmdl::NAMES::ORDER_CMD)
       {
         std::vector<std::string> wordSet;
         if(command == "")
         {
           std::cout << std::endl << "Set to order (list separated by spaces)? ";
         }
-        else
+        else if(commandWords.size() > 0)
         {
-          wordSet = commandWordrates;
+          wordSet = commandWords;
 
           for(const std::string& word : wordSet)
           {
@@ -390,6 +390,11 @@ int main(int argc, char* argv[])
               return 0;
             }
           }
+        }
+        else
+        {
+          std::cout << "No inputted words" << std::endl;
+          return 0;
         }
 
         std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
@@ -446,9 +451,9 @@ int main(int argc, char* argv[])
         {
           std::cout << std::endl << "Words to rate (list separated by spaces)? ";
         }
-        else
+        else if(commandWords.size() > 0)
         {
-          wordSet = commandWordrates;
+          wordSet = commandWords;
 
           for(const std::string& word : wordSet)
           {
@@ -458,6 +463,11 @@ int main(int argc, char* argv[])
               return 0;
             }
           }
+        }
+        else
+        {
+          std::cout << "No inputted words" << std::endl;
+          return 0;
         }
 
         std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 

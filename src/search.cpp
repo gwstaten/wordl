@@ -199,6 +199,58 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
+double rateInts(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<unsigned long long int> prefixColorings)
+{
+  unsigned long long int factor = std::pow(3,guess[0].size());
+  std::unordered_map<unsigned long long int, double> ratingsMap;
+  for(unsigned int answer = 0; answer < words.size(); answer++)
+  {
+    unsigned long long int total = prefixColorings[answer];
+    for(unsigned int i = 0; i < guess.size(); i++)
+    {
+      total *= factor;
+      total += grade2(guess[i], words[answer]);
+    }
+    ratingsMap[total]++;
+  }
+  if(searchMode == 2)
+  {
+    return ratingsMap.size();
+  }
+  double total = 0;
+  std::unordered_map<unsigned long long int, double>::iterator it;
+  for(it = ratingsMap.begin(); it != ratingsMap.end(); ++it)
+  {
+    std::vector<bool> usedGreen(guess[0].length(),false);
+    switch(searchMode)
+    {
+      case 1:
+        total += ((it->second) * (it->second));
+        break;
+      case 3:
+        if((it->second) == 1)
+        {
+          total++;
+        }
+        break;
+      case 4:
+        if(total < (it->second))
+        {
+          total = (it->second);
+        }
+        break;
+      case 5:
+        total += (it->second) * std::log((it->second) / words.size()) / std::log(0.5);
+        break;
+    }
+  }
+  if(searchMode == 1 || searchMode == 5 || searchMode == 6)
+  {
+    total /= words.size();
+  }
+  return total;
+}
+
 void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string keyword, int fullRankingRequiredScore, std::vector<std::string> forceIncludePos, bool cont)
 {
   std::ofstream fout;
@@ -291,6 +343,9 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       fout.close();
     }
   }
+
+  bool intColorings = (words[0].size() <= 11 && searchMode != 6 && words[0].size() * (prefix.size() + setsize) <= 40);
+
   std::vector<std::string> prefixColorings = {};
   for(unsigned int i = 0; i < words.size(); i++)
   {
@@ -301,6 +356,22 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     }
     prefixColorings.push_back(prefixColoring);
   }
+  std::vector<unsigned long long int> prefixColorings2 = {};
+  if(intColorings)
+  {
+    unsigned long long int factor = std::pow(3,words[0].size());
+    for(unsigned int i = 0; i < words.size(); i++)
+    {
+      unsigned long long int prefixColor2 = 0;
+      for(unsigned int j = 0; j < prefix.size(); j++)
+      {
+        prefixColor2 *= factor;
+        prefixColor2 += grade2(prefix[j], words[i]);
+      }
+      prefixColorings2.push_back(prefixColor2);
+    }
+  }
+
   std::string prefixStarter = "";
   if(prefix.size())
   {
@@ -434,7 +505,15 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       if(stillGood)
       {
-        double total = rate(guessVec, words, searchMode, prefixColorings);
+        double total;
+        if(intColorings)
+        {
+          total = rateInts(guessVec, words, searchMode, prefixColorings2);
+        }
+        else
+        {
+          total = rate(guessVec, words, searchMode, prefixColorings);
+        }
         numberChecked++;
         if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
         {

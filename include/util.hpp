@@ -26,6 +26,7 @@ bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);
 int countDistinct(std::string s);
 
 std::string grade(std::string guess, std::string answer);
+unsigned long long int grade2(std::string guess, std::string answer);
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>& vec, size_t n);

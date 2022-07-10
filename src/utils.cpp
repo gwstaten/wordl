@@ -44,6 +44,39 @@ int countDistinct(std::string s)
   return m.size();
 }
 
+unsigned long long int positions[] = {1,3,9,27,81,243,729,2187,6561,19683,59049,177147,531441};
+
+unsigned long long int grade2(std::string guess, std::string answer)
+{
+  const unsigned int size = guess.length();
+  unsigned long long int out = 0;
+  std::vector<bool> usedAnswer(size,false);
+  for(unsigned int i = 0; i < size; i++)
+  {
+    if(guess[i] == answer.at(i))
+    {
+      out += 2 * positions[i];
+      usedAnswer[i] = true;
+    }
+  }
+  for(unsigned int guessSpot = 0; guessSpot < size; guessSpot++)
+  {
+    if((out / positions[guessSpot]) % 3 == 0)
+    {
+      bool stillSearching = true;
+      for(unsigned int answerSpot = 0; answerSpot < size && stillSearching; answerSpot++)
+      {
+        if(!usedAnswer[answerSpot] && guess[guessSpot] == answer[answerSpot])
+        {
+          out += positions[guessSpot];
+          usedAnswer[answerSpot] = true;
+          stillSearching = false;
+        }
+      }
+    }
+  }
+  return out;
+}
 
 std::string grade(std::string guess, std::string answer)
 {

@@ -318,9 +318,6 @@ int main(int argc, char* argv[])
     }
   }
   
-  std::sort(validWords.begin(), validWords.end());
-  std::sort(validWordss.begin(), validWordss.end());
-
   if(!searchMode)
   {
     std::cout << "Search mode (1 - 6)? ";

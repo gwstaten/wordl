@@ -134,12 +134,12 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   std::cout << std::endl;
 }
 
-double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode)
+double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<std::string> prefixColorings)
 {
   std::unordered_map<std::string, double> ratingsMap;
   for(unsigned int answer = 0; answer < words.size(); answer++)
   {
-    std::string total = "";
+    std::string total = prefixColorings[answer];
     for(unsigned int i = 0; i < guess.size(); i++)
     {
       total += grade(guess[i], words[answer]);
@@ -291,6 +291,27 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       fout.close();
     }
   }
+  std::vector<std::string> prefixColorings = {};
+  for(unsigned int i = 0; i < words.size(); i++)
+  {
+    std::string prefixColoring = "";
+    for(unsigned int j = 0; j < prefix.size(); j++)
+    {
+      prefixColoring += grade(prefix[j], words[i]);
+    }
+    prefixColorings.push_back(prefixColoring);
+  }
+  std::string prefixStarter = "";
+  for(unsigned int i = 0; i < prefix.size(); i++)
+  {
+    if(i)
+    {
+      prefixStarter += "-";
+    }
+    prefixStarter += prefix[i];
+  }
+  prefixStarter += "-";
+
   auto startTime = std::chrono::system_clock::now();
   for(unsigned int guess = 0; notdone; guess++)
   {
@@ -322,24 +343,8 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     }
     int toIncrement = setsize - 1;
     
-    std::vector<std::string> guessVec = prefix;
-    std::string comb;
-    if(prefix.size())
-    {
-      for(unsigned int i = 0; i < prefix.size(); i++)
-      {
-        if(i)
-        {
-          comb += "-";
-        }
-        comb += prefix[i];
-      }
-      comb += "+" + validWords[positions[0]];
-    }
-    else
-    {
-      comb = validWords[positions[0]];
-    }
+    std::vector<std::string> guessVec;
+    std::string comb = prefixStarter + validWords[positions[0]];
     guessVec.push_back(validWords[positions[0]]);
     std::string prior = comb;
     bool alpha = true;
@@ -426,7 +431,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
       if(stillGood)
       {
-        double total = rate(guessVec, words, searchMode);
+        double total = rate(guessVec, words, searchMode, prefixColorings);
         numberChecked++;
         if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
         {

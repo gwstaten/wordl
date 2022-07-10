@@ -401,6 +401,7 @@ int main(int argc, char* argv[])
           std::transform(word.begin(), word.end(), word.begin(), ::tolower);
           return word;
         });
+        std::vector<std::string> blank(valids.size(),"");
 
         if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0].length()))
         {
@@ -420,7 +421,7 @@ int main(int argc, char* argv[])
                     tempWordSet.push_back(wordSet[k]);
                   }
                 }
-                double score = rate(tempWordSet, valids, u);
+                double score = rate(tempWordSet, valids, u, blank);
                 if(!j || (score < bestScore && (u == 1 || u == 4)) || (score > bestScore && !(u == 1 || u == 4)))
                 {
                   bestScore = score;

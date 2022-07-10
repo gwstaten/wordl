@@ -44,6 +44,7 @@ int countDistinct(std::string s)
   return m.size();
 }
 
+
 std::string grade(std::string guess, std::string answer)
 {
   const unsigned int size = guess.length();
@@ -51,22 +52,22 @@ std::string grade(std::string guess, std::string answer)
   std::vector<bool> usedAnswer(size,false);
   for(unsigned int i = 0; i < size; i++)
   {
-    if(guess.at(i) == answer.at(i))
+    if(guess[i] == answer.at(i))
     {
-      output.at(i) = '2';
+      output[i] = '2';
       usedAnswer[i] = true;
     }
   }
   for(unsigned int guessSpot = 0; guessSpot < size; guessSpot++)
   {
-    if(output.at(guessSpot) == '0')
+    if(output[guessSpot] == '0')
     {
       bool stillSearching = true;
       for(unsigned int answerSpot = 0; answerSpot < size && stillSearching; answerSpot++)
       {
-        if(!usedAnswer[answerSpot] && guess.at(guessSpot) == answer.at(answerSpot))
+        if(!usedAnswer[answerSpot] && guess[guessSpot] == answer[answerSpot])
         {
-          output.at(guessSpot) = '1';
+          output[guessSpot] = '1';
           usedAnswer[answerSpot] = true;
           stillSearching = false;
         }
@@ -74,6 +75,7 @@ std::string grade(std::string guess, std::string answer)
     }
   }
   return output;
+}rn output;
 }
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter)

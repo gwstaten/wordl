@@ -57,7 +57,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
             {
               wordpos = 0;
             }
-            if((it->first).at(i) == '2' && !usedGreen[wordpos])
+            if((it->first)[i] == '2' && !usedGreen[wordpos])
             {
               usedGreen[wordpos] = true;
               total[searchMode] += (it->second);
@@ -184,7 +184,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
           {
             wordpos = 0;
           }
-          if((it->first).at(i) == '2' && !usedGreen[wordpos])
+          if((it->first)[i] == '2' && !usedGreen[wordpos])
           {
             usedGreen[wordpos] = true;
             total += (it->second);
@@ -302,15 +302,18 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     prefixColorings.push_back(prefixColoring);
   }
   std::string prefixStarter = "";
-  for(unsigned int i = 0; i < prefix.size(); i++)
+  if(prefix.size())
   {
-    if(i)
+    for(unsigned int i = 0; i < prefix.size(); i++)
     {
-      prefixStarter += "-";
+      if(i)
+      {
+        prefixStarter += "-";
+      }
+      prefixStarter += prefix[i];
     }
-    prefixStarter += prefix[i];
+    prefixStarter += "-";
   }
-  prefixStarter += "-";
 
   auto startTime = std::chrono::system_clock::now();
   for(unsigned int guess = 0; notdone; guess++)
@@ -382,10 +385,10 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
           std::string combNotUsed = comb;
           for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
           {
-            if(combNotUsed.find(forceInclude.at(i)) != std::string::npos)
+            if(combNotUsed.find(forceInclude[i]) != std::string::npos)
             {
               numOccured++;
-              combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
+              combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
             }
           }
           if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
@@ -423,10 +426,10 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       std::string combNotUsed = comb;
       for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
       {
-        stillGood = combNotUsed.find(forceInclude.at(i)) != std::string::npos;
+        stillGood = combNotUsed.find(forceInclude[i]) != std::string::npos;
         if(stillGood)
         {
-          combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
+          combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
         }
       }
       if(stillGood)
@@ -502,11 +505,11 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     bool stillGood = true;
     for(unsigned int j = 0; j < forceExclude.length() && stillGood; j++)
     {
-      stillGood = validWordList[i].find(forceExclude.at(j)) == std::string::npos;
+      stillGood = validWordList[i].find(forceExclude[j]) == std::string::npos;
     }
     for(unsigned int j = 0; j < forceExcludePos.size() && stillGood; j++)
     {
-      stillGood = forceExcludePos[j].find(validWordList[i].at(j)) == std::string::npos;
+      stillGood = forceExcludePos[j].find(validWordList[i][j]) == std::string::npos;
     }
     if(stillGood)
     {
@@ -514,10 +517,10 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
       int numOccured = 0;
       for(unsigned int i = 0; i < forceInclude.length(); i++)
       {
-        if(combNotUsed.find(forceInclude.at(i)) != std::string::npos)
+        if(combNotUsed.find(forceInclude[i]) != std::string::npos)
         {
           numOccured++;
-          combNotUsed.at(combNotUsed.find(forceInclude.at(i))) = '_';
+          combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
         }
       }
       stillGood = numOccured + ((setSize + prefix.size() - 1) * words[0].length()) >= forceInclude.length();

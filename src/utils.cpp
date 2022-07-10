@@ -75,7 +75,6 @@ std::string grade(std::string guess, std::string answer)
     }
   }
   return output;
-}rn output;
 }
 
 std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std::string, std::string> filter)

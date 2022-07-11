@@ -265,6 +265,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   unsigned int lastChanged = 0;
   unsigned long long int numberChecked = 0;
   bool forceIncludePosUsed = false;
+  unsigned long long int timeRan = 0;
   for(unsigned int i = 0; i < forceIncludePos.size(); i++)
   {
     if(forceIncludePos[i].size())
@@ -303,6 +304,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     lastWroteToFile = out.size();
     fin.close();
     fin.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
+    fin >> timeRan;
     fin >> numberChecked;
     for(unsigned int i = 0; i < positions.size(); i++)
     {
@@ -335,7 +337,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results");
       fout.close();
       fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
-      fout << "0";
+      fout << "0 0";
       for(int i = 0; i < setsize; i++)
       {
         fout << " 0";
@@ -395,7 +397,19 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
       {
         last = (int)diff.count() + threadNum;
-        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - has checked " << numberChecked << " sets that meet all filters - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
+        unsigned long long int timeRanCur = timeRan + diff.count();
+        std::string hour = std::to_string((int)(timeRanCur / 3600));
+        std::string minute = std::to_string((int)((timeRanCur % 3600) / 60));
+        if(minute.length() == 1)
+        {
+          minute = "0" + minute;
+        }
+        std::string second = std::to_string(timeRanCur % 60);
+        if(second.length() == 1)
+        {
+          second = "0" + second;
+        }
+        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - " << hour + ":" + minute + ":" + second << " - has checked " << numberChecked << " sets that meet all filters - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
         if(keyword.length())
         {
           fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
@@ -406,7 +420,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
           lastWroteToFile = out.size();
           fout.close();
           fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
-          fout << numberChecked;
+          fout << timeRan + (int)diff.count() << " " << numberChecked;
           for(int i = 0; i < setsize; i++)
           {
             fout << " " << positions[i];

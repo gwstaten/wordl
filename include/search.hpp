@@ -12,6 +12,7 @@ std::vector<std::string> filter(std::vector<std::string> wordList, std::pair<std
 std::vector<std::string> filterHM(std::vector<std::string> wordList, std::pair<std::string, std::string> filter);
 std::string grade(std::string guess, std::string answer);
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode);
+double rateInts(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<unsigned long long int> prefixColorings);
 void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist);
 
 std::vector<std::vector<std::string>> SplitVector(const std::vector<std::string>& vec, size_t n);

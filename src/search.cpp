@@ -420,7 +420,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     std::vector<std::string> guessVec;
     std::string comb = prefixStarter + validWords[positions[0]];
     guessVec.push_back(validWords[positions[0]]);
-    std::string prior = comb;
+    std::string prior = validWords[positions[0]];
     bool alpha = true;
     if(setsize > 1)
     {

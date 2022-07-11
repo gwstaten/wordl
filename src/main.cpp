@@ -409,8 +409,8 @@ int main(int argc, char* argv[])
           {
             for(unsigned int i = wordSet.size() - 1; i > 0; i--)
             {
-              double bestScore;
-              unsigned int bestToExclude;
+              double bestScore = 0;
+              unsigned int bestToExclude = 0;
               for(unsigned int j = 0; j <= i; j++)
               {
                 std::vector<std::string> tempWordSet;

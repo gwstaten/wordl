@@ -134,7 +134,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   std::cout << std::endl;
 }
 
-double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<std::string> prefixColorings)
+double rate(const std::vector<std::string> guess, const std::vector<std::string> words, int searchMode, const std::vector<std::string> prefixColorings)
 {
   std::unordered_map<std::string, double> ratingsMap;
   for(unsigned int answer = 0; answer < words.size(); answer++)
@@ -199,7 +199,7 @@ double rate(std::vector<std::string> guess, std::vector<std::string> words, int 
   return total;
 }
 
-double rateInts(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<unsigned long long int> prefixColorings)
+double rateInts(const std::vector<std::string> guess, const std::vector<std::string> words, int searchMode, const std::vector<unsigned long long int> prefixColorings)
 {
   unsigned long long int factor = std::pow(3,guess[0].size());
   std::unordered_map<unsigned long long int, double> ratingsMap;

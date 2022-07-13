@@ -665,25 +665,35 @@ int main(int argc, char* argv[])
                 }
               }
               state[state.size()-1]++;
-              if(state[state.size()-1] == validGuessesPossible.size())
+              if(state.size() > 1)
               {
-                bool stillCarrying = true;
-                unsigned int on = state.size();
-                for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
+                if(state[state.size()-1] == validGuessesPossible.size())
                 {
-                  on = i;
-                  state[i]++;
-                  state[i + 1] = 0;
-                  stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
-                  if(stillCarrying && i == 0)
+                  bool stillCarrying = true;
+                  unsigned int on = state.size();
+                  for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
                   {
-                    done = true;
-                    stillCarrying = false;
+                    on = i;
+                    state[i]++;
+                    state[i + 1] = 0;
+                    stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
+                    if(stillCarrying && i == 0)
+                    {
+                      done = true;
+                      stillCarrying = false;
+                    }
+                  }
+                  for(unsigned int j = on + 1; j < state.size(); j++)
+                  {
+                    state[j] = state[j - 1] + 1;
                   }
                 }
-                for(unsigned int j = on + 1; j < state.size(); j++)
+              }
+              else
+              {
+                if(state[0] == validGuessesPossible.size())
                 {
-                  state[j] = state[j - 1] + 1;
+                  done = true;
                 }
               }
             }

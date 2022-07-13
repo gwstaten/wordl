@@ -486,6 +486,128 @@ int main(int argc, char* argv[])
           std::cin.ignore();
         }
       }
+      else if(userInput == 'p' || command == cmdl::NAMES::RATE_CMD)
+      {
+        std::vector<std::string> wordSet;
+        if(command == "")
+        {
+          std::cout << std::endl << "Words to find permutations of (list separated by spaces)? ";
+        }
+        else if(commandWords.size() > 0)
+        {
+          wordSet = commandWords;
+
+          for(const std::string& word : wordSet)
+          {
+            if(word.length() != valids[0].length())
+            {
+              std::cout << "Invalid word length of " << word.length() << ": '" << word << "'" << std::endl;
+              return 0;
+            }
+          }
+        }
+        else
+        {
+          std::cout << "No inputted words" << std::endl;
+          return 0;
+        }
+
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+          std::transform(word.begin(), word.end(), word.begin(), ::tolower);
+          return word;
+        });
+
+        if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0].length()))
+        {
+          bool anyFound = false;
+          std::vector<std::string> letterPos(wordSet[0].length(), "");
+          std::vector<unsigned int> state = {};
+          for(unsigned int i = 0; i < wordSet.size(); i++)
+          {
+            state.push_back(i);
+            for(unsigned int j = 0; j < wordSet[0].length(); j++)
+            {
+              letterPos[j] += wordSet[i][j];
+            }
+          }
+          std::vector<std::string> validGuessesPossible = {};
+          for(unsigned int i = 0; i < validGuesses.size(); i++)
+          {
+            bool stillGood = true;
+            for(unsigned int j = 0; j < validGuesses[0].length() && stillGood; j++)
+            {
+              stillGood = (letterPos[j].find(validGuesses[i][j]) != std::string::npos);
+            }
+            if(stillGood)
+            {
+              validGuessesPossible.push_back(validGuesses[i]);
+            }
+          }
+          bool done = !validGuessesPossible.size();
+          while(!done)
+          {
+            auto tempLetterPos = letterPos;
+            bool good = true;
+            for(unsigned int i = 0; i < wordSet.size() && good; i++)
+            {
+              for(unsigned int j = 0; j < wordSet[0].size() && good; j++)
+              {
+                auto pos = tempLetterPos[j].find(validGuessesPossible[state[i]][j]);
+                if(pos == std::string::npos)
+                {
+                  good = false;
+                }
+                else
+                {
+                  tempLetterPos[j][pos] = '_';
+                }
+              }
+            }
+            if(good)
+            {
+              std::cout << validGuessesPossible[state[0]];
+              for(unsigned int i = 1; i < wordSet.size(); i++)
+              {
+                std::cout << "-" << validGuessesPossible[state[i]];
+              }
+              std::cout << std::endl;
+              anyFound = true;
+            }
+            state[state.size()-1]++;
+            if(state[state.size()-1] == validGuessesPossible.size())
+            {
+              bool stillCarrying = true;
+              unsigned int on = state.size();
+              for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
+              {
+                on = i;
+                state[i]++;
+                state[i + 1] = 0;
+                stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
+                if(stillCarrying && i == 0)
+                {
+                  done = true;
+                  stillCarrying = false;
+                }
+              }
+              for(unsigned int j = on + 1; j < state.size(); j++)
+              {
+                state[j] = state[j - 1] + 1;
+              }
+            }
+          }
+          if(!anyFound)
+          {
+            std::cout << "no matching sets found" << std::endl;
+          }
+          std::cout << std::endl;
+        }
+        else
+        {
+          std::cout << "invalid word lengths" << std::endl << std::endl;
+          std::cin.ignore();
+        }
+      }
       else if(userInput == 's')
       {
         char usePrefix {};

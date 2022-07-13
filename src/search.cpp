@@ -579,7 +579,20 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   }
   if(updatePrintFrequency)
   {
-    std::cout << "(Thread " << threadNum << ") Finished! " << numberChecked << " sets were checked!" << std::endl;
+    std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
+    unsigned long long int timeRanCur = timeRan + diff.count();
+    std::string hour = std::to_string((int)(timeRanCur / 3600));
+    std::string minute = std::to_string((int)((timeRanCur % 3600) / 60));
+    if(minute.length() == 1)
+    {
+      minute = "0" + minute;
+    }
+    std::string second = std::to_string(timeRanCur % 60);
+    if(second.length() == 1)
+    {
+      second = "0" + second;
+    }
+    std::cout << "(Thread " << threadNum << ") Finished! " << numberChecked << " sets were checked! " << hour << ":" << minute << ":" << second << std::endl;
   }
 }
 

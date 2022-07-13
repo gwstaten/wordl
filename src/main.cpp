@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
   int unique = 0;
   bool newBestPrints = false;
   bool answersOnlyFirst = true;
+  bool preciseSearchTimer = false;
   int updatePrintFrequency = 0;
   std::string forceInclude = "";
   std::string forceExclude = "";
@@ -521,15 +522,36 @@ int main(int argc, char* argv[])
         {
           bool anyFound = false;
           std::vector<std::string> letterPos(wordSet[0].length(), "");
-          std::vector<unsigned int> state = {};
+          std::string comb = "";
           for(unsigned int i = 0; i < wordSet.size(); i++)
           {
-            state.push_back(i);
+            comb += wordSet[i];
             for(unsigned int j = 0; j < wordSet[0].length(); j++)
             {
               letterPos[j] += wordSet[i][j];
             }
           }
+          std::unordered_map<char, int> m;
+          for(unsigned int i = 0; i < comb.length(); i++)
+          {
+            m[comb[i]]++;
+          }
+
+          std::unordered_map<char, int> forceMults;
+          std::unordered_map<char, int>::iterator it;
+          for(it = m.begin(); it != m.end(); ++it)
+          {
+            if(it->second > 1)
+            {
+              std::cout << "How many of the " << it->second << " " << it->first << "'s need to be in the same word? ";
+              getline(std::cin, temp);
+              if(std::stoi(temp) > 1)
+              {
+                forceMults[it->first] = std::stoi(temp);
+              }
+            }
+          }
+
           std::vector<std::string> validGuessesPossible = {};
           for(unsigned int i = 0; i < validGuesses.size(); i++)
           {
@@ -543,64 +565,138 @@ int main(int argc, char* argv[])
               validGuessesPossible.push_back(validGuesses[i]);
             }
           }
-          bool done = !validGuessesPossible.size();
-          while(!done)
+          int notIncluded = -1;
+          while(!anyFound)
           {
-            auto tempLetterPos = letterPos;
-            bool good = true;
-            for(unsigned int i = 0; i < wordSet.size() && good; i++)
+            notIncluded++;
+            std::vector<unsigned int> state = {};
+            for(unsigned int i = 0; i < wordSet.size() - notIncluded; i++)
             {
-              for(unsigned int j = 0; j < wordSet[0].size() && good; j++)
+              state.push_back(i);
+            }
+            bool done = !validGuessesPossible.size();
+            while(!done)
+            {
+              auto tempLetterPos = letterPos;
+              bool good = true;
+              for(unsigned int i = 0; i < (wordSet.size() - notIncluded) && good; i++)
               {
-                auto pos = tempLetterPos[j].find(validGuessesPossible[state[i]][j]);
-                if(pos == std::string::npos)
+                for(unsigned int j = 0; j < wordSet[0].size() && good; j++)
                 {
-                  good = false;
+                  auto pos = tempLetterPos[j].find(validGuessesPossible[state[i]][j]);
+                  if(pos == std::string::npos)
+                  {
+                    good = false;
+                  }
+                  else
+                  {
+                    tempLetterPos[j][pos] = '_';
+                  }
                 }
-                else
+              }
+              if(good)
+              {
+                if(forceMults.size())
                 {
-                  tempLetterPos[j][pos] = '_';
+                  std::vector<std::string> setChunks = {};
+                  for(unsigned int i = 0; i < (wordSet.size() - notIncluded); i++)
+                  {
+                    setChunks.push_back(validGuessesPossible[state[i]]);
+                  }
+                  if(notIncluded)
+                  {
+                    std::string tempChunk = "";
+                    for(unsigned int i = 0; i < tempLetterPos.size(); i++)
+                    {
+                      for(unsigned int j = 0; j < tempLetterPos[i].length(); j++)
+                      {
+                        if(tempLetterPos[i][j] != '_')
+                        {
+                          tempChunk += tempLetterPos[i][j];
+                        }
+                      }
+                    }
+                    setChunks.push_back(tempChunk);
+                  }
+                  std::unordered_map<char, int>::iterator it;
+                  for(it = forceMults.begin(); it != forceMults.end() && good; ++it)
+                  {
+                    bool found = false;
+                    for(unsigned int i = 0; i < setChunks.size() && !found; i++)
+                    {
+                      std::unordered_map<char, int> m;
+                      for(unsigned int j = 0; j < setChunks[i].length(); j++)
+                      {
+                        m[setChunks[i][j]]++;
+                      }
+                      found = m[it->first] >= it->second;
+                    }
+                    if(!found)
+                    {
+                      good = false;
+                    }
+                  }
+                }
+                if(good)
+                {
+                  std::cout << validGuessesPossible[state[0]];
+                  for(unsigned int i = 1; i < (wordSet.size() - notIncluded); i++)
+                  {
+                    std::cout << "-" << validGuessesPossible[state[i]];
+                  }
+                  if(notIncluded)
+                  {
+                    std::cout << "-";
+                    for(unsigned int i = 0; i < tempLetterPos.size(); i++)
+                    {
+                      std::cout << "(";
+                      for(unsigned int j = 0; j < tempLetterPos[i].length(); j++)
+                      {
+                        if(tempLetterPos[i][j] != '_')
+                        {
+                          std::cout << tempLetterPos[i][j];
+                        }
+                      }
+                      std::cout << ")";
+                    }
+                  }
+                  std::cout << std::endl;
+                  anyFound = true;
+                }
+              }
+              state[state.size()-1]++;
+              if(state[state.size()-1] == validGuessesPossible.size())
+              {
+                bool stillCarrying = true;
+                unsigned int on = state.size();
+                for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
+                {
+                  on = i;
+                  state[i]++;
+                  state[i + 1] = 0;
+                  stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
+                  if(stillCarrying && i == 0)
+                  {
+                    done = true;
+                    stillCarrying = false;
+                  }
+                }
+                for(unsigned int j = on + 1; j < state.size(); j++)
+                {
+                  state[j] = state[j - 1] + 1;
                 }
               }
             }
-            if(good)
+            if(!anyFound)
             {
-              std::cout << validGuessesPossible[state[0]];
-              for(unsigned int i = 1; i < wordSet.size(); i++)
+              std::cout << "no matching sets found with " << wordSet.size() - notIncluded << " real words" << std::endl;
+              if(wordSet.size() - notIncluded == 1)
               {
-                std::cout << "-" << validGuessesPossible[state[i]];
-              }
-              std::cout << std::endl;
-              anyFound = true;
-            }
-            state[state.size()-1]++;
-            if(state[state.size()-1] == validGuessesPossible.size())
-            {
-              bool stillCarrying = true;
-              unsigned int on = state.size();
-              for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
-              {
-                on = i;
-                state[i]++;
-                state[i + 1] = 0;
-                stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
-                if(stillCarrying && i == 0)
-                {
-                  done = true;
-                  stillCarrying = false;
-                }
-              }
-              for(unsigned int j = on + 1; j < state.size(); j++)
-              {
-                state[j] = state[j - 1] + 1;
+                anyFound = true;
               }
             }
+            std::cout << std::endl;
           }
-          if(!anyFound)
-          {
-            std::cout << "no matching sets found" << std::endl;
-          }
-          std::cout << std::endl;
         }
         else
         {
@@ -628,6 +724,10 @@ int main(int argc, char* argv[])
           std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
           return 0;
         }
+
+        std::cout << "Precise search timer (y / n)? ";
+        getline(std::cin, temp);
+        preciseSearchTimer = std::tolower(temp.at(0)) == 'y';
 
         std::cout << "Do answers only search first (y / n)? ";
         getline(std::cin, temp);
@@ -810,7 +910,13 @@ int main(int argc, char* argv[])
       }
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
+        auto start = std::chrono::high_resolution_clock::now();
         findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, forceIncludePos, answersOnlyFirst, keyword);
+        if(preciseSearchTimer)
+        {
+          auto finish = std::chrono::high_resolution_clock::now();
+          std::cout << (double)std::chrono::duration_cast<std::chrono::nanoseconds>(finish-start).count() / 1000000000 << "s\n\n";
+        }
 
         if(command != "")
         {

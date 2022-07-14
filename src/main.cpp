@@ -551,6 +551,31 @@ int main(int argc, char* argv[])
               }
             }
           }
+          std::string freeLetters = "";
+
+          std::cout << "How many letters are able to change positions? " ;
+          getline(std::cin, temp);
+          unsigned int numChangeable = std::stoi(temp);
+          for(unsigned int i = 0; i < numChangeable; i++)
+          {
+            char letter = '.';
+            int pos = 0;
+            auto location = std::string::npos;
+            while(location == std::string::npos)
+            {
+              std::cout << "Letter and position (example e4)? ";
+              getline(std::cin, temp);
+              letter = temp[0];
+              pos = std::stoi(temp.substr(1));
+              location = letterPos[pos-1].find(letter);
+              if(location == std::string::npos)
+              {
+                std::cout << "That letter + position combo was not found, try again" << std::endl;
+              }
+            }
+            letterPos[pos-1][location] = '*';
+            freeLetters += letter;
+          }
 
           std::vector<std::string> validGuessesPossible = {};
           for(unsigned int i = 0; i < validGuesses.size(); i++)
@@ -558,7 +583,7 @@ int main(int argc, char* argv[])
             bool stillGood = true;
             for(unsigned int j = 0; j < validGuesses[0].length() && stillGood; j++)
             {
-              stillGood = (letterPos[j].find(validGuesses[i][j]) != std::string::npos);
+              stillGood = (letterPos[j].find(validGuesses[i][j]) != std::string::npos || freeLetters.find(validGuesses[i][j]) != std::string::npos);
             }
             if(stillGood)
             {
@@ -578,6 +603,7 @@ int main(int argc, char* argv[])
             while(!done)
             {
               auto tempLetterPos = letterPos;
+              auto tempFreeLetters = freeLetters;
               bool good = true;
               for(unsigned int i = 0; i < (wordSet.size() - notIncluded) && good; i++)
               {
@@ -586,7 +612,17 @@ int main(int argc, char* argv[])
                   auto pos = tempLetterPos[j].find(validGuessesPossible[state[i]][j]);
                   if(pos == std::string::npos)
                   {
-                    good = false;
+                    pos = tempLetterPos[j].find('*');
+                    auto pos2 = tempFreeLetters.find(validGuessesPossible[state[i]][j]);
+                    if(pos != std::string::npos && pos2 != std::string::npos)
+                    {
+                      tempLetterPos[j][pos] = '_';
+                      tempFreeLetters[pos2] = '_';
+                    }
+                    else
+                    {
+                      good = false;
+                    }
                   }
                   else
                   {
@@ -629,7 +665,12 @@ int main(int argc, char* argv[])
                       {
                         m[setChunks[i][j]]++;
                       }
-                      found = m[it->first] >= it->second;
+                      std::unordered_map<char, int> m2;
+                      for(unsigned int j = 0; j < tempFreeLetters.length(); j++)
+                      {
+                        m2[tempFreeLetters[j]]++;
+                      }
+                      found = m[it->first] + std::min(m['*'],m2[it->first]) >= it->second;
                     }
                     if(!found)
                     {
@@ -659,6 +700,18 @@ int main(int argc, char* argv[])
                       }
                       std::cout << ")";
                     }
+                  }
+                  if(tempFreeLetters.length())
+                  {
+                    std::cout << "[";
+                    for(unsigned int i = 0; i < tempFreeLetters.length(); i++)
+                    {
+                      if(tempFreeLetters[i] != '_')
+                      {
+                        std::cout << tempFreeLetters[i];
+                      }
+                    }
+                    std::cout << "]";
                   }
                   std::cout << std::endl;
                   anyFound = true;

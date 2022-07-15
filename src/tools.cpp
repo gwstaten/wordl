@@ -31,7 +31,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
   std::unordered_map<char, int>::iterator it;
   for(it = m.begin(); it != m.end(); ++it)
   {
-    if(it->second > 1)
+    if(it->second > 1 && it->first != '?')
     {
       std::cout << "How many of the " << it->second << " " << it->first << "'s need to be in the same word? ";
       getline(std::cin, temp);
@@ -42,6 +42,8 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
     }
   }
   std::string freeLetters = "";
+
+  unsigned int numAnyLet = m['?'];
 
   std::cout << "How many letters are able to change positions? " ;
   getline(std::cin, temp);
@@ -71,9 +73,15 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
   for(unsigned int i = 0; i < validGuesses.size(); i++)
   {
     bool stillGood = true;
+    unsigned int numAnyLetTemp = numAnyLet;
     for(unsigned int j = 0; j < validGuesses[0].length() && stillGood; j++)
     {
       stillGood = (letterPos[j].find(validGuesses[i][j]) != std::string::npos || freeLetters.find(validGuesses[i][j]) != std::string::npos);
+      if(stillGood == false && numAnyLetTemp > 0)
+      {
+        stillGood = true;
+        numAnyLetTemp--;
+      }
     }
     if(stillGood)
     {
@@ -95,6 +103,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
       unsigned int toIncrement = state.size()-1;
       auto tempLetterPos = letterPos;
       auto tempFreeLetters = freeLetters;
+      auto numAnyLetTemp = numAnyLet;
       bool good = true;
       for(unsigned int i = 0; i < (wordSet.size() - notIncluded) && good; i++)
       {
@@ -109,6 +118,10 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
             {
               tempLetterPos[j][pos] = '_';
               tempFreeLetters[pos2] = '_';
+            }
+            else if(numAnyLetTemp > 0)
+            {
+              numAnyLetTemp--;
             }
             else
             {
@@ -185,7 +198,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
               std::cout << "(";
               for(unsigned int j = 0; j < tempLetterPos[i].length(); j++)
               {
-                if(tempLetterPos[i][j] != '_')
+                if(tempLetterPos[i][j] != '_' && tempLetterPos[i][j] != '?')
                 {
                   std::cout << tempLetterPos[i][j];
                 }

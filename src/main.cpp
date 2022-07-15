@@ -36,6 +36,8 @@ int main(int argc, char* argv[])
 
   std::string command {};
 
+  unsigned int rsetSize = 0;
+
   for(int pos = 1; pos < argc; ++pos)
   {
     std::string arg = std::string(argv[pos]);
@@ -158,6 +160,10 @@ int main(int argc, char* argv[])
 
           wordlistStream = std::ifstream("wordlists/" + wordlist);
         }
+        else if(parsearg.first == cmdl::NAMES::SSIZE_ARG)
+        {
+          rsetSize = stoi(parsearg.second);
+        }
         else
         {
           std::cout << "Unknown argument: '" << parsearg.first << "'" << std::endl;
@@ -182,12 +188,12 @@ int main(int argc, char* argv[])
           command = arg; 
         }
       }
-      else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD)
+      else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD || (command == cmdl::NAMES::RATE_CMD && !(rsetSize == 0 || commandWords.size() != rsetSize)))
       {
         commandGuesses.push_back({arg, argv[pos + 1]});
         pos++;
       }
-      else if(command == cmdl::NAMES::RATE_CMD || command == cmdl::NAMES::ORDER_CMD)
+      else if((command == cmdl::NAMES::RATE_CMD && (rsetSize == 0 || commandWords.size() < rsetSize)) || command == cmdl::NAMES::ORDER_CMD)
       {
         commandWords.push_back(arg);
       }
@@ -415,7 +421,7 @@ int main(int argc, char* argv[])
           std::cin.ignore();
         }
       }
-      else if(userInput == 'a' || command == cmdl::NAMES::RATE_CMD)
+      else if(userInput == 'a' || (command == cmdl::NAMES::RATE_CMD && commandGuesses.size() == 0))
       {
         std::vector<std::string> wordSet;
         if(command == "")
@@ -425,6 +431,7 @@ int main(int argc, char* argv[])
         else if(commandWords.size() > 0)
         {
           wordSet = commandWords;
+          commandWords = {};
 
           for(const std::string& word : wordSet)
           {
@@ -456,7 +463,7 @@ int main(int argc, char* argv[])
           std::cin.ignore();
         }
       }
-      else if(userInput == 'p' || command == cmdl::NAMES::RATE_CMD)
+      else if(userInput == 'p')
       {
         std::vector<std::string> wordSet;
         if(command == "")
@@ -729,7 +736,7 @@ int main(int argc, char* argv[])
           return 0;
         }
       }
-      else if(userInput == 'g' || ((command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::FILTER_CMD || command == cmdl::NAMES::LIST_CMD) && commandGuesses.size() > 0))
+      else if(userInput == 'g' || ((command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::FILTER_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::RATE_CMD) && commandGuesses.size() > 0))
       {
         std::string guess;
         if(command == "")
@@ -829,7 +836,7 @@ int main(int argc, char* argv[])
         std::cout << std::endl << "Unknown command: '" << userInput << "'" << std::endl << std::endl;
       }
 
-      if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0)
+      if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0 && commandWords.size() == 0)
       {
         return 0;
       }

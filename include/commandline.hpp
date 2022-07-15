@@ -15,6 +15,7 @@ namespace cmdl {
       const inline static std::string ULETTER_ARG = "uletter";
       const inline static std::string UFILTERBY_ARG = "ufilterby";
       const inline static std::string DEFAULT_ARG = "default";
+      const inline static std::string SSIZE_ARG = "setsize";
       const inline static std::string FINDBEST_CMD = "findbest";
       const inline static std::string LIST_CMD = "list";
       const inline static std::string RATE_CMD = "rate";

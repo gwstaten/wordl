@@ -1,7 +1,7 @@
-#include "util.hpp"
-
 #ifndef _COMMANDLINE_HPP_
 #define _COMMANDLINE_HPP_
+
+#include "util.hpp"
 
 namespace cmdl {
   class NAMES {

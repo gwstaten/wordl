@@ -1,4 +1,5 @@
 #include "tools.hpp"
+#include "search.hpp"
 
 void permute(std::vector<std::string> wordSet, std::vector<std::string> validGuesses)
 {
@@ -243,4 +244,42 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
     }
     std::cout << std::endl;
   }
+}
+
+void order(std::vector<std::string> wordSet, std::vector<std::string> valids)
+{
+  std::vector<std::string> blank(valids.size(),"");
+  for(unsigned int u = 1; u <= 6; u++)
+  {
+    for(unsigned int i = wordSet.size() - 1; i > 0; i--)
+    {
+      double bestScore = 0;
+      unsigned int bestToExclude = 0;
+      for(unsigned int j = 0; j <= i; j++)
+      {
+        std::vector<std::string> tempWordSet;
+        for(unsigned int k = 0; k <= i; k++)
+        {
+          if(k != j)
+          {
+            tempWordSet.push_back(wordSet[k]);
+          }
+        }
+        double score = rate(tempWordSet, valids, u, blank);
+        if(!j || (score < bestScore && (u == 1 || u == 4)) || (score > bestScore && !(u == 1 || u == 4)))
+        {
+          bestScore = score;
+          bestToExclude = j;
+        }
+      }
+      std::swap(wordSet[bestToExclude],wordSet[i]);
+    }
+    std::cout << "Optimal ordering by search mode " << u << ": ";
+    for(unsigned int i = 0; i < wordSet.size(); i++)
+    {
+      std::cout << wordSet[i] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
 }

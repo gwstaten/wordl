@@ -9,4 +9,5 @@
 #include "util.hpp"
 
 void permute(std::vector<std::string> wordSet, std::vector<std::string> validGuesses);
+void order(std::vector<std::string> wordSet, std::vector<std::string> valids);
 #endif

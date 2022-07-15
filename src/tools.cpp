@@ -86,6 +86,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
     bool done = !validGuessesPossible.size();
     while(!done)
     {
+      unsigned int toIncrement = state.size()-1;
       auto tempLetterPos = letterPos;
       auto tempFreeLetters = freeLetters;
       bool good = true;
@@ -106,6 +107,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
             else
             {
               good = false;
+              toIncrement = i;
             }
           }
           else
@@ -201,28 +203,35 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
           anyFound = true;
         }
       }
-      state[state.size()-1]++;
+      state[toIncrement]++;
       if(state.size() > 1)
       {
-        if(state[state.size()-1] == validGuessesPossible.size())
+        if(state[toIncrement] == validGuessesPossible.size())
         {
-          bool stillCarrying = true;
-          unsigned int on = state.size();
-          for(unsigned int i = state.size()-2; i >= 0 && stillCarrying; i--)
+          if(toIncrement == 0)
           {
-            on = i;
-            state[i]++;
-            state[i + 1] = 0;
-            stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
-            if(stillCarrying && i == 0)
-            {
-              done = true;
-              stillCarrying = false;
-            }
+            done = true;
           }
-          for(unsigned int j = on + 1; j < state.size(); j++)
+          else
           {
-            state[j] = state[j - 1] + 1;
+            bool stillCarrying = true;
+            unsigned int on = state.size();
+            for(unsigned int i = toIncrement - 1; i >= 0 && stillCarrying; i--)
+            {
+              on = i;
+              state[i]++;
+              state[i + 1] = 0;
+              stillCarrying = (state[i] == validGuessesPossible.size() || state[i] + (state.size() - i - 1) >= validGuessesPossible.size());
+              if(stillCarrying && i == 0)
+              {
+                done = true;
+                stillCarrying = false;
+              }
+            }
+            for(unsigned int j = on + 1; j < state.size(); j++)
+            {
+              state[j] = state[j - 1] + 1;
+            }
           }
         }
       }

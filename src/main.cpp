@@ -7,6 +7,7 @@
 #include "search.hpp"
 #include "commandline.hpp"
 #include "tools.hpp"
+#include "rate.hpp"
 
 int main(int argc, char* argv[])
 {

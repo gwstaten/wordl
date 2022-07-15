@@ -5,6 +5,7 @@
  */
 #include "tools.hpp"
 #include "search.hpp"
+#include "rate.hpp"
 
 void permute(std::vector<std::string> wordSet, std::vector<std::string> validGuesses)
 {

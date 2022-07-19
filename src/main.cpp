@@ -836,7 +836,7 @@ int main(int argc, char* argv[])
         std::cout << std::endl << "Unknown command: '" << userInput << "'" << std::endl << std::endl;
       }
 
-      if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0 && commandWords.size() == 0)
+      if(command != "" && std::find(cmdl::moreLoops.begin(), cmdl::moreLoops.end(), command) == cmdl::moreLoops.end() && commandGuesses.size() == 0 && (commandWords.size() == 0 || command == cmdl::NAMES::ORDER_CMD))
       {
         return 0;
       }

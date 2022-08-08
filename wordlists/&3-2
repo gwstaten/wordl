@@ -30,6 +30,7 @@ ain
 air
 ais
 ait
+aji
 aka
 ake
 ala
@@ -40,7 +41,9 @@ all
 alp
 als
 alt
+alu
 ama
+ame
 ami
 amp
 amu
@@ -49,6 +52,7 @@ and
 ane
 ani
 ann
+ans
 ant
 any
 ape
@@ -70,6 +74,7 @@ ask
 asp
 ass
 ate
+ats
 att
 aua
 aue
@@ -80,6 +85,7 @@ ave
 avo
 awa
 awe
+awk
 awl
 awn
 axe
@@ -90,11 +96,13 @@ azo
 baa
 bac
 bad
+bae
 bag
 bah
 bal
 bam
 ban
+bao
 bap
 bar
 bas
@@ -151,7 +159,9 @@ bys
 caa
 cab
 cad
+caf
 cag
+cal
 cam
 can
 cap
@@ -216,6 +226,7 @@ deg
 dei
 del
 den
+dep
 dev
 dew
 dex
@@ -247,6 +258,7 @@ dor
 dos
 dot
 dow
+dox
 doy
 dry
 dso
@@ -256,6 +268,7 @@ due
 dug
 duh
 dui
+dum
 dun
 duo
 dup
@@ -276,6 +289,7 @@ eds
 eek
 eel
 een
+eew
 eff
 efs
 eft
@@ -305,6 +319,7 @@ ere
 erf
 erg
 erk
+erm
 ern
 err
 ers
@@ -364,6 +379,7 @@ foe
 fog
 foh
 fon
+foo
 fop
 for
 fou
@@ -382,6 +398,7 @@ gab
 gad
 gae
 gag
+gak
 gal
 gam
 gan
@@ -390,6 +407,7 @@ gar
 gas
 gat
 gau
+gaw
 gay
 ged
 gee
@@ -397,6 +415,7 @@ gel
 gem
 gen
 geo
+ger
 get
 gey
 ghi
@@ -424,6 +443,7 @@ got
 gov
 gox
 goy
+grr
 gub
 gue
 gul
@@ -509,6 +529,7 @@ igg
 ilk
 ill
 imp
+ing
 ink
 inn
 ins
@@ -644,6 +665,7 @@ loy
 lud
 lug
 lum
+lun
 lur
 luv
 lux
@@ -669,6 +691,7 @@ may
 med
 mee
 meg
+meh
 mel
 mem
 men
@@ -687,6 +710,7 @@ mir
 mis
 mix
 miz
+mmm
 mna
 moa
 mob
@@ -724,6 +748,7 @@ nan
 nap
 nas
 nat
+nav
 naw
 nay
 neb
@@ -759,11 +784,13 @@ nox
 noy
 nth
 nub
+nug
 nun
 nur
 nus
 nut
 nye
+nym
 nys
 oaf
 oak
@@ -788,11 +815,13 @@ oho
 ohs
 oik
 oil
+ois
 oka
 oke
 old
 ole
 olm
+oma
 oms
 one
 ono
@@ -806,6 +835,7 @@ oop
 oor
 oos
 oot
+opa
 ope
 ops
 opt
@@ -815,6 +845,7 @@ orc
 ord
 ore
 orf
+org
 ors
 ort
 ose
@@ -836,6 +867,7 @@ oys
 pac
 pad
 pah
+pak
 pal
 pam
 pan
@@ -853,6 +885,7 @@ ped
 pee
 peg
 peh
+pel
 pen
 pep
 per
@@ -904,10 +937,12 @@ pur
 pus
 put
 puy
+pwn
 pya
 pye
 pyx
 qat
+qin
 qis
 qua
 rad
@@ -920,6 +955,7 @@ ran
 rap
 ras
 rat
+rav
 raw
 rax
 ray
@@ -972,6 +1008,7 @@ run
 rut
 rya
 rye
+ryu
 sab
 sac
 sad
@@ -1000,6 +1037,7 @@ sel
 sen
 ser
 set
+sev
 sew
 sex
 sey
@@ -1007,10 +1045,12 @@ sez
 sha
 she
 shh
+sho
 shy
 sib
 sic
 sif
+sig
 sik
 sim
 sin
@@ -1041,6 +1081,7 @@ sov
 sow
 sox
 soy
+soz
 spa
 spy
 sri
@@ -1048,6 +1089,7 @@ sty
 sub
 sud
 sue
+sug
 sui
 suk
 sum
@@ -1097,12 +1139,14 @@ tic
 tid
 tie
 tig
+tik
 til
 tin
 tip
 tis
 tit
 tix
+tiz
 toc
 tod
 toe
@@ -1139,8 +1183,10 @@ ugs
 uke
 ule
 ulu
+ume
 umm
 ump
+ums
 umu
 uni
 uns
@@ -1167,6 +1213,7 @@ vat
 vau
 vav
 vaw
+vax
 vee
 veg
 vet
@@ -1180,7 +1227,9 @@ vin
 vis
 vly
 voe
+vog
 vol
+vom
 vor
 vow
 vox
@@ -1199,6 +1248,7 @@ wat
 waw
 wax
 way
+waz
 web
 wed
 wee
@@ -1229,8 +1279,10 @@ wox
 wry
 wud
 wus
+wuz
 wye
 wyn
+xed
 xis
 yad
 yae
@@ -1240,16 +1292,19 @@ yak
 yam
 yap
 yar
+yas
 yaw
 yay
 yea
 yeh
 yen
 yep
+yer
 yes
 yet
 yew
 yex
+yez
 ygo
 yid
 yin
@@ -1259,7 +1314,6 @@ yod
 yok
 yom
 yon
-yos
 you
 yow
 yug
@@ -1276,6 +1330,7 @@ zed
 zee
 zek
 zel
+zen
 zep
 zex
 zho

@@ -309,6 +309,42 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? 
+```
+
+You then enter a y or n for whether you want a precise timer for how long the search takes, in this case I just hit n because I didn't need the timer. (Note that precise search timer option will not be saved in save files)
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes2
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
+
+Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? 
+```
+Next you enter a y or n for whether you want the code to search for sets that only use answers first so that you know what the best option is from the answers. In this case the search won't be taking that long, so I entered y.
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes2
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
+
+Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)?
 ```
 
@@ -326,6 +362,8 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)?
 ```
@@ -344,9 +382,33 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
-Set size?
+Require score cutoff for considered sets (y / n)?
+```
+
+Next you tell the program whether there should be a score cutoff for the sets that are stored / considered. In this case the search is fairly short so we won't be running into any issues without a cutoff, so `n` was entered. (Note that if `y` is entered, another prompt will show up to give the cutoff score, this cutoff score is in terms of whatever search mode the search is being run in)
+
+``bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes2
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
+Set size? 
 ```
 
 Next you enter the size of the set you will be searching for. In this case, 2.
@@ -363,8 +425,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 
 ```
@@ -383,8 +448,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)?
@@ -405,8 +473,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
@@ -428,8 +499,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
@@ -439,6 +513,9 @@ Update print frequency (0 for no update prints)?
 ```
 
 Now you enter the how frequently during the search the code should print an update. This number is given in seconds. If you don't want it to output these prints you should put `0`. I will do this for this search because it won't take a super long time.
+
+(Note, if a value is given, you will be given one or two more prompts. The first asks if you would like to store updates for later continuation, this is recommended for convenience for longer searches, however it will slightly slow the search down due to updating the saved files at every update print. If you select `y` for this option you will be given yet another prompt where you give a keyword for the search)
+(To pause a search with the store updates for later continuation option on simply shut the window running the search, then when the program is run again later, it will notice the save files, and prompt you if you would like to continue a save search)
 
 ```bash
 $ ./wordl
@@ -452,8 +529,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
@@ -479,8 +559,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 
@@ -488,6 +571,69 @@ Num of required unique for each step (0 for no requirement)?
 New best prints (y / n)? y
 Update print frequency (0 for no update prints)? 0
 Forced include letters (y / n)? n
+Forced exclude letters (y / n)? 
+```
+
+Next you must enter if you would like to force exclude any letters from the search. This option will have the same secondary prompt as the force include letters option. (Note, this filter is applied to the wordlist before the search begins whereas the include letters option is applied at runtime when considering if a found set is valid or not.)
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)? 
+5
+New best prints (y / n)? y
+Update print frequency (0 for no update prints)? 0
+Forced include letters (y / n)? n
+Forced exclude letters (y / n)? n
+Forced include letter positions (y / n)?
+```
+
+You are now prompted if you would like to force include specific letter positions. If you select `y` you will be prompted once for every letter in the words you are searching and you can either enter a letter string for what to force there or simply hit enter with nothing selected to not force anything in that position. 
+You then do the same thing for force excluding a letter position, I will select no for both of these because they aren't needed for a short search like this.
+
+```bash
+$ ./wordl
+Number of threads? 4
+Word list? nytimes
+Ultra hard mode, hard mode, or normal (u, h, n)? n
+Search mode (1 - 6)? 2
+
+Wordlist initialized with 2309 answers
+
+Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
+
+Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
+Use prefex (y / n)? n
+Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
+Set size? 2
+Number of required unique for whole set (put 0 for no requirement)? 10
+Num of required unique for each step (0 for no requirement)? 
+5
+New best prints (y / n)? y
+Update print frequency (0 for no update prints)? 0
+Forced include letters (y / n)? n
+Forced exclude letters (y / n)? n
+Forced include letter positions (y / n)? n
+Forced include letter positions (y / n)? n
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
@@ -506,8 +652,11 @@ Wordlist initialized with 2309 answers
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
 Search mode (1 - 6)? 2
+Precise search timer (y / n)? n
+Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
+Require score cutoff for considered sets (y / n)? n
 Set size? 2
 Number of required unique for whole set (put 0 for no requirement)? 10
 Num of required unique for each step (0 for no requirement)? 

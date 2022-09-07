@@ -286,7 +286,15 @@ int main(int argc, char* argv[])
   wordlistStream >> temp;
   while(!wordlistStream.eof())
   {
-    validWordss.push_back(temp);
+    bool found = false;
+    for(unsigned int i = 0; i < validWordss.size() && !found; i++)
+    {
+      found = (temp == validWordss[i]);
+    }
+    if(!found)
+    {
+      validWordss.push_back(temp);
+    }
     wordlistStream >> temp;
   }
   
@@ -830,6 +838,25 @@ int main(int argc, char* argv[])
       else if(userInput == 'r')
       {
         break;
+      }
+      else if(userInput == 'c')
+      {
+        std::cout << std::endl << "Coloring to filter by: ";
+        getline(std::cin, temp);
+        for(unsigned int i = 0; i < valids.size(); i++)
+        {
+          bool found = false;
+          for(unsigned int j = 0; j < validGuesses.size() && !found; j++)
+          {
+            found = grade(validGuesses[j], valids[i]) == temp;
+          }
+          if(!found)
+          {
+            valids.erase(valids.begin() + i);
+            i--;
+          }
+        }
+        std::cout << "There are now " << valids.size() << " remaining possibilities" << std::endl << std::endl;
       }
       else
       {

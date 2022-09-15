@@ -26,6 +26,7 @@ int main(int argc, char* argv[])
   bool answersOnlyFirst = true;
   bool preciseSearchTimer = false;
   int updatePrintFrequency = 0;
+  bool rateFileColorings = false;
   std::string forceInclude = "";
   std::string forceExclude = "";
   std::vector<int> uniqueSteps = {};
@@ -150,6 +151,10 @@ int main(int argc, char* argv[])
 
             GorA = {};
           }
+        }
+        else if(parsearg.first == cmdl::NAMES::RATE_FILE_COLORINGS_ARG)
+        {
+          rateFileColorings = (parsearg.second == "true" || parsearg.second == "True");
         }
         else if(parsearg.first == cmdl::NAMES::DEFAULT_ARG)
         {
@@ -463,7 +468,7 @@ int main(int argc, char* argv[])
 
         if(wordSet.size() > 0 || inputWordSet(std::ref(wordSet), valids[0].length()))
         {
-          rateAll(wordSet, valids, wordlist);
+          rateAll(wordSet, valids, wordlist, rateFileColorings);
         }
         else
         {

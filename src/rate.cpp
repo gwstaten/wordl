@@ -1,6 +1,6 @@
 #include "rate.hpp"
 
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist)
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist, bool rateFileColorings)
 {
   std::map<std::string, double> ratingsMap;
   std::map<std::string, std::vector<std::string>> sets;
@@ -116,7 +116,11 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   {
     if((it3->second).size() != 1)
     {
-      fout << "( " << it3->first << " ";
+      fout << "( ";
+      if(rateFileColorings)
+      {
+        fout << it3->first << " ";
+      }
       for(unsigned int i = 0; i < (it3->second).size(); i++)
       {
         fout << (it3->second)[i] << " ";

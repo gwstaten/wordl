@@ -22,6 +22,7 @@ namespace cmdl {
       const inline static std::string FILTER_CMD = "filter";
       const inline static std::string UFILTER_CMD = "ufilter";
       const inline static std::string ORDER_CMD = "order";
+      const inline static std::string RATE_FILE_COLORINGS_ARG = "filecolorings";
   };
 
   const std::map<std::string, std::string> arguments {{NAMES::THREAD_ARG, "Sets the number of threads"}, {NAMES::WORDLIST_ARG, "Sets the wordlist"}, {NAMES::HARDMODE_ARG, "Sets the hardmode"}, {NAMES::SEARCHMODE_ARG, "Sets the searchmode"}, {NAMES::PREFIX_ARG, "Sets prefix words. Only for " + NAMES::FINDBEST_CMD}, {NAMES::ULETTER_ARG, "Sets the number of unique letters"}, {NAMES::UFILTERBY_ARG, "Sets filter mode. Only for " + NAMES::UFILTER_CMD}, {NAMES::DEFAULT_ARG, "Sets all argument to default"}};

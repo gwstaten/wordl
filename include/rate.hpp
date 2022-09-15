@@ -10,6 +10,6 @@
 
 double rate(std::vector<std::string> guess, std::vector<std::string> words, int searchMode, std::vector<std::string> prefixColorings);
 double rateInts(const std::vector<std::string> guess, const std::vector<std::string> words, int searchMode, std::vector<unsigned long long int> prefixColorings);
-void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist);
+void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std::string wordlist, bool rateFileColorings);
 
 #endif

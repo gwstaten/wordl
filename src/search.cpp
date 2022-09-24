@@ -6,7 +6,7 @@
 #include "search.hpp"
 #include "rate.hpp"
 
-void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string keyword, int fullRankingRequiredScore, std::vector<std::string> forceIncludePos, bool cont)
+void findBestThread(std::vector<std::string> words, std::vector<std::string> validWords, std::vector<std::pair<double,std::string>> &out, int searchMode, std::vector<std::string> prefix, std::vector<std::string> allguess, int setsize, int unique, bool newBestPrints, int threadNum, std::string forceInclude, std::vector<int> uniqueSteps, int updatePrintFrequency, std::string keyword, int fullRankingRequiredScore, std::vector<std::string> forceIncludePos, bool cont, std::unordered_map<char,unsigned int> maxInclude)
 {
   std::ofstream fout;
   std::vector<unsigned int> positions(setsize, 0);
@@ -199,11 +199,28 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         toIncrement = 0;
       }
     }
+    std::unordered_map<char, unsigned int> m;
+    bool maxIncludeMap = maxInclude.size();
     for(unsigned int i = 1; i < positions.size() && alpha; i++)
     {
       guessVec.push_back(allguess[positions[i]]);
       comb = comb + "-" + allguess[positions[i]];
-      if(i >= lastChanged)
+      for(unsigned int y = 0; y < allguess[positions[i]].length() && alpha; y++)
+      {
+        m[allguess[positions[i]][y]]++;
+        if(maxIncludeMap && i >= lastChanged)
+        {
+          if(maxInclude.find(allguess[positions[i]][y]) != maxInclude.end())
+          {
+            if(maxInclude[allguess[positions[i]][y]] < m[allguess[positions[i]][y]])
+            {
+              alpha = false;
+              toIncrement = i;
+            }
+          }
+        }
+      }
+      if(i >= lastChanged && alpha)
       {
         if(prior >= allguess[positions[i]])
         {
@@ -212,7 +229,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         }
         if(i < positions.size() - 1)
         {
-          if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
+          if((int)m.size() < uniqueSteps[i] && uniqueSteps[i])
           {
             alpha = false;
             toIncrement = i;
@@ -357,7 +374,7 @@ struct greater
     bool operator()(T const &a, T const &b) const { return a > b; }
 };
 
-std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, std::vector<std::string> forceExcludePos, std::vector<std::string> forceIncludePos, int updatePrintFrequency, std::string keyword, int fullRankingRequiredScore, bool cont)
+std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> words, std::vector<std::string> validWordList, int threads, int searchMode, std::vector<std::string> prefix, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps, std::vector<std::string> forceExcludePos, std::vector<std::string> forceIncludePos, int updatePrintFrequency, std::string keyword, int fullRankingRequiredScore, bool cont, std::unordered_map<char,unsigned int> maxInclude)
 {
   std::vector<std::string> validWords;
   unsigned int uniqueUn = unique;
@@ -389,6 +406,14 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     if(stillGood)
     {
       stillGood = countDistinct(validWordList[i]) + ((setSize + prefix.size() - 1) * words[0].length()) >= uniqueUn;
+    }
+    if(stillGood)
+    {
+      std::unordered_map<char,unsigned int>::iterator it;
+      for(it = maxInclude.begin(); it != maxInclude.end(); it++)
+      {
+        stillGood = std::count(validWordList[i].begin(), validWordList[i].end(), it->first) <= it->second;
+      }
     }
     if(stillGood)
     {
@@ -424,7 +449,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   std::vector<std::thread> threadVector;
   for(unsigned int i = 0; i < numThreads; i++)
   {
-    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWordsOrder, setSize, unique, newBestPrints, i + 1, forceInclude, uniqueSteps, updatePrintFrequency, keyword, fullRankingRequiredScore, forceIncludePos, cont));
+    threadVector.push_back(std::thread(findBestThread,words, validWordsChunks[i], std::ref(results[i]), searchMode, prefix, validWordsOrder, setSize, unique, newBestPrints, i + 1, forceInclude, uniqueSteps, updatePrintFrequency, keyword, fullRankingRequiredScore, forceIncludePos, cont, maxInclude));
   }
   for(unsigned int i = 0; i < numThreads; i++)
   {
@@ -491,6 +516,7 @@ void findbest(std::string keyword)
   std::vector<int> uniqueSteps;
   std::vector<std::string> forceExcludePos = {};
   std::vector<std::string> forceIncludePos = {};
+  std::unordered_map<char,unsigned int> maxInclude;
 
   fin.open("saves/" + keyword);
   fin >> numThreads;
@@ -517,9 +543,9 @@ void findbest(std::string keyword)
     fin >> tempIn;
     prefix.push_back(tempIn);
   }
+  int tempInt;
   for(int i = 0; i < setSize - 1; i++)
   {
-    int tempInt;
     fin >> tempInt;
     uniqueSteps.push_back(tempInt);
   }
@@ -532,6 +558,12 @@ void findbest(std::string keyword)
   {
     fin >> tempIn;
     forceIncludePos.push_back(tempIn.substr(1));
+  }
+  while(!fin.eof())
+  {
+    fin >> temp;
+    fin >> tempInt;
+    maxInclude[temp] = tempInt;
   }
   fin.close();
   std::cout << std::endl << "Best guess: ";
@@ -554,7 +586,7 @@ void findbest(std::string keyword)
         fin >> temp1;
       }
       fin.close();
-      bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true);
+      bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true, maxInclude);
       if(fullRankingOut)
       {
         std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");
@@ -567,7 +599,7 @@ void findbest(std::string keyword)
     }
     else
     {
-      bestAnswers = fbThreads(valids, valids, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true);
+      bestAnswers = fbThreads(valids, valids, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true, maxInclude);
       if(fullRankingOut)
       {
         if(!std::filesystem::exists("rankings"))
@@ -592,7 +624,7 @@ void findbest(std::string keyword)
             fout2 << bestAnswers[i].second << " " << bestAnswers[i].first << std::endl;
           }
         }
-        bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false);
+        bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false, maxInclude);
         if(fullRankingOut)
         {
           std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");
@@ -648,7 +680,7 @@ void findbest(std::string keyword)
   }
   else
   {
-    bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true);
+    bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, true, maxInclude);
     if(fullRankingOut)
     {
       std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");
@@ -690,7 +722,7 @@ void findbest(std::string keyword)
   std::remove(tempIn.c_str());
 }
 
-void findbest(std::vector<std::string> valids, std::vector<std::string> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int fullRankingRequiredScore, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist, std::vector<std::string> forceExcludePos, std::vector<std::string> forceIncludePos, bool answersOnlyFirst, std::string keyword)
+void findbest(std::vector<std::string> valids, std::vector<std::string> validGuesses, int numThreads, int searchMode, std::vector<std::string> prefix, bool fullRankingOut, int fullRankingRequiredScore, int setSize, int unique, bool newBestPrints, std::string forceInclude, std::string forceExclude, std::vector<int> uniqueSteps,  int updatePrintFrequency, std::string wordlist, std::vector<std::string> forceExcludePos, std::vector<std::string> forceIncludePos, bool answersOnlyFirst, std::string keyword, std::unordered_map<char,unsigned int> maxInclude)
 {
   if(keyword.length())
   {
@@ -719,6 +751,11 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     {
       fout << "-" << forceIncludePos[i] << std::endl;
     }
+    std::unordered_map<char,unsigned int>::iterator it;
+    for(it = maxInclude.begin(); it != maxInclude.end(); it++)
+    {
+      fout << it->first << " " << it->second << std::endl;
+    }
     fout.close();
     fout.open("saves/" + keyword + "-valids");
     for(unsigned int i = 0; i < valids.size(); i++)
@@ -741,7 +778,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
     std::vector<std::pair<double, std::string>> bestGuesses;
     if(answersOnlyFirst)
     {
-      bestAnswers = fbThreads(valids, valids, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false);
+      bestAnswers = fbThreads(valids, valids, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false, maxInclude);
       if(fullRankingOut)
       {
         if(!std::filesystem::exists("rankings"))
@@ -767,7 +804,7 @@ void findbest(std::vector<std::string> valids, std::vector<std::string> validGue
           fout2 << bestAnswers[i].second << " " << bestAnswers[i].first << std::endl;
         }
       }
-      bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false);
+      bestGuesses = fbThreads(valids, validGuesses, numThreads, searchMode, prefix, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, forceExcludePos, forceIncludePos, updatePrintFrequency, keyword, fullRankingRequiredScore, false, maxInclude);
       if(fullRankingOut)
       {
         std::ofstream fout("rankings/guessesRating" + searchKey + ".txt");

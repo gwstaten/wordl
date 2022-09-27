@@ -193,7 +193,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       }
     }
     int toIncrement = setsize - 1;
-    
+
     std::vector<std::string> guessVec;
     std::string comb = prefixStarter + validWords[positions[0]];
     m.clear();
@@ -434,7 +434,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
   }
 
   std::vector<std::string> validWordsOrder = validWords;
-  auto rd = std::random_device{}; 
+  auto rd = std::random_device{};
   auto rng = std::default_random_engine{rd()};
   std::shuffle(std::begin(validWords), std::end(validWords), rng);
 
@@ -500,7 +500,7 @@ void findbest(std::string keyword)
 {
   std::ifstream fin;
   std::vector<std::string> valids = {};
-  std::vector<std::string> validGuesses = {}; 
+  std::vector<std::string> validGuesses = {};
 
   fin.open("saves/" + keyword + "-valids");
   std::string tempIn;
@@ -522,7 +522,7 @@ void findbest(std::string keyword)
   fin.close();
 
   int numThreads, searchMode, setSize, unique, updatePrintFrequency, fullRankingRequiredScore;
-  std::vector<std::string> prefix = {}; 
+  std::vector<std::string> prefix = {};
   bool fullRankingOut, newBestPrints, answersOnlyFirst;
   std::string forceInclude, forceExclude, wordlist;
   std::vector<int> uniqueSteps;

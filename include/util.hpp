@@ -19,7 +19,7 @@
 #include <string>
 #include <sstream>
 #include <chrono>
-#include <ctime> 
+#include <ctime>
 #include <random>
 
 bool inputWordSet(std::vector<std::string> &wordSet, unsigned int correctSize);

@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
         }
         else if(parsearg.first == cmdl::NAMES::RATE_FILE_COLORINGS_ARG)
         {
-          rateFileColorings = (parsearg.second == "true" || parsearg.second == "True");
+          rateFileColorings = parsearg.second == "true" || parsearg.second == "1" || parsearg.second.empty();
         }
         else if(parsearg.first == cmdl::NAMES::DEFAULT_ARG)
         {
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
       }
       catch(std::exception& exception)
       {
-        std::cout << "Argument for '" << parsearg.first << "' invalid: '" << parsearg.second << "'" << std::endl; 
+        std::cout << "Argument for '" << parsearg.first << "' invalid: '" << parsearg.second << "'" << std::endl;
       }
     }
     else
@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
         }
         else
         {
-          command = arg; 
+          command = arg;
         }
       }
       else if(command == cmdl::NAMES::FINDBEST_CMD || command == cmdl::NAMES::LIST_CMD || command == cmdl::NAMES::FILTER_CMD || (command == cmdl::NAMES::RATE_CMD && !(rsetSize == 0 || commandWords.size() != rsetSize)))
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
   {
     std::cout << "Number of threads? ";
     getline(std::cin, temp);
-  
+
     try
     {
       numThreads = stoi(temp);
@@ -287,7 +287,7 @@ int main(int argc, char* argv[])
       std::cout << "Invalid word list name: '" << wordlist << "'" << std::endl;
       return 0;
     }
-  } 
+  }
 
   wordlistStream >> temp;
   while(!wordlistStream.eof())
@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
     }
     wordlistStream >> temp;
   }
-  
+
   std::vector<std::string> forceExcludePos(validWordss[0].length(), "");
   std::vector<std::string> forceIncludePos(validWordss[0].length(), "");
 
@@ -311,7 +311,7 @@ int main(int argc, char* argv[])
   {
     std::cout << "Ultra hard mode, hard mode, or normal (u, h, n)? ";
     getline(std::cin, temp);
-    
+
     hardmode = std::tolower(temp[0]);
 
     if(hardmode != 'u' && hardmode != 'h' && hardmode != 'n')
@@ -343,7 +343,7 @@ int main(int argc, char* argv[])
 
   std::sort(validWords.begin(), validWords.end());
   std::sort(validWordss.begin(), validWordss.end());
-  
+
   if(!searchMode)
   {
     std::cout << "Search mode (1 - 6)? ";
@@ -364,7 +364,7 @@ int main(int argc, char* argv[])
       return 0;
     }
   }
-  
+
   while(true)
   {
     std::vector<std::string> valids;
@@ -420,7 +420,7 @@ int main(int argc, char* argv[])
           return 0;
         }
 
-        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) {
           std::transform(word.begin(), word.end(), word.begin(), ::tolower);
           return word;
         });
@@ -462,7 +462,7 @@ int main(int argc, char* argv[])
           return 0;
         }
 
-        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) {
           std::transform(word.begin(), word.end(), word.begin(), ::tolower);
           return word;
         });
@@ -503,7 +503,7 @@ int main(int argc, char* argv[])
           return 0;
         }
 
-        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) { 
+        std::transform(wordSet.begin(), wordSet.end(), wordSet.begin(), [](std::string &word) {
           std::transform(word.begin(), word.end(), word.begin(), ::tolower);
           return word;
         });
@@ -571,7 +571,7 @@ int main(int argc, char* argv[])
         std::cout << "Print full rankings to file (y / n)? ";
         getline(std::cin, temp);
         fullRankingOutput = std::tolower(temp.at(0)) == 'y';
-        
+
         std::cout << "Require score cutoff for considered sets (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -832,7 +832,7 @@ int main(int argc, char* argv[])
         if(GorA == "")
         {
           std::cout << "Filter answers or guesses (g / a)? ";
-          
+
           getline(std::cin, GorA);
           GorA = std::tolower(GorA.at(0));
         }

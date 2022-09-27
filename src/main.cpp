@@ -31,7 +31,6 @@ int main(int argc, char* argv[])
   std::string forceExclude = "";
   std::vector<int> uniqueSteps = {};
   std::string keyword = "";
-  std::unordered_map<char,unsigned int> maxInclude;
 
   std::vector<std::pair<std::string, std::string>> commandGuesses;
   std::vector<std::string> commandWords;
@@ -646,6 +645,32 @@ int main(int argc, char* argv[])
           forceInclude = "";
         }
 
+        /*std::cout << "Extra conditions for duplicate letters (y / n)? ";
+        getline(std::cin, temp);
+        if(std::tolower(temp.at(0)) == 'y')
+        {
+          std::unordered_map<char, int> m;
+          for(unsigned int i = 0; i < forceInclude.length(); i++)
+          {
+            m[forceInclude[i]]++;
+          }
+          std::unordered_map<char, int>::iterator it;
+          for(it = m.begin(); it != m.end(); ++it)
+          {
+            if(it->second > 1)
+            {
+              std::cout << it->first << " - how many of the " << it->second << " need to be in the same word? ";
+              getline(std::cin, temp);
+            }
+            std::cout << it->first << " - allow more than " << it->second << " to be included (y / n)? ";
+            getline(std::cin, temp);
+          }
+        }
+        else
+        {
+          // set to some default
+        }*/
+
         std::cout << "Forced exclude letters (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -660,53 +685,6 @@ int main(int argc, char* argv[])
           forceExclude = "";
         }
 
-        std::cout << "Extra conditions for duplicate letters (y / n)? ";
-        getline(std::cin, temp);
-        if(std::tolower(temp.at(0)) == 'y')
-        {
-          std::cout << "Included letters:" << std::endl;
-          std::unordered_map<char, int> m;
-          for(unsigned int i = 0; i < forceInclude.length(); i++)
-          {
-            m[forceInclude[i]]++;
-          }
-          std::unordered_map<char, int>::iterator it;
-          for(it = m.begin(); it != m.end(); ++it)
-          {
-            /*if(it->second > 1)
-            {
-              std::cout << it->first << " - how many of the " << it->second << " need to be in the same word? ";
-              getline(std::cin, temp);
-            }*/
-            std::cout << it->first << " - limit the number included (y / n)? ";
-            getline(std::cin, temp);
-            if(std::tolower(temp.at(0)) == 'y')
-            {
-              std::cout << it->first << " - max allowed? ";
-              getline(std::cin, temp);
-              maxInclude[it->first] = std::stoi(temp);
-            }
-          }
-          std::cout << "Ambiguous letters: " << std::endl;
-          for(char i = 'a'; i < 'z' + 1; i++)
-          {
-            if(forceInclude.find(i) == std::string::npos && forceExclude.find(i) == std::string::npos)
-            {
-              std::cout << i << " - limit the number included (y / n)? ";
-              getline(std::cin, temp);
-              if(std::tolower(temp.at(0)) == 'y')
-              {
-                std::cout << i << " - max allowed? ";
-                getline(std::cin, temp);
-                maxInclude[i] = std::stoi(temp);
-              }
-            }
-          }
-        }
-        else
-        {
-          maxInclude.clear();
-        }
         std::cout << "Forced include letter positions (y / n)? ";
         getline(std::cin, temp);
         if(std::tolower(temp.at(0)) == 'y')
@@ -746,7 +724,7 @@ int main(int argc, char* argv[])
       else if(userInput == 'f' || (command == cmdl::NAMES::FINDBEST_CMD && commandGuesses.size() == 0))
       {
         auto start = std::chrono::high_resolution_clock::now();
-        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, forceIncludePos, answersOnlyFirst, keyword, maxInclude);
+        findbest(valids, validGuesses, numThreads, searchMode, prefix, fullRankingOutput, fullRankingRequiredScore, setSize, unique, newBestPrints, forceInclude, forceExclude, uniqueSteps, updatePrintFrequency, wordlist, forceExcludePos, forceIncludePos, answersOnlyFirst, keyword);
         if(preciseSearchTimer)
         {
           auto finish = std::chrono::high_resolution_clock::now();

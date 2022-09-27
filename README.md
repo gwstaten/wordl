@@ -134,7 +134,7 @@ There are now 246 answers remaining
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 ```
 
-At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-output) to see what the code running would look like.
+At this point, typing `f` would result in the program finding the best guess. The speed of the program will depend on the input you gave. Typing `g` will bypass that step, and give prompt you for another guess you inputted. You can also type `l` to find a list of words that are still valid with the information you inputted. You can also type `a` to receive a rating for a word or word set in the current situation. This will repeat until the program has one possible solution left, at this point typing `e` will exit the code or you can type `r` to begin a new game with the current settings. If you encounter any issues running the code submit a [bug report](https://github.com/gwstaten/wordl/issues/new/choose). You can also look at [Example Output](#example-program-run) to see what the code running would look like.
 
 ## Word Lists
 
@@ -237,6 +237,7 @@ Instead of going through the interface, you can use the one-line version. The on
 | -prefix | Sets prefix words. Only for findbest |
 | -uletter | Sets the number of unique letters |
 | -ufilterby | Sets filter mode. Only for ufilter |
+| -filecolorings | Add colorings to rate files |
 
 ```bash
 -<ARGUMENT>=(VALUE)
@@ -250,6 +251,7 @@ Instead of going through the interface, you can use the one-line version. The on
 | -searchmode | 2 |
 | -threads | 4 |
 | -wordlist | nytimes2 |
+| -filecolorings | false |
 
 #### CMDL Commands
 
@@ -329,6 +331,7 @@ Search mode (1 - 6)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? 
 ```
+
 Next you enter a y or n for whether you want the code to search for sets that only use answers first so that you know what the best option is from the answers. In this case the search won't be taking that long, so I entered y.
 
 ```bash
@@ -391,7 +394,7 @@ Require score cutoff for considered sets (y / n)?
 
 Next you tell the program whether there should be a score cutoff for the sets that are stored / considered. In this case the search is fairly short so we won't be running into any issues without a cutoff, so `n` was entered. (Note that if `y` is entered, another prompt will show up to give the cutoff score, this cutoff score is in terms of whatever search mode the search is being run in)
 
-``bash
+```bash
 $ ./wordl
 Number of threads? 4
 Word list? nytimes2
@@ -408,7 +411,7 @@ Do answers only search first (y / n)? y
 Use prefex (y / n)? n
 Print full rankings to file (y / n)? y
 Require score cutoff for considered sets (y / n)? n
-Set size? 
+Set size?
 ```
 
 Next you enter the size of the set you will be searching for. In this case, 2.
@@ -604,8 +607,7 @@ Forced exclude letters (y / n)? n
 Forced include letter positions (y / n)?
 ```
 
-You are now prompted if you would like to force include specific letter positions. If you select `y` you will be prompted once for every letter in the words you are searching and you can either enter a letter string for what to force there or simply hit enter with nothing selected to not force anything in that position. 
-You then do the same thing for force excluding a letter position, I will select no for both of these because they aren't needed for a short search like this.
+You are now prompted if you would like to force include specific letter positions. If you select `y` you will be prompted once for every letter in the words you are searching and you can either enter a letter string for what to force there or simply hit enter with nothing selected to not force anything in that position. You then do the same thing for force excluding a letter position, I will select no for both of these because they aren't needed for a short search like this.
 
 ```bash
 $ ./wordl

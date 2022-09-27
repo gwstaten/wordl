@@ -101,13 +101,6 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
     }
   }
 
-  std::vector<unsigned int> maxIncludeVec(26,0);
-  std::unordered_map<char,unsigned int>::iterator it;
-  for(it = maxInclude.begin(); it != maxInclude.end(); it++)
-  {
-    maxIncludeVec[it->first - 'a'] = it->second;
-  }
-
   bool intColorings = (words[0].size() <= 11 && searchMode != 6 && words[0].size() * (prefix.size() + setsize) <= 40);
 
   std::vector<std::string> prefixColorings = {};
@@ -151,7 +144,6 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   }
 
   auto startTime = std::chrono::system_clock::now();
-  std::unordered_map<char, unsigned int> m;
   for(unsigned int guess = 0; notdone; guess++)
   {
     std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
@@ -196,22 +188,18 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
 
     std::vector<std::string> guessVec;
     std::string comb = prefixStarter + validWords[positions[0]];
-    m.clear();
-    for(unsigned int y = 0; y < validWords[positions[0]].length(); y++)
-    {
-      m[validWords[positions[0]][y]]++;
-    }
     guessVec.push_back(validWords[positions[0]]);
     std::string prior = validWords[positions[0]];
     bool alpha = true;
     if(setsize > 1)
     {
-      if((int)m.size() < uniqueSteps[0] && uniqueSteps[0])
+      if(countDistinct(comb) < uniqueSteps[0] && uniqueSteps[0])
       {
         alpha = false;
         toIncrement = 0;
       }
     }
+    std::unordered_map<char, unsigned int> m;
     bool maxIncludeMap = maxInclude.size();
     for(unsigned int i = 1; i < positions.size() && alpha; i++)
     {
@@ -222,9 +210,9 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         m[allguess[positions[i]][y]]++;
         if(maxIncludeMap && i >= lastChanged)
         {
-          if(maxIncludeVec[allguess[positions[i]][y] - 'a'])
+          if(maxInclude.find(allguess[positions[i]][y]) != maxInclude.end())
           {
-            if(maxIncludeVec[allguess[positions[i]][y] - 'a'] < m[allguess[positions[i]][y]])
+            if(maxInclude[allguess[positions[i]][y]] < m[allguess[positions[i]][y]])
             {
               alpha = false;
               toIncrement = i;
@@ -239,7 +227,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
           alpha = false;
           toIncrement = i;
         }
-        if(i < positions.size() - 1 && alpha)
+        if(i < positions.size() - 1)
         {
           if((int)m.size() < uniqueSteps[i] && uniqueSteps[i])
           {
@@ -247,7 +235,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
             toIncrement = i;
           }
         }
-        if(i < positions.size() - 1 && alpha)
+        if(i < positions.size() - 1)
         {
           bool stillPossible = true;
           int numOccured = 0;
@@ -422,7 +410,7 @@ std::vector<std::pair<double,std::string>> fbThreads(std::vector<std::string> wo
     if(stillGood)
     {
       std::unordered_map<char,unsigned int>::iterator it;
-      for(it = maxInclude.begin(); it != maxInclude.end() && stillGood; it++)
+      for(it = maxInclude.begin(); it != maxInclude.end(); it++)
       {
         stillGood = std::count(validWordList[i].begin(), validWordList[i].end(), it->first) <= it->second;
       }

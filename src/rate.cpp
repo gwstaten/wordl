@@ -66,9 +66,11 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   total[5] /= words.size();
   std::cout << "Average bits of info: " << total[4] << std::endl;
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
-  std::cout << "1/n score: " << total[1] << std::endl;
+  std::cout << "Colorings (1/n): " << total[1] << std::endl;
+  std::cout << "Collisions (# answers - 1/n): " << words.size() - total[1] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
   std::cout << "Average greens: " << total[5] << std::endl;
+  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   std::map<std::string, std::vector<std::string>>::iterator it2;
   int num = 0;
@@ -88,7 +90,6 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
     std::cout << "... " << num - 4 << " more ";
   }
   std::cout << ")" << std::endl;
-  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
   if(!std::filesystem::exists("ratelogs"))
   {
     std::filesystem::create_directory("ratelogs");

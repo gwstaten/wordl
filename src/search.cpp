@@ -47,6 +47,11 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         first = false;
         best = temp2;
         bestStr = temp1;
+        bestTied = false;
+      }
+      else if(temp2 == best)
+      {
+        bestTied = true;
       }
       out.push_back(std::make_pair(temp2, temp1));
       fin >> temp1;
@@ -164,7 +169,12 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
         {
           second = "0" + second;
         }
-        std::cout << "(Thread " << threadNum << ") Update - ~" << (double)positions[0] / (double)validWords.size() * 100 << "% - " << hour + ":" + minute + ":" + second << " - has checked " << numberChecked << " sets that meet all filters - currently on word " << validWords[positions[0]] << " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
+        std::cout << "(Thread " << threadNum << ") Update - ~" << 
+                  (((double)positions[0] / (double)validWords.size()) + (positions.size() > 1 ? (double)positions[1] / (double)allguess.size() / (double)validWords.size() : 0)) * 100 << "% - " << 
+                  hour + ":" + minute + ":" + second << 
+                  " - has checked " << numberChecked << 
+                  " sets with all filters - currently on start " << validWords[positions[0]] + (positions.size() > 1 ? "-" + allguess[positions[1]] : "") << 
+                  " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
         if(keyword.length())
         {
           fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);

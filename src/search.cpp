@@ -149,197 +149,200 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   }
 
   auto startTime = std::chrono::system_clock::now();
-  for(unsigned int guess = 0; notdone; guess++)
+  if(positions[0] != validWords.size())
   {
-    std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
-    if(updatePrintFrequency)
+    for(unsigned int guess = 0; notdone; guess++)
     {
-      if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
+      std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
+      if(updatePrintFrequency)
       {
-        last = (int)diff.count() + threadNum;
-        unsigned long long int timeRanCur = timeRan + diff.count();
-        std::string hour = std::to_string((int)(timeRanCur / 3600));
-        std::string minute = std::to_string((int)((timeRanCur % 3600) / 60));
-        if(minute.length() == 1)
+        if(((int)diff.count() + threadNum) % updatePrintFrequency == 0 && (int)diff.count() + threadNum != last)
         {
-          minute = "0" + minute;
-        }
-        std::string second = std::to_string(timeRanCur % 60);
-        if(second.length() == 1)
-        {
-          second = "0" + second;
-        }
-        std::cout << "(Thread " << threadNum << ") Update - ~" << 
-                  (((double)positions[0] / (double)validWords.size()) + (positions.size() > 1 ? (double)positions[1] / (double)allguess.size() / (double)validWords.size() : 0)) * 100 << "% - " << 
-                  hour + ":" + minute + ":" + second << 
-                  " - has checked " << numberChecked << 
-                  " sets with all filters - currently on start " << validWords[positions[0]] + (positions.size() > 1 ? "-" + allguess[positions[1]] : "") << 
-                  " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
-        if(keyword.length())
-        {
-          fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
-          for(unsigned int i = lastWroteToFile; i < out.size(); i++)
+          last = (int)diff.count() + threadNum;
+          unsigned long long int timeRanCur = timeRan + diff.count();
+          std::string hour = std::to_string((int)(timeRanCur / 3600));
+          std::string minute = std::to_string((int)((timeRanCur % 3600) / 60));
+          if(minute.length() == 1)
           {
-            fout << out[i].second << " " << out[i].first << std::endl;
+            minute = "0" + minute;
           }
-          lastWroteToFile = out.size();
-          fout.close();
-          fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
-          fout << timeRan + (int)diff.count() << " " << numberChecked;
-          for(int i = 0; i < setsize; i++)
+          std::string second = std::to_string(timeRanCur % 60);
+          if(second.length() == 1)
           {
-            fout << " " << positions[i];
+            second = "0" + second;
           }
-          fout.close();
+          std::cout << "(Thread " << threadNum << ") Update - ~" << 
+                    (((double)positions[0] / (double)validWords.size()) + (positions.size() > 1 ? (double)positions[1] / (double)allguess.size() / (double)validWords.size() : 0)) * 100 << "% - " << 
+                    hour + ":" + minute + ":" + second << 
+                    " - has checked " << numberChecked << 
+                    " sets with all filters - currently on start " << validWords[positions[0]] + (positions.size() > 1 ? "-" + allguess[positions[1]] : "") << 
+                    " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
+          if(keyword.length())
+          {
+            fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
+            for(unsigned int i = lastWroteToFile; i < out.size(); i++)
+            {
+              fout << out[i].second << " " << out[i].first << std::endl;
+            }
+            lastWroteToFile = out.size();
+            fout.close();
+            fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
+            fout << timeRan + (int)diff.count() << " " << numberChecked;
+            for(int i = 0; i < setsize; i++)
+            {
+              fout << " " << positions[i];
+            }
+            fout.close();
+          }
         }
       }
-    }
-    int toIncrement = setsize - 1;
+      int toIncrement = setsize - 1;
 
-    std::vector<std::string> guessVec;
-    std::string comb = prefixStarter + validWords[positions[0]];
-    guessVec.push_back(validWords[positions[0]]);
-    std::string prior = validWords[positions[0]];
-    bool alpha = true;
-    if(setsize > 1)
-    {
-      if(countDistinct(comb) < uniqueSteps[0] && uniqueSteps[0])
+      std::vector<std::string> guessVec;
+      std::string comb = prefixStarter + validWords[positions[0]];
+      guessVec.push_back(validWords[positions[0]]);
+      std::string prior = validWords[positions[0]];
+      bool alpha = true;
+      if(setsize > 1)
       {
-        alpha = false;
-        toIncrement = 0;
-      }
-    }
-    for(unsigned int i = 1; i < positions.size() && alpha; i++)
-    {
-      guessVec.push_back(allguess[positions[i]]);
-      comb = comb + "-" + allguess[positions[i]];
-      if(i >= lastChanged)
-      {
-        if(prior >= allguess[positions[i]])
+        if(countDistinct(comb) < uniqueSteps[0] && uniqueSteps[0])
         {
           alpha = false;
-          toIncrement = i;
-        }
-        if(i < positions.size() - 1)
-        {
-          if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
-          {
-            alpha = false;
-            toIncrement = i;
-          }
-        }
-        if(i < positions.size() - 1)
-        {
-          bool stillPossible = true;
-          int numOccured = 0;
-          std::string combNotUsed = comb;
-          for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
-          {
-            if(combNotUsed.find(forceInclude[i]) != std::string::npos)
-            {
-              numOccured++;
-              combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
-            }
-          }
-          if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
-          {
-            alpha = false;
-            toIncrement = i;
-          }
+          toIncrement = 0;
         }
       }
-      prior = allguess[positions[i]];
-    }
-    if(alpha)
-    {
-      if(forceIncludePosUsed)
+      for(unsigned int i = 1; i < positions.size() && alpha; i++)
+      {
+        guessVec.push_back(allguess[positions[i]]);
+        comb = comb + "-" + allguess[positions[i]];
+        if(i >= lastChanged)
+        {
+          if(prior >= allguess[positions[i]])
+          {
+            alpha = false;
+            toIncrement = i;
+          }
+          if(i < positions.size() - 1)
+          {
+            if(countDistinct(comb) - 1 < uniqueSteps[i] && uniqueSteps[i])
+            {
+              alpha = false;
+              toIncrement = i;
+            }
+          }
+          if(i < positions.size() - 1)
+          {
+            bool stillPossible = true;
+            int numOccured = 0;
+            std::string combNotUsed = comb;
+            for(unsigned int i = 0; i < forceInclude.length() && stillPossible; i++)
+            {
+              if(combNotUsed.find(forceInclude[i]) != std::string::npos)
+              {
+                numOccured++;
+                combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
+              }
+            }
+            if(numOccured + words[0].length() * positions.size() - i < forceInclude.length())
+            {
+              alpha = false;
+              toIncrement = i;
+            }
+          }
+        }
+        prior = allguess[positions[i]];
+      }
+      if(alpha)
+      {
+        if(forceIncludePosUsed)
+        {
+          bool stillGood = true;
+          for(unsigned int i = 0; i < forceIncludePos.size() && stillGood; i++)
+          {
+            for(unsigned int j = 0; j < forceIncludePos[i].length() && stillGood; j++)
+            {
+              bool found = false;
+              for(unsigned int k = 0; k < guessVec.size() && !found; k++)
+              {
+                found = (guessVec[k][i] == forceIncludePos[i][j]);
+              }
+              stillGood = found;
+            }
+          }
+          alpha = stillGood;
+        }
+      }
+      if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
       {
         bool stillGood = true;
-        for(unsigned int i = 0; i < forceIncludePos.size() && stillGood; i++)
+        std::string combNotUsed = comb;
+        for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
         {
-          for(unsigned int j = 0; j < forceIncludePos[i].length() && stillGood; j++)
+          stillGood = combNotUsed.find(forceInclude[i]) != std::string::npos;
+          if(stillGood)
           {
-            bool found = false;
-            for(unsigned int k = 0; k < guessVec.size() && !found; k++)
-            {
-              found = (guessVec[k][i] == forceIncludePos[i][j]);
-            }
-            stillGood = found;
+            combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
           }
         }
-        alpha = stillGood;
-      }
-    }
-    if(alpha && (countDistinct(comb) >= unique + 1 || !unique || (guessVec.size() == 1 && countDistinct(comb) >= unique)))
-    {
-      bool stillGood = true;
-      std::string combNotUsed = comb;
-      for(unsigned int i = 0; i < forceInclude.length() && stillGood; i++)
-      {
-        stillGood = combNotUsed.find(forceInclude[i]) != std::string::npos;
         if(stillGood)
         {
-          combNotUsed[combNotUsed.find(forceInclude[i])] = '_';
+          double total;
+          if(intColorings)
+          {
+            total = rateInts(guessVec, words, searchMode, prefixColorings2);
+          }
+          else
+          {
+            total = rate(guessVec, words, searchMode, prefixColorings);
+          }
+          numberChecked++;
+          if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
+          {
+            first = false;
+            best = total;
+            bestStr = comb;
+            bestTied = false;
+            if(newBestPrints)
+            {
+              std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
+            }
+            out.push_back(std::make_pair(total, comb));
+          }
+          else if(newBestPrints && (first || best == total))
+          {
+            if(newBestPrints)
+            {
+              std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
+            }
+            bestTied = true;
+            out.push_back(std::make_pair(total, comb));
+          }
+          else if(fullRankingRequiredScore == -1 || ((total <= fullRankingRequiredScore && (searchMode == 1 || searchMode == 4)) || (total >= fullRankingRequiredScore && !(searchMode == 1 || searchMode == 4))))
+          {
+            out.push_back(std::make_pair(total, comb));
+          }
         }
       }
-      if(stillGood)
+
+      positions[toIncrement]++;
+      bool stillCarrying = true;
+      for(unsigned int i = toIncrement; i > 0 && stillCarrying; i--)
       {
-        double total;
-        if(intColorings)
+        if(positions[i] == allguess.size())
         {
-          total = rateInts(guessVec, words, searchMode, prefixColorings2);
+          positions[i] = 0;
+          positions[i - 1]++;
+          lastChanged = i - 1;
         }
         else
         {
-          total = rate(guessVec, words, searchMode, prefixColorings);
-        }
-        numberChecked++;
-        if(first || (total < best && (searchMode == 1 || searchMode == 4)) || (total > best && !(searchMode == 1 || searchMode == 4)))
-        {
-          first = false;
-          best = total;
-          bestStr = comb;
-          bestTied = false;
-          if(newBestPrints)
-          {
-            std::cout << "(Thread " << threadNum << ") New Best - " << comb << " " << total << std::endl;
-          }
-          out.push_back(std::make_pair(total, comb));
-        }
-        else if(newBestPrints && (first || best == total))
-        {
-          if(newBestPrints)
-          {
-            std::cout << "(Thread " << threadNum << ") Tied Best - " << comb << " " << total << std::endl;
-          }
-          bestTied = true;
-          out.push_back(std::make_pair(total, comb));
-        }
-        else if(fullRankingRequiredScore == -1 || ((total <= fullRankingRequiredScore && (searchMode == 1 || searchMode == 4)) || (total >= fullRankingRequiredScore && !(searchMode == 1 || searchMode == 4))))
-        {
-          out.push_back(std::make_pair(total, comb));
+          stillCarrying = false;
         }
       }
-    }
-
-    positions[toIncrement]++;
-    bool stillCarrying = true;
-    for(unsigned int i = toIncrement; i > 0 && stillCarrying; i--)
-    {
-      if(positions[i] == allguess.size())
+      if(positions[0] == validWords.size())
       {
-        positions[i] = 0;
-        positions[i - 1]++;
-        lastChanged = i - 1;
+        notdone = false;
       }
-      else
-      {
-        stillCarrying = false;
-      }
-    }
-    if(positions[0] == validWords.size())
-    {
-      notdone = false;
     }
   }
   if(updatePrintFrequency)
@@ -358,6 +361,23 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
       second = "0" + second;
     }
     std::cout << "(Thread " << threadNum << ") Finished! " << numberChecked << " sets were checked! " << hour << ":" << minute << ":" << second << std::endl;
+    if(keyword.length())
+    {
+      fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-results", std::ios_base::app);
+      for(unsigned int i = lastWroteToFile; i < out.size(); i++)
+      {
+        fout << out[i].second << " " << out[i].first << std::endl;
+      }
+      lastWroteToFile = out.size();
+      fout.close();
+      fout.open("saves/" + keyword + "-thread" + std::to_string(threadNum) + "-state");
+      fout << timeRan + (int)diff.count() << " " << numberChecked;
+      for(int i = 0; i < setsize; i++)
+      {
+        fout << " " << positions[i];
+      }
+      fout.close();
+    }
   }
 }
 

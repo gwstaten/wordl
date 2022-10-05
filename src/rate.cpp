@@ -58,6 +58,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
               total[searchMode] += (it->second);
             }
           }
+          break;
       }
     }
   }
@@ -68,6 +69,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   std::cout << "Average remaining possibilities: " << total[0] << std::endl;
   std::cout << "Colorings (1/n): " << total[1] << std::endl;
   std::cout << "Collisions (# answers - 1/n): " << words.size() - total[1] << std::endl;
+  std::cout << "Complexity (1/n - Guaranteed solves): " << total[1]  - total[2] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
   std::cout << "Average greens: " << total[5] << std::endl;
   std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
@@ -190,11 +192,22 @@ double rate(const std::vector<std::string> guess, const std::vector<std::string>
             total += (it->second);
           }
         }
+        break;
+      case 7:
+        if((it->second) == 1)
+        {
+          total++;
+        }
+        break;
     }
   }
   if(searchMode == 1 || searchMode == 5 || searchMode == 6)
   {
     total /= words.size();
+  }
+  if(searchMode == 7)
+  {
+    total = ratingsMap.size() - total;
   }
   return total;
 }
@@ -242,11 +255,21 @@ double rateInts(const std::vector<std::string> guess, const std::vector<std::str
       case 5:
         total += (it->second) * std::log((it->second) / words.size()) / std::log(0.5);
         break;
+      case 7:
+        if((it->second) == 1)
+        {
+          total++;
+        }
+        break;
     }
   }
   if(searchMode == 1 || searchMode == 5 || searchMode == 6)
   {
     total /= words.size();
+  }
+  if(searchMode == 7)
+  {
+    total = ratingsMap.size() - total;
   }
   return total;
 }

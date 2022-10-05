@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
         {
           searchMode = parsearg.second == "" ? std::stoi(cmdl::defaults.at(parsearg.first)) : std::stoi(parsearg.second);
 
-          if(searchMode < 1 || searchMode > 6)
+          if(searchMode < 1 || searchMode > 7)
           {
             std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
             searchMode = 0;
@@ -345,7 +345,7 @@ int main(int argc, char* argv[])
 
   if(!searchMode)
   {
-    std::cout << "Search mode (1 - 6)? ";
+    std::cout << "Search mode (1 - 7)? ";
     getline(std::cin, temp);
 
     try
@@ -354,10 +354,10 @@ int main(int argc, char* argv[])
     }
     catch(const std::exception& e)
     {
-      std::cout << "Searchmode must be an integer between 1 and 6: '" << temp << "'" << std::endl;
+      std::cout << "Searchmode must be an integer between 1 and 7: '" << temp << "'" << std::endl;
     }
 
-    if(searchMode < 1 || searchMode > 6)
+    if(searchMode < 1 || searchMode > 7)
     {
       std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
       return 0;
@@ -520,7 +520,7 @@ int main(int argc, char* argv[])
       else if(userInput == 's')
       {
         char usePrefix {};
-        std::cout << std::endl << "Search mode (1 - 6)? ";
+        std::cout << std::endl << "Search mode (1 - 7)? ";
         getline(std::cin, temp);
 
         try
@@ -529,10 +529,10 @@ int main(int argc, char* argv[])
         }
         catch(const std::exception& e)
         {
-          std::cout << "Searchmode must be an integer between 1 and 6: '" << temp << "'" << std::endl;
+          std::cout << "Searchmode must be an integer between 1 and 7: '" << temp << "'" << std::endl;
         }
 
-        if(searchMode < 1 || searchMode > 6)
+        if(searchMode < 1 || searchMode > 7)
         {
           std::cout << "Unknown searchmode: '" << searchMode << "'" << std::endl;
           return 0;

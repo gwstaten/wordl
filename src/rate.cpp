@@ -72,7 +72,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   std::cout << "Complexity (1/n - Guaranteed solves): " << total[1]  - total[2] << std::endl;
   std::cout << "Largest ambiguous set: " << total[3] << std::endl;
   std::cout << "Average greens: " << total[5] << std::endl;
-  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl << std::endl;
+  std::cout << "Ambiguity: " << words.size() - total[2] << "/" << words.size() << std::endl;
   std::cout << "Guaranteed solves: " << total[2] << "/" << words.size() << std::endl << "( ";
   std::map<std::string, std::vector<std::string>>::iterator it2;
   int num = 0;
@@ -91,7 +91,7 @@ void rateAll(std::vector<std::string> guess, std::vector<std::string> words, std
   {
     std::cout << "... " << num - 4 << " more ";
   }
-  std::cout << ")" << std::endl;
+  std::cout << ")" << std::endl << std::endl;
   if(!std::filesystem::exists("ratelogs"))
   {
     std::filesystem::create_directory("ratelogs");

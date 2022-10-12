@@ -81,7 +81,7 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)?
+Search mode (1 - 7)?
 ```
 
 Each search method uses a different algorithm and can be found [here](#search-modes). The recommended search method is 2, though the three have not been thoroughly tested and you can experiment with each one.
@@ -91,7 +91,7 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -105,7 +105,7 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -121,7 +121,7 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -171,7 +171,7 @@ $ ./wordle
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -290,7 +290,7 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
@@ -304,13 +304,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? 
 ```
 
@@ -321,13 +321,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? 
 ```
@@ -339,13 +339,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)? s
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)?
@@ -358,13 +358,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -378,13 +378,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -399,13 +399,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -421,13 +421,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -444,13 +444,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -469,13 +469,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -495,13 +495,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes2
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -525,13 +525,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -555,13 +555,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -584,13 +584,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -614,13 +614,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n
@@ -647,13 +647,13 @@ $ ./wordl
 Number of threads? 4
 Word list? nytimes
 Ultra hard mode, hard mode, or normal (u, h, n)? n
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 
 Wordlist initialized with 2309 answers
 
 Find best (f), list (l), guess (g), rate (a), restart with same settings (r), or exit (e)?
 
-Search mode (1 - 6)? 2
+Search mode (1 - 7)? 2
 Precise search timer (y / n)? n
 Do answers only search first (y / n)? y
 Use prefex (y / n)? n

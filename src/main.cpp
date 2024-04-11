@@ -762,6 +762,12 @@ int main(int argc, char* argv[])
           guess = commandGuesses.begin()->first;
         }
 
+        if(guess.length() != valids[0].length())
+        {
+          std::cout << "Invalid word length of " << guess.length() << ": '" << guess << "'" << std::endl;
+          return 0;
+        }
+
         std::transform(guess.begin(), guess.end(), guess.begin(), ::tolower);
 
         if(valids.size() > 1 || valids.size() == 1)
@@ -775,6 +781,12 @@ int main(int argc, char* argv[])
           else
           {
             rating = commandGuesses.begin()->second;
+          }
+
+          if(rating.length() != valids[0].length())
+          {
+            std::cout << "Invalid rating length of " << rating.length() << ": '" << rating << "'" << std::endl;
+            return 0;
           }
 
           valids = filter(valids,std::make_pair(guess, rating));

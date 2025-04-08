@@ -151,7 +151,7 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
   auto startTime = std::chrono::system_clock::now();
   if(positions[0] != validWords.size())
   {
-    for(unsigned int guess = 0; notdone; guess++)
+    while(notdone)
     {
       std::chrono::duration<double> diff = std::chrono::system_clock::now() - startTime;
       if(updatePrintFrequency)
@@ -171,11 +171,11 @@ void findBestThread(std::vector<std::string> words, std::vector<std::string> val
           {
             second = "0" + second;
           }
-          std::cout << "(Thread " << threadNum << ") Update - ~" << 
-                    (((double)positions[0] / (double)validWords.size()) + (positions.size() > 1 ? (double)positions[1] / (double)allguess.size() / (double)validWords.size() : 0)) * 100 << "% - " << 
-                    hour + ":" + minute + ":" + second << 
-                    " - has checked " << numberChecked << 
-                    " sets with all filters - currently on start " << validWords[positions[0]] + (positions.size() > 1 ? "-" + allguess[positions[1]] : "") << 
+          std::cout << "(Thread " << threadNum << ") Update - ~" <<
+                    (((double)positions[0] / (double)validWords.size()) + (positions.size() > 1 ? (double)positions[1] / (double)allguess.size() / (double)validWords.size() : 0)) * 100 << "% - " <<
+                    hour + ":" + minute + ":" + second <<
+                    " - has checked " << numberChecked <<
+                    " sets with all filters - currently on start " << validWords[positions[0]] + (positions.size() > 1 ? "-" + allguess[positions[1]] : "") <<
                     " - current best " << bestStr << " " << best << (bestTied ? " (with a tie)" : "") << std::endl;
           if(keyword.length())
           {

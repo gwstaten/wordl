@@ -8,7 +8,7 @@ EXE := $(BIN_DIR)/wordl
 SRC := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRC))
 
-CXXFLAGS := -g -Wall -Ofast -Iinclude -MMD -MP -std=c++17
+CXXFLAGS := -g -Wall -Wextra -O3 -ffast-math -Iinclude -MMD -MP -std=c++17
 LDLIBS   := -lm -pthread
 
 ifeq ($(OS), Windows_NT)

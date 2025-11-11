@@ -235,7 +235,7 @@ void permute(std::vector<std::string> wordSet, std::vector<std::string> validGue
           {
             bool stillCarrying = true;
             unsigned int on = state.size();
-            for(unsigned int i = toIncrement - 1; i >= 0 && stillCarrying; i--)
+            for(unsigned int i = toIncrement - 1; stillCarrying; i--)
             {
               on = i;
               state[i]++;
